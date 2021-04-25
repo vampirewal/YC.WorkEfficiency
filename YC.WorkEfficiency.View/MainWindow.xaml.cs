@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using YC.WorkEfficiency.View.ViewModels;
+using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.View
 {
@@ -24,7 +24,7 @@ namespace YC.WorkEfficiency.View
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = new MainViewModel();
+            this.DataContext = new MainViewModel();
             //Border b;
             //b.
         }

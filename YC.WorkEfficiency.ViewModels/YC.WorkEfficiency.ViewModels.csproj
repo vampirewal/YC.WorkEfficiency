@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YC.WorkEfficiency.Core\YC.WorkEfficiency.Core.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.DataAccess\YC.WorkEfficiency.DataAccess.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.Models\YC.WorkEfficiency.Models.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.SimpleMVVM\YC.WorkEfficiency.SimpleMVVM.csproj" />
+  </ItemGroup>
+
+</Project>

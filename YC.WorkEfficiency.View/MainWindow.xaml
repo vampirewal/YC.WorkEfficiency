@@ -13,7 +13,6 @@
     Height="450"
     MaxWidth="{Binding MaxWidth}"
     MaxHeight="{Binding MaxHeight}"
-    DataContext="{Binding Source={StaticResource locator}, Path=MainViewModel}"
     FontFamily="Microsoft YaHei"
     Icon="Assets/Image/时钟.jpg"
     Style="{StaticResource WindowDefauleStyle}"
@@ -673,6 +672,12 @@
                                 </i:Interaction.Triggers>
                             </DataGrid>
                             <!--#endregion-->
+                        </TabItem>
+                        <TabItem
+                            Width="200"
+                            Header="测试"
+                            Style="{StaticResource MainTabItemStyle}">
+                            <ContentControl Content="{Binding testFrame}" />
                         </TabItem>
                     </TabControl>
 

@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="BaseBackground" Color="#f2eada" />
+            <SolidColorBrush x:Key="redFont" Color="#d93a49" />
+            <SolidColorBrush x:Key="DefaultButtonColor" Color="#74787c" />
+            <SolidColorBrush x:Key="MainColor" Color="#e0861a" />
+        </ResourceDictionary>
+
+        <ResourceDictionary>
+
+            
+
+            <!--#region 窗体整体Border的样式-->
+            <Style x:Key="DefualtWindowBorderStyle" TargetType="Border">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect
+                            BlurRadius="5"
+                            Direction="0"
+                            Opacity="0.7"
+                            ShadowDepth="0"
+                            Color="#e0861a" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--#endregion-->
+
+            <!--#region 窗体顶部标题栏样式-->
+            <Style x:Key="TopBorderStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+                <Setter Property="CornerRadius" Value="5 5 0 0" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+            <!--#endregion-->
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

@@ -24,7 +24,6 @@ namespace YC.WorkEfficiency.View.Models
         {
             //构造函数
         }
-
         #region 属性
         private string _GuidId;
 

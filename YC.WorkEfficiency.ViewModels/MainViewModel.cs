@@ -21,14 +21,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
-using YC.WorkEfficiency.View.DataAccess;
-using YC.WorkEfficiency.View.Models;
+using YC.WorkEfficiency.DataAccess;
+using YC.WorkEfficiency.Models;
+using YC.WorkEfficiency.SimpleMVVM;
 using YC.WorkEfficiency.ViewModels.Common;
 
-namespace YC.WorkEfficiency.View.ViewModels
+namespace YC.WorkEfficiency.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
@@ -39,13 +38,7 @@ namespace YC.WorkEfficiency.View.ViewModels
             //构造函数
             Title = "时间效率管理";
             InitData();
-            //using (testModelDataContext testModelDataContext = new testModelDataContext())
-            //{
-            //    testModelDataContext.Database.EnsureCreated();
-            //    testModelDataContext.SaveChanges();
 
-            //    //testModelDataContext.testModelDB.
-            //}
             LoadModulesServices.Instance.LoadModules();
             testFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
         }
@@ -56,9 +49,8 @@ namespace YC.WorkEfficiency.View.ViewModels
         public ObservableCollection<FileModel> FileList { get; set; }
 
         public FileModelData fileModelData { get; set; }
-        public string Title { get; set; }
 
-        public FileModel SelectedItem { get => selectedItem; set { selectedItem = value;RaisePropertyChanged(); } }
+        public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
         //public ObservableCollection<>
 
         private string _TotleWorkTime;
@@ -66,12 +58,10 @@ namespace YC.WorkEfficiency.View.ViewModels
         public string TotleWorkTime
         {
             get { return _TotleWorkTime; }
-            set { _TotleWorkTime = value; RaisePropertyChanged(); }
+            set { _TotleWorkTime = value; DoNotify(); }
         }
 
         public ObservableCollection<FileAttachmentModel> fileAttachmentModels { get; set; }
-
-        public FrameworkElement testFrame { get; set; }
 
         #region 窗体显示属性
 
@@ -92,6 +82,8 @@ namespace YC.WorkEfficiency.View.ViewModels
         }
 
         #endregion 窗体显示属性
+
+        public FrameworkElement testFrame { get; set; }
         #endregion 属性
 
         #region 私有方法
@@ -133,7 +125,7 @@ namespace YC.WorkEfficiency.View.ViewModels
 
         private void GetData()
         {
-            using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
             {
                 //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
                 //fileModelDataContext.SaveChanges();
@@ -195,7 +187,7 @@ namespace YC.WorkEfficiency.View.ViewModels
                             item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
                         }
                     }
-                    using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+                    using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                     {
                         fileModelDataContext.UpdateRange(fileModelData.WorkingList);
                         fileModelDataContext.SaveChanges();
@@ -212,7 +204,7 @@ namespace YC.WorkEfficiency.View.ViewModels
                 int hours = 0;
                 int minutes = 0;
                 int seconds = 0;
-                using (FileModelDataContext fileModelDataContext=new FileModelDataContext())
+                using (WorkEfficiencyDataContext fileModelDataContext =new WorkEfficiencyDataContext())
                 {
                     var current= fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true).ToList();
                     
@@ -251,7 +243,7 @@ namespace YC.WorkEfficiency.View.ViewModels
                 CreateTime = DateTime.Now,
                 EndTime = DateTime.Now
             };
-            using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
             {
                 fileModelDataContext.FileModelDB.Add(current);
                 fileModelDataContext.SaveChanges();
@@ -284,7 +276,7 @@ namespace YC.WorkEfficiency.View.ViewModels
                 fileModelData.WorkingList.Remove(f);
                 fileModelData.EndingList.Add(f);
 
-                using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                 {
                     fileModelDataContext.Update(f);
                     fileModelDataContext.SaveChanges();
@@ -300,7 +292,7 @@ namespace YC.WorkEfficiency.View.ViewModels
             if (o!=null)
             {
                 string guid = o.GuidId;
-                using(FileAttachmentModelDataContext fileAttachmentModelData=new FileAttachmentModelDataContext())
+                using(WorkEfficiencyDataContext fileAttachmentModelData =new WorkEfficiencyDataContext())
                 {
                     fileAttachmentModelData.Database.EnsureCreated();
                     fileAttachmentModels.Clear();
@@ -323,7 +315,7 @@ namespace YC.WorkEfficiency.View.ViewModels
     /// <summary>
     /// 后期进行存储的DataModel类
     /// </summary>
-    public class FileModelData : ObservableObject
+    public class FileModelData 
     {
         public ObservableCollection<FileModel> WorkingList { get; set; }
 
