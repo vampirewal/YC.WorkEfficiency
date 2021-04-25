@@ -23,16 +23,16 @@ namespace YC.WorkEfficiency.Models
     /// 文件的附件类
     /// </summary>
     [Table("FileAttachment")]
-    public class FileAttachmentModel 
+    public class FileAttachmentModel :BaseModel
     {
         #region 属性
-        private string _GuidId;
-        [Key]
-        public string GuidId
-        {
-            get { return _GuidId; }
-            set { _GuidId = value; }
-        }
+        //private string _GuidId;
+        //[Key]
+        //public string GuidId
+        //{
+        //    get { return _GuidId; }
+        //    set { _GuidId = value; }
+        //}
 
         private string _ParentGuidId;
         /// <summary>

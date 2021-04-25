@@ -25,7 +25,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
 using YC.WorkEfficiency.View.DataAccess;
-using YC.WorkEfficiency.View.Models;
+using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.View.ViewModels

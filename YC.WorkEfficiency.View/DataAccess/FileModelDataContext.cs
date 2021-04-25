@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using YC.WorkEfficiency.View.Models;
+using YC.WorkEfficiency.Models;
 
 namespace YC.WorkEfficiency.View.DataAccess
 {

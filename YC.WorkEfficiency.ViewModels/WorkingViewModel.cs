@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
@@ -72,6 +73,44 @@ namespace YC.WorkEfficiency.ViewModels
                 
             }
         }
+
+        [RegistMethod]
+        private void AddNoFinishedWork(FileModel entity)
+        {
+            WorkingList.Add(entity);
+        }
+
+        private void StartWork()
+        {
+            Thread td = new Thread(ActionWork);
+            td.Start();
+        }
+
+        private void ActionWork()
+        {
+            while (true)
+            {
+                Thread.Sleep(1000);
+                if (WorkingList.Count > 0)
+                {
+                    TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
+                    foreach (var item in WorkingList)
+                    {
+                        if (!item.IsFinished && !item.IsEdit)
+                        {
+                            TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
+                            TimeSpan ts = ts_now.Subtract(ts_createtime);
+                            item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+                        }
+                    }
+                    using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+                    {
+                        fileModelDataContext.UpdateRange(WorkingList);
+                        fileModelDataContext.SaveChanges();
+                    }
+                }
+            }
+        }
         #endregion
 
         #region 命令
@@ -97,6 +136,25 @@ namespace YC.WorkEfficiency.ViewModels
 
                     //}
 
+                }
+            }
+        });
+
+        public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
+        {
+            if (f != null)
+            {
+                f.EndTime = DateTime.Now;
+                f.IsFinished = true;
+
+                WorkingList.Remove(f);
+                fileModelData.EndingList.Add(f);
+                Messenger.Default.Send
+
+                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+                {
+                    fileModelDataContext.Update(f);
+                    fileModelDataContext.SaveChanges();
                 }
             }
         });

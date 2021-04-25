@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YC.WorkEfficiency.WorkingMo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Moduels", "Moduels", "{B56DDFE3-CA1A-4513-BF45-94E80BF0B379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YC.WorkEfficiency.FinishedWorkModuel", "YC.WorkEfficiency.FinishedWorkModuel\YC.WorkEfficiency.FinishedWorkModuel.csproj", "{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,14 @@ Global
 		{BC21DA7E-F9C0-46B6-9307-D7645D4B3C6B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC21DA7E-F9C0-46B6-9307-D7645D4B3C6B}.Release|x86.ActiveCfg = Release|Any CPU
 		{BC21DA7E-F9C0-46B6-9307-D7645D4B3C6B}.Release|x86.Build.0 = Release|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Debug|x86.Build.0 = Debug|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Release|x86.ActiveCfg = Release|Any CPU
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +113,7 @@ Global
 		{019ACB24-B336-4B1B-8BF6-E39D12FC68A6} = {FFFAF086-18E3-46CB-98A2-C061EB7BF3F1}
 		{DAD0197A-4B58-4718-AF9F-CE4B2DE198EB} = {FFFAF086-18E3-46CB-98A2-C061EB7BF3F1}
 		{BC21DA7E-F9C0-46B6-9307-D7645D4B3C6B} = {B56DDFE3-CA1A-4513-BF45-94E80BF0B379}
+		{AAFA4240-F3BE-41E4-8AEE-F04D60B9B77F} = {B56DDFE3-CA1A-4513-BF45-94E80BF0B379}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B19A8826-B20D-40AA-81CC-057F8C3BDA83}

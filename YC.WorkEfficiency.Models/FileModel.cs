@@ -20,7 +20,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace YC.WorkEfficiency.Models
 {
     [Table("FileModel")]
-    public class FileModel 
+    public class FileModel :BaseModel
     {
         public FileModel()
         {
@@ -36,7 +36,7 @@ namespace YC.WorkEfficiency.Models
         private DateTime _EndTime;
         private string _FileText;
         private string _FileTitle;
-        private string _GuidId;
+        //private string _GuidId;
 
         private bool _IsFinished;
 
@@ -97,16 +97,16 @@ namespace YC.WorkEfficiency.Models
         /// <summary>
         /// 文件ID
         /// </summary>
-        [Key]
-        public string GuidId
-        {
-            get { return _GuidId; }
-            set
-            {
-                _GuidId = value;
+        //[Key]
+        //public string GuidId
+        //{
+        //    get { return _GuidId; }
+        //    set
+        //    {
+        //        _GuidId = value;
                 
-            }
-        }
+        //    }
+        //}
         [Column("IsEdit")]
         public bool IsEdit { get => isEdit; set { isEdit = value;  } }
 

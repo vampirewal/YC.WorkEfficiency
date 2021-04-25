@@ -20,20 +20,20 @@ using System.Text;
 namespace YC.WorkEfficiency.Models
 {
     [Table("User")]
-    public class UserModel
+    public class UserModel:BaseModel
     {
         public UserModel()
         {
             //构造函数
         }
 
-        private string _GuidId;
-        [Key]
-        public string GuidId
-        {
-            get { return _GuidId; }
-            set { _GuidId = value; }
-        }
+        //private string _GuidId;
+        //[Key]
+        //public string GuidId
+        //{
+        //    get { return _GuidId; }
+        //    set { _GuidId = value; }
+        //}
 
         private string _UserName;
         [Column("UserName")]

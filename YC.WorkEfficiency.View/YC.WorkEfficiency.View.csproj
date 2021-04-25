@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Fonts\iconfont.ttf" />
     <None Remove="Assets\Image\时钟.jpg" />
     <None Remove="DataSettings.json" />
   </ItemGroup>
@@ -27,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Fonts\iconfont.ttf" />
     <Resource Include="Assets\Image\时钟.jpg" />
   </ItemGroup>
 

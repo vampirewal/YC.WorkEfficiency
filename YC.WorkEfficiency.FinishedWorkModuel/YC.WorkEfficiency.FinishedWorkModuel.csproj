@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YC.WorkEfficiency.Core\YC.WorkEfficiency.Core.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.DataAccess\YC.WorkEfficiency.DataAccess.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.Models\YC.WorkEfficiency.Models.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.SimpleMVVM\YC.WorkEfficiency.SimpleMVVM.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.Themes\YC.WorkEfficiency.Themes.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.ViewModels\YC.WorkEfficiency.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

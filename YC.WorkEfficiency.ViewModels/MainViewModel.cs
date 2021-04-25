@@ -119,7 +119,7 @@ namespace YC.WorkEfficiency.ViewModels
             fileModelData = new FileModelData();
             fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
             GetData();
-            StartWork();
+            //StartWork();
             GetTotleTime();
         }
 
@@ -164,37 +164,39 @@ namespace YC.WorkEfficiency.ViewModels
             }
         }
 
-        private void StartWork()
-        {
-            Thread td = new Thread(ActionWork);
-            td.Start();
-        }
+        #region 废弃
+        //private void StartWork()
+        //{
+        //    Thread td = new Thread(ActionWork);
+        //    td.Start();
+        //}
 
-        private void ActionWork()
-        {
-            while (true)
-            {
-                Thread.Sleep(1000);
-                if (fileModelData.WorkingList.Count > 0)
-                {
-                    TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
-                    foreach (var item in fileModelData.WorkingList)
-                    {
-                        if (!item.IsFinished && !item.IsEdit)
-                        {
-                            TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
-                            TimeSpan ts = ts_now.Subtract(ts_createtime);
-                            item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
-                        }
-                    }
-                    using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
-                    {
-                        fileModelDataContext.UpdateRange(fileModelData.WorkingList);
-                        fileModelDataContext.SaveChanges();
-                    }
-                }
-            }
-        }
+        //private void ActionWork()
+        //{
+        //    while (true)
+        //    {
+        //        Thread.Sleep(1000);
+        //        if (fileModelData.WorkingList.Count > 0)
+        //        {
+        //            TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
+        //            foreach (var item in fileModelData.WorkingList)
+        //            {
+        //                if (!item.IsFinished && !item.IsEdit)
+        //                {
+        //                    TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
+        //                    TimeSpan ts = ts_now.Subtract(ts_createtime);
+        //                    item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+        //                }
+        //            }
+        //            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+        //            {
+        //                fileModelDataContext.UpdateRange(fileModelData.WorkingList);
+        //                fileModelDataContext.SaveChanges();
+        //            }
+        //        }
+        //    }
+        //} 
+        #endregion
 
         private void GetTotleTime()
         {

@@ -1,0 +1,198 @@
+﻿<UserControl
+    x:Class="YC.WorkEfficiency.FinishedWorkModuel.FinishedWorkView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:YC.WorkEfficiency.FinishedWorkModuel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <!--#region NewRegion-->
+        <DataGrid Name="FinishedWorkList"
+                  Grid.Row="1"
+                  Margin="5,0"
+                  AutoGenerateColumns="False"
+                  Background="Transparent"
+                  HeadersVisibility="All"
+                  ItemsSource="{Binding fileModelData.EndingList}"
+                  RowHeaderWidth="60"
+                  SelectedItem="{Binding SelectedItem}"
+                  SelectionMode="Single"
+                  VerticalScrollBarVisibility="Auto">
+            <DataGrid.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                        <ResourceDictionary>
+                            <Style x:Key="TextBlockCenterStyle"
+                                   TargetType="TextBlock">
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                                <Setter Property="HorizontalAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </ResourceDictionary>
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="80"
+                                        Header="状态"
+                                        IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Path x:Name="StatePoint"
+                                  Width="20"
+                                  Height="20"
+                                  Margin="5"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Center"
+                                  Data="{StaticResource StatePoint}"
+                                  Fill="Green"
+                                  SnapsToDevicePixels="True"
+                                  Stretch="Uniform" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="auto"
+                                        Header="工作名">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock x:Name="ShowFileTitle"
+                                           Text="{Binding FileTitle}" />
+                                <TextBox x:Name="EditText"
+                                         Text="{Binding FileTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsEdit}"
+                                             Value="True">
+                                    <Setter TargetName="ShowFileTitle"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Setter TargetName="EditText"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEdit}"
+                                             Value="False">
+                                    <Setter TargetName="ShowFileTitle"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                    <Setter TargetName="EditText"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+
+                <DataGridTextColumn Width="auto"
+                                    Binding="{Binding CreateTime, StringFormat={}{0:yyyy-MM-dd}}"
+                                    Header="开始时间"
+                                    IsReadOnly="True" />
+                <DataGridTemplateColumn Width="auto"
+                                        Header="结束时间">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <hc:DateTimePicker x:Name="datepicker"
+                                                   IsEnabled="{Binding IsEdit, Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                   SelectedDateTime="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock x:Name="showEndTime"
+                                           Text="{Binding EndTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
+                                           Visibility="Collapsed" />
+                            </StackPanel>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsEdit}"
+                                             Value="False">
+                                    <Setter TargetName="datepicker"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Setter TargetName="showEndTime"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Width="auto"
+                                    Binding="{Binding AfterTime}"
+                                    Header="已经过时间"
+                                    IsReadOnly="True" />
+
+                <DataGridTemplateColumn Width="auto"
+                                        Header="操作">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="btnStartWork"
+                                        Command="{Binding DataContext.QueDing, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                        Content="确定" />
+                                <Button x:Name="btnFinishWork"
+                                        Command="{Binding DataContext.FinishSettingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                        Content="完成" />
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsEdit}"
+                                             Value="True">
+                                    <Setter TargetName="btnFinishWork"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Setter TargetName="btnStartWork"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding IsEdit}"
+                                             Value="False">
+                                    <Setter TargetName="btnStartWork"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                    <Setter TargetName="btnFinishWork"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+            <DataGrid.ContextMenu>
+                <ContextMenu MinWidth="50">
+                    <MenuItem Command="{Binding RefreshData}"
+                              Header="刷新数据" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectionChangeCommand}"
+                                           CommandParameter="{Binding SelectedItem, ElementName=FinishedWorkList}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </DataGrid>
+        <!--#endregion-->
+    </Grid>
+</UserControl>
