@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../BaseStyles.xaml" />
+        <ResourceDictionary>
+            <Style x:Key="LoginComBox" TargetType="ComboBox">
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Template">
+
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Border
+                                Background="White"
+                                CornerRadius="5" 
+                                Style="{StaticResource BorderOnlyEffect}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="../Assets/Fonts/#iconfont"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        Text="&#xe725;" />
+                                    <ComboBox
+                                        Grid.Column="1"
+                                        Margin="5,0"
+                                        VerticalContentAlignment="Center"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        IsEditable="True"
+                                        ItemsSource="{TemplateBinding ItemsSource}" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

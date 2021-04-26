@@ -126,7 +126,7 @@
                     Header="已经过时间"
                     IsReadOnly="True" />
 
-                <DataGridTemplateColumn Width="auto" Header="操作">
+                <!--<DataGridTemplateColumn Width="auto" Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -154,7 +154,7 @@
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
             </DataGrid.Columns>
 
             <!--<DataGrid.ContextMenu>

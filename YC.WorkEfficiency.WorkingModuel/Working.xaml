@@ -20,7 +20,7 @@
     </UserControl.Resources>
     <Grid>
         <!--#region NewRegion -->
-        <DataGrid Name="hahaFinishedList"
+        <DataGrid Name="NoFinishedList"
                   Grid.Row="1"
                   Margin="5,0"
                   AutoGenerateColumns="False"

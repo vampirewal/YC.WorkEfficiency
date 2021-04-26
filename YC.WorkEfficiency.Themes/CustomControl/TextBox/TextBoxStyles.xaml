@@ -1,0 +1,117 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:YC.WorkEfficiency.Themes">
+
+    <!--#region 带图标的输入框-->
+    <Style TargetType="local:TextBoxIcon">
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#FFCCCCCC" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TextBoxIcon">
+                    <Border
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="3">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                x:Name="icon"
+                                Margin="5,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontFamily="../../Assets/Fonts/#iconfont"
+                                FontSize="{Binding IconFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}"
+                                Foreground="{Binding WaterTextForeground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}"
+                                Opacity="0.2"
+                                Text="{Binding IconStr, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}" />
+                            <TextBlock
+                                x:Name="TbWaterText"
+                                Grid.Column="1"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{Binding WaterTextFontSize, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}"
+                                Foreground="{Binding WaterTextForeground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}"
+                                Opacity="0.5"
+                                Text="{Binding WaterText, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxIcon}}" />
+                            <Decorator
+                                x:Name="PART_ContentHost"
+                                Grid.Column="1"
+                                Margin="{TemplateBinding Padding}"
+                                VerticalAlignment="Center"
+                                Focusable="false"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="icon" Property="Text" Value="">
+                            <Setter TargetName="icon" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region 带下划线动画的文本输入框-->
+    <Style x:Key="UnderLineTextBox" TargetType="TextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="2" />
+                        </Grid.RowDefinitions>
+                        <Decorator x:Name="PART_ContentHost" Focusable="false" />
+                        <ProgressBar
+                            x:Name="progressBar"
+                            Grid.Row="1"
+                            Margin="0,1,0,0" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="GotKeyboardFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="progressBar"
+                                            Storyboard.TargetProperty="Value"
+                                            To="100"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="LostKeyboardFocus">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="progressBar"
+                                            Storyboard.TargetProperty="Value"
+                                            To="0"
+                                            Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>

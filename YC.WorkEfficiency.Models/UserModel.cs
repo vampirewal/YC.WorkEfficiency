@@ -50,5 +50,17 @@ namespace YC.WorkEfficiency.Models
             get { return _PassWord; }
             set { _PassWord = value; DoNotify(); }
         }
+
+        private int _IsRemember;
+        /// <summary>
+        /// 是否记住密码，0是不记住，1是记住
+        /// </summary>
+        [Column("IsRemember")]
+        public int IsRemember
+        {
+            get { return _IsRemember; }
+            set { _IsRemember = value; DoNotify(); }
+        }
+
     }
 }

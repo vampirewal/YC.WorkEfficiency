@@ -8,14 +8,7 @@
         </ResourceDictionary>
 
         <ResourceDictionary>
-
-            
-
-            <!--#region 窗体整体Border的样式-->
-            <Style x:Key="DefualtWindowBorderStyle" TargetType="Border">
-                <Setter Property="CornerRadius" Value="5" />
-                <Setter Property="Margin" Value="5" />
-                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+            <Style x:Key="BorderOnlyEffect" TargetType="Border">
                 <Setter Property="Effect">
                     <Setter.Value>
                         <DropShadowEffect
@@ -27,6 +20,17 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+
+            <!--#region 窗体整体Border的样式-->
+            <Style
+                x:Key="DefualtWindowBorderStyle"
+                BasedOn="{StaticResource BorderOnlyEffect}"
+                TargetType="Border">
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+            </Style>
             <!--#endregion-->
 
             <!--#region 窗体顶部标题栏样式-->
@@ -37,6 +41,8 @@
                 <Setter Property="VerticalAlignment" Value="Top" />
             </Style>
             <!--#endregion-->
+
+
         </ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

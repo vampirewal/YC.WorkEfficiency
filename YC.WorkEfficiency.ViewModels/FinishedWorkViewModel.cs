@@ -89,14 +89,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-        public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
-        {
-            if (f != null)
-            {
-                f.CreateTime = DateTime.Now;
-                f.IsEdit = false;
-            }
-        });
+        
 
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {

@@ -31,7 +31,7 @@ namespace YC.WorkEfficiency.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private FileModel selectedItem;
+        
 
         public MainViewModel()
         {
@@ -45,10 +45,9 @@ namespace YC.WorkEfficiency.ViewModels
         #region 属性
 
         public BaseCommand baseCommand { get; set; } = new BaseCommand();
-        public ObservableCollection<FileModel> FileList { get; set; }
 
         //public FileModelData fileModelData { get; set; }
-
+        private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
         //public ObservableCollection<>
 
@@ -245,7 +244,7 @@ namespace YC.WorkEfficiency.ViewModels
         {
             if (entity!=null)
             {
-                selectedItem = entity;
+                SelectedItem = entity;
                 string guid = entity.GuidId;
                 using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {

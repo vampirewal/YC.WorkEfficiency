@@ -4,13 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:YC.WorkEfficiency.View"
     xmlns:vm1="clr-namespace:YC.WorkEfficiency.ViewModels;assembly=YC.WorkEfficiency.ViewModels"
-    StartupUri="MainWindow.xaml">
+    StartupUri="LoginView.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
                 <!--<ResourceDictionary>
-                    <vm1:ViewModelLocator x:Key="locator" />
+                    <vm1:ViewModelLocator x:Key="Locator" />
 
                 </ResourceDictionary>-->
                 <ResourceDictionary>
