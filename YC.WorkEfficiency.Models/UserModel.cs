@@ -40,7 +40,7 @@ namespace YC.WorkEfficiency.Models
         public string UserName
         {
             get { return _UserName; }
-            set { _UserName = value; }
+            set { _UserName = value; DoNotify(); }
         }
 
         private string _PassWord;
@@ -48,7 +48,7 @@ namespace YC.WorkEfficiency.Models
         public string PassWord
         {
             get { return _PassWord; }
-            set { _PassWord = value; }
+            set { _PassWord = value; DoNotify(); }
         }
     }
 }

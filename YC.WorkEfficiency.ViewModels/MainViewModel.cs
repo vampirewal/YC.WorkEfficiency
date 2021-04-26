@@ -39,8 +39,7 @@ namespace YC.WorkEfficiency.ViewModels
             Title = "时间效率管理";
             InitData();
 
-            LoadModulesServices.Instance.LoadModules();
-            testFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
+            
         }
 
         #region 属性
@@ -48,7 +47,7 @@ namespace YC.WorkEfficiency.ViewModels
         public BaseCommand baseCommand { get; set; } = new BaseCommand();
         public ObservableCollection<FileModel> FileList { get; set; }
 
-        public FileModelData fileModelData { get; set; }
+        //public FileModelData fileModelData { get; set; }
 
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
         //public ObservableCollection<>
@@ -83,120 +82,36 @@ namespace YC.WorkEfficiency.ViewModels
 
         #endregion 窗体显示属性
 
-        public FrameworkElement testFrame { get; set; }
+        public FrameworkElement NoFinishedWorkFrame { get; set; }
+        public FrameworkElement FinishedWorkFrame { get; set; }
         #endregion 属性
 
         #region 私有方法
-
-        /// <summary>
-        /// 读取本地文件夹内的文件
-        /// </summary>
-        private void LoadFile()
-        {
-            List<FileModel> currentList = new List<FileModel>();
-            string filePath = $"{AppDomain.CurrentDomain.BaseDirectory}Works";
-            if (!Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath);
-            }
-            //获取文件夹内的json文件
-            string[] files = Directory.GetFiles(filePath);
-
-            foreach (var file in files)
-            {
-                var current = File.ReadAllText(file);
-                FileModel nm = JsonConvert.DeserializeObject<FileModel>(current);
-                var dic = Directory.GetParent(file).FullName;//获取文件的所在文件夹
-                currentList.Add(nm);
-            }
-        }
 
         /// <summary>
         /// 初始化数据
         /// </summary>
         private void InitData()
         {
-            fileModelData = new FileModelData();
+            
             fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
-            GetData();
-            //StartWork();
+            
+            
+            LoadModuels();
+            MessengerRegister();
             GetTotleTime();
         }
-
-        private void GetData()
+        /// <summary>
+        /// 获取模块并加载到MainViewModel
+        /// </summary>
+        private void LoadModuels()
         {
-            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
-            {
-                //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
-                //fileModelDataContext.SaveChanges();
+            LoadModulesServices.Instance.LoadModules();
+            NoFinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
 
-                //1、第一步，先获取当前的时间
-                TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
-                //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var result = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
-
-                var EndResult = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true).ToList();
-                //3、在workList中的每一条都与互相排序
-                result.Sort((left, right) =>
-                {
-                    if (left.EndTime > right.EndTime)
-                    {
-                        return 1;
-                    }
-                    else
-                    {
-                        return -1;
-                    }
-                });
-                fileModelData.WorkingList = new ObservableCollection<FileModel>(result);
-                EndResult.Sort((left, right) => 
-                {
-                    if (left.CreateTime > right.CreateTime)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                });
-                fileModelData.EndingList = new ObservableCollection<FileModel>(EndResult);
-            }
+            FinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["已完成的工作"];
+            
         }
-
-        #region 废弃
-        //private void StartWork()
-        //{
-        //    Thread td = new Thread(ActionWork);
-        //    td.Start();
-        //}
-
-        //private void ActionWork()
-        //{
-        //    while (true)
-        //    {
-        //        Thread.Sleep(1000);
-        //        if (fileModelData.WorkingList.Count > 0)
-        //        {
-        //            TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
-        //            foreach (var item in fileModelData.WorkingList)
-        //            {
-        //                if (!item.IsFinished && !item.IsEdit)
-        //                {
-        //                    TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
-        //                    TimeSpan ts = ts_now.Subtract(ts_createtime);
-        //                    item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
-        //                }
-        //            }
-        //            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
-        //            {
-        //                fileModelDataContext.UpdateRange(fileModelData.WorkingList);
-        //                fileModelDataContext.SaveChanges();
-        //            }
-        //        }
-        //    }
-        //} 
-        #endregion
 
         private void GetTotleTime()
         {
@@ -245,28 +160,29 @@ namespace YC.WorkEfficiency.ViewModels
                 CreateTime = DateTime.Now,
                 EndTime = DateTime.Now
             };
-            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
-                fileModelDataContext.FileModelDB.Add(current);
-                fileModelDataContext.SaveChanges();
+                work.FileModelDB.Add(current);
+                work.SaveChanges();
             }
-            fileModelData.WorkingList.Insert(0, current);
+            //WorkingList.Insert(0, current);
+            Messenger.Default.Send("InsertFinishWork", current);
 
         });
 
-        public RelayCommand RefreshData => new RelayCommand(() =>
-        {
-            GetData();
-        });
+        //public RelayCommand RefreshData => new RelayCommand(() =>
+        //{
+        //    //GetData();
+        //});
 
-        public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
-        {
-            if (f != null)
-            {
-                f.CreateTime = DateTime.Now;
-                f.IsEdit = false;
-            }
-        });
+        //public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
+        //{
+        //    if (f != null)
+        //    {
+        //        f.CreateTime = DateTime.Now;
+        //        f.IsEdit = false;
+        //    }
+        //});
 
         //public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
         //{
@@ -312,15 +228,40 @@ namespace YC.WorkEfficiency.ViewModels
             }
         });
         #endregion
-    }
 
-    /// <summary>
-    /// 后期进行存储的DataModel类
-    /// </summary>
-    public class FileModelData 
-    {
-        public ObservableCollection<FileModel> WorkingList { get; set; }
-
-        public ObservableCollection<FileModel> EndingList { get; set; }
+        #region 消息
+        /// <summary>
+        /// 汇总消息注册
+        /// </summary>
+        private void MessengerRegister()
+        {
+            Messenger.Default.Register<FileModel>(this, "ShowWorkInfo", ShowWorkInfo);
+        }
+        /// <summary>
+        /// 将选择的FileModel，获取附件之后，将完整信息显示到下方的panel中
+        /// </summary>
+        /// <param name="entity"></param>
+        private void ShowWorkInfo(FileModel entity)
+        {
+            if (entity!=null)
+            {
+                selectedItem = entity;
+                string guid = entity.GuidId;
+                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                {
+                    
+                    fileAttachmentModels.Clear();
+                    var current = work.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
+                    if (current.Count > 0)
+                    {
+                        foreach (var item in current)
+                        {
+                            fileAttachmentModels.Add(item);
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }

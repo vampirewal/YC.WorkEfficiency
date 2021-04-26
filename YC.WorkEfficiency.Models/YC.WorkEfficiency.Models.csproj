@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\YC.WorkEfficiency.SimpleMVVM\YC.WorkEfficiency.SimpleMVVM.csproj" />
+  </ItemGroup>
+
 </Project>

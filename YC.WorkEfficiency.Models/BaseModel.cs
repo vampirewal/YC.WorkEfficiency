@@ -15,10 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using YC.WorkEfficiency.SimpleMVVM;
 
 namespace YC.WorkEfficiency.Models
 {
-    public class BaseModel
+    public class BaseModel:NotifyBase
     {
         public BaseModel()
         {
@@ -31,7 +32,7 @@ namespace YC.WorkEfficiency.Models
         public string GuidId
         {
             get { return _GuidId; }
-            set { _GuidId = value; }
+            set { _GuidId = value; DoNotify(); }
         }
 
         #endregion

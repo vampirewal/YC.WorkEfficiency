@@ -29,11 +29,11 @@ namespace YC.WorkEfficiency.Models
 
         #region 属性
         private string _UserGuid;
-
+        [Column("UserGuid")]
         public string UserGuid
         {
             get { return _UserGuid; }
-            set { _UserGuid = value; }
+            set { _UserGuid = value;DoNotify(); }
         }
 
 

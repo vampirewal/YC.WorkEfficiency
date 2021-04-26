@@ -88,6 +88,7 @@ namespace YC.WorkEfficiency.ViewModels
         private void MessengerRegist()
         {
             Messenger.Default.Register<FileModel>(this, "AddNoFinishedWork", AddNoFinishedWork);
+            Messenger.Default.Register<FileModel>(this, "InsertFinishWork", InsertFinishWork);
         }
 
 
@@ -95,6 +96,14 @@ namespace YC.WorkEfficiency.ViewModels
         private void AddNoFinishedWork(FileModel entity)
         {
             WorkingList.Add(entity);
+        }
+        private void InsertFinishWork(FileModel entity)
+        {
+            if (WorkingList.Where(w => w.IsEdit == true).Count()==0)
+            {
+                WorkingList.Insert(0, entity);
+            }
+            
         }
         #endregion
 
@@ -129,35 +138,25 @@ namespace YC.WorkEfficiency.ViewModels
                     }
                 }
             }
-        } 
+        }
         #endregion
 
         #endregion
 
         #region 命令
+        public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
+        {
+            if (f != null)
+            {
+                f.CreateTime = DateTime.Now;
+                f.IsEdit = false;
+            }
+        });
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
-            //FileModel fileModel = o as FileModel;
-            //MessageBox.Show(SelectedItem.GuidId);
-            //SelectedItem = o;
             if (o != null)
             {
-                string guid = o.GuidId;
-                using (WorkEfficiencyDataContext fileAttachmentModelData = new WorkEfficiencyDataContext())
-                {
-                    //fileAttachmentModelData.Database.EnsureCreated();
-                    //fileAttachmentModels.Clear();
-                    //var current = fileAttachmentModelData.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
-                    //if (current.Count > 0)
-                    //{
-                    //    foreach (var item in current)
-                    //    {
-                    //        fileAttachmentModels.Add(item);
-                    //    }
-
-                    //}
-
-                }
+                Messenger.Default.Send("ShowWorkInfo", o);
             }
         });
 

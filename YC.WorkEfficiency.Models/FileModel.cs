@@ -51,7 +51,7 @@ namespace YC.WorkEfficiency.Models
         public string AfterTime
         {
             get { return _afterTime; }
-            set { _afterTime = value;  }
+            set { _afterTime = value; DoNotify(); }
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace YC.WorkEfficiency.Models
         public DateTime CreateTime
         {
             get { return _CreateTime; }
-            set { _CreateTime = value;  }
+            set { _CreateTime = value; DoNotify(); }
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace YC.WorkEfficiency.Models
         public DateTime EndTime
         {
             get { return _EndTime; }
-            set { _EndTime = value;  }
+            set { _EndTime = value; DoNotify(); }
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace YC.WorkEfficiency.Models
         public string FileText
         {
             get { return _FileText; }
-            set { _FileText = value;  }
+            set { _FileText = value; DoNotify(); }
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace YC.WorkEfficiency.Models
         public string FileTitle
         {
             get { return _FileTitle; }
-            set { _FileTitle = value;  }
+            set { _FileTitle = value; DoNotify(); }
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace YC.WorkEfficiency.Models
         //    }
         //}
         [Column("IsEdit")]
-        public bool IsEdit { get => isEdit; set { isEdit = value;  } }
+        public bool IsEdit { get => isEdit; set { isEdit = value; DoNotify(); } }
 
         /// <summary>
         /// 是否结束
@@ -117,27 +117,28 @@ namespace YC.WorkEfficiency.Models
         public bool IsFinished
         {
             get { return _IsFinished; }
-            set { _IsFinished = value;  }
+            set { _IsFinished = value; DoNotify(); }
         }
 
         [Column("IsSelected")]
-        public bool IsSelected { get => isSelected; set { isSelected = value;  } }
+        public bool IsSelected { get => isSelected; set { isSelected = value; DoNotify(); } }
         #endregion 属性
 
         #region 扩展属性
 
+        private string _StateColor;
         /// <summary>
         /// 状态图标的颜色
         /// </summary>
         [Column("StateColor")]
-        public string StateColor { get; set; }
+        public string StateColor { get=>_StateColor; set { _StateColor = value; DoNotify(); } }
 
         private string _UserGuid;
-
+        [Column("UserGuid")]
         public string UserGuid
         {
             get { return _UserGuid; }
-            set { _UserGuid = value; }
+            set { _UserGuid = value; DoNotify(); }
         }
 
         #endregion 扩展属性

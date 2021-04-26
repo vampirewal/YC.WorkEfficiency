@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using YC.WorkEfficiency.Core;
+using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.FinishedWorkModuel
 {
@@ -25,6 +26,7 @@ namespace YC.WorkEfficiency.FinishedWorkModuel
         public FinishedWorkView()
         {
             InitializeComponent();
+            this.DataContext = new FinishedWorkViewModel();
         }
 
         public object Window => this;

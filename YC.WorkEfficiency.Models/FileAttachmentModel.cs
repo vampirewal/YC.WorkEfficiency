@@ -42,7 +42,7 @@ namespace YC.WorkEfficiency.Models
         public string ParentGuidId
         {
             get { return _ParentGuidId; }
-            set { _ParentGuidId = value; }
+            set { _ParentGuidId = value; DoNotify(); }
         }
 
         private byte[] _Attachment;
@@ -53,7 +53,7 @@ namespace YC.WorkEfficiency.Models
         public byte[] Attachment
         {
             get { return _Attachment; }
-            set { _Attachment = value; }
+            set { _Attachment = value; DoNotify(); }
         }
 
         private int _AttachmentType;
@@ -64,7 +64,7 @@ namespace YC.WorkEfficiency.Models
         public int AttachmentType
         {
             get { return _AttachmentType; }
-            set { _AttachmentType = value; }
+            set { _AttachmentType = value; DoNotify(); }
         }
 
         private int _AttachmentByte;
@@ -72,7 +72,7 @@ namespace YC.WorkEfficiency.Models
         public int AttachmentByte
         {
             get { return _AttachmentByte; }
-            set { _AttachmentByte = value; }
+            set { _AttachmentByte = value; DoNotify(); }
         }
 
         #endregion
