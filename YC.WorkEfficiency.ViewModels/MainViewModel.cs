@@ -268,23 +268,23 @@ namespace YC.WorkEfficiency.ViewModels
             }
         });
 
-        public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
-        {
-            if (f != null)
-            {
-                f.EndTime = DateTime.Now;
-                f.IsFinished = true;
+        //public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
+        //{
+        //    if (f != null)
+        //    {
+        //        f.EndTime = DateTime.Now;
+        //        f.IsFinished = true;
 
-                fileModelData.WorkingList.Remove(f);
-                fileModelData.EndingList.Add(f);
+        //        fileModelData.WorkingList.Remove(f);
+        //        fileModelData.EndingList.Add(f);
 
-                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
-                {
-                    fileModelDataContext.Update(f);
-                    fileModelDataContext.SaveChanges();
-                }
-            }
-        });
+        //        using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+        //        {
+        //            fileModelDataContext.Update(f);
+        //            fileModelDataContext.SaveChanges();
+        //        }
+        //    }
+        //});
 
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {

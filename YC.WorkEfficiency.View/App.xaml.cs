@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using YC.WorkEfficiency.View.DataAccess;
+using YC.WorkEfficiency.DataAccess;
 
 namespace YC.WorkEfficiency.View
 {
@@ -12,11 +12,10 @@ namespace YC.WorkEfficiency.View
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
-            FileModelDataContext dbContext = new FileModelDataContext();
+            WorkEfficiencyDataContext dbContext = new WorkEfficiencyDataContext();
             dbContext.Database.EnsureCreated();
 
-            FileAttachmentModelDataContext db2 = new FileAttachmentModelDataContext();
-            db2.Database.EnsureCreated();
+            
         }
     }
 }

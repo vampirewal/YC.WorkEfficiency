@@ -21,11 +21,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using Newtonsoft.Json;
-using YC.WorkEfficiency.View.DataAccess;
+using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
+using YC.WorkEfficiency.SimpleMVVM;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.View.ViewModels
@@ -58,7 +57,7 @@ namespace YC.WorkEfficiency.View.ViewModels
         public FileModelData fileModelData { get; set; }
         public string Title { get; set; }
 
-        public FileModel SelectedItem { get => selectedItem; set { selectedItem = value;RaisePropertyChanged(); } }
+        public FileModel SelectedItem { get => selectedItem; set { selectedItem = value;DoNotify(); } }
         //public ObservableCollection<>
 
         private string _TotleWorkTime;
@@ -66,7 +65,7 @@ namespace YC.WorkEfficiency.View.ViewModels
         public string TotleWorkTime
         {
             get { return _TotleWorkTime; }
-            set { _TotleWorkTime = value; RaisePropertyChanged(); }
+            set { _TotleWorkTime = value; DoNotify(); }
         }
 
         public ObservableCollection<FileAttachmentModel> fileAttachmentModels { get; set; }
@@ -127,13 +126,13 @@ namespace YC.WorkEfficiency.View.ViewModels
             fileModelData = new FileModelData();
             fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
             GetData();
-            StartWork();
+            //StartWork();
             GetTotleTime();
         }
 
         private void GetData()
         {
-            using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
                 //fileModelDataContext.SaveChanges();
@@ -141,9 +140,9 @@ namespace YC.WorkEfficiency.View.ViewModels
                 //1、第一步，先获取当前的时间
                 TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
                 //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var result = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
+                var result = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
 
-                var EndResult = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true).ToList();
+                var EndResult = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true).ToList();
                 //3、在workList中的每一条都与互相排序
                 result.Sort((left, right) =>
                 {
@@ -172,37 +171,37 @@ namespace YC.WorkEfficiency.View.ViewModels
             }
         }
 
-        private void StartWork()
-        {
-            Thread td = new Thread(ActionWork);
-            td.Start();
-        }
+        //private void StartWork()
+        //{
+        //    Thread td = new Thread(ActionWork);
+        //    td.Start();
+        //}
 
-        private void ActionWork()
-        {
-            while (true)
-            {
-                Thread.Sleep(1000);
-                if (fileModelData.WorkingList.Count > 0)
-                {
-                    TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
-                    foreach (var item in fileModelData.WorkingList)
-                    {
-                        if (!item.IsFinished && !item.IsEdit)
-                        {
-                            TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
-                            TimeSpan ts = ts_now.Subtract(ts_createtime);
-                            item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
-                        }
-                    }
-                    using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
-                    {
-                        fileModelDataContext.UpdateRange(fileModelData.WorkingList);
-                        fileModelDataContext.SaveChanges();
-                    }
-                }
-            }
-        }
+        //private void ActionWork()
+        //{
+        //    while (true)
+        //    {
+        //        Thread.Sleep(1000);
+        //        if (fileModelData.WorkingList.Count > 0)
+        //        {
+        //            TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
+        //            foreach (var item in fileModelData.WorkingList)
+        //            {
+        //                if (!item.IsFinished && !item.IsEdit)
+        //                {
+        //                    TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
+        //                    TimeSpan ts = ts_now.Subtract(ts_createtime);
+        //                    item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+        //                }
+        //            }
+        //            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+        //            {
+        //                work.UpdateRange(WorkingList);
+        //                work.SaveChanges();
+        //            }
+        //        }
+        //    }
+        //}
 
         private void GetTotleTime()
         {
@@ -212,9 +211,9 @@ namespace YC.WorkEfficiency.View.ViewModels
                 int hours = 0;
                 int minutes = 0;
                 int seconds = 0;
-                using (FileModelDataContext fileModelDataContext=new FileModelDataContext())
+                using (WorkEfficiencyDataContext work =new WorkEfficiencyDataContext())
                 {
-                    var current= fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true).ToList();
+                    var current= work.FileModelDB.Where(s => s.IsFinished == true).ToList();
                     
                     foreach (var item in current)
                     {
@@ -251,10 +250,10 @@ namespace YC.WorkEfficiency.View.ViewModels
                 CreateTime = DateTime.Now,
                 EndTime = DateTime.Now
             };
-            using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
-                fileModelDataContext.FileModelDB.Add(current);
-                fileModelDataContext.SaveChanges();
+                work.FileModelDB.Add(current);
+                work.SaveChanges();
             }
             fileModelData.WorkingList.Insert(0, current);
 
@@ -284,10 +283,10 @@ namespace YC.WorkEfficiency.View.ViewModels
                 fileModelData.WorkingList.Remove(f);
                 fileModelData.EndingList.Add(f);
 
-                using (FileModelDataContext fileModelDataContext = new FileModelDataContext())
+                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {
-                    fileModelDataContext.Update(f);
-                    fileModelDataContext.SaveChanges();
+                    work.Update(f);
+                    work.SaveChanges();
                 }
             }
         });
@@ -300,11 +299,11 @@ namespace YC.WorkEfficiency.View.ViewModels
             if (o!=null)
             {
                 string guid = o.GuidId;
-                using(FileAttachmentModelDataContext fileAttachmentModelData=new FileAttachmentModelDataContext())
+                using(WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {
-                    fileAttachmentModelData.Database.EnsureCreated();
+                    work.Database.EnsureCreated();
                     fileAttachmentModels.Clear();
-                    var current= fileAttachmentModelData.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
+                    var current= work.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
                     if (current.Count>0)
                     {
                         foreach (var item in current)
@@ -323,7 +322,7 @@ namespace YC.WorkEfficiency.View.ViewModels
     /// <summary>
     /// 后期进行存储的DataModel类
     /// </summary>
-    public class FileModelData : ObservableObject
+    public class FileModelData 
     {
         public ObservableCollection<FileModel> WorkingList { get; set; }
 

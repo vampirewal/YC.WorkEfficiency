@@ -15,7 +15,6 @@
 
 using System;
 using System.Windows;
-using GalaSoft.MvvmLight.Command;
 
 namespace YC.WorkEfficiency.View.ViewModels
 {
@@ -28,41 +27,41 @@ namespace YC.WorkEfficiency.View.ViewModels
 
         #region 命令
 
-        public RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
-        {
-            if (w.Name == "MainView")
-            {
-                System.Environment.Exit(0);
-                Application.Current.Shutdown();
-            }
-            else
-            {
-                w.Close();
-                GC.Collect();
-            }
-        });
+        //public RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
+        //{
+        //    if (w.Name == "MainView")
+        //    {
+        //        System.Environment.Exit(0);
+        //        Application.Current.Shutdown();
+        //    }
+        //    else
+        //    {
+        //        w.Close();
+        //        GC.Collect();
+        //    }
+        //});
 
-        public RelayCommand<Window> MaxWindowCommand => new RelayCommand<Window>((w) =>
-        {
-            if (w.WindowState == WindowState.Normal)
-            {
-                w.WindowState = WindowState.Maximized;
-            }
-            else
-            {
-                w.WindowState = WindowState.Normal;
-            }
-        });
+        //public RelayCommand<Window> MaxWindowCommand => new RelayCommand<Window>((w) =>
+        //{
+        //    if (w.WindowState == WindowState.Normal)
+        //    {
+        //        w.WindowState = WindowState.Maximized;
+        //    }
+        //    else
+        //    {
+        //        w.WindowState = WindowState.Normal;
+        //    }
+        //});
 
-        public RelayCommand<Window> MinWindowCommand => new RelayCommand<Window>((w) => { w.WindowState = WindowState.Minimized; });
+        //public RelayCommand<Window> MinWindowCommand => new RelayCommand<Window>((w) => { w.WindowState = WindowState.Minimized; });
 
-        public RelayCommand<Window> WindowMoveCommand => new RelayCommand<Window>((w) =>
-        {
-            if (w!=null)
-            {
-                w.DragMove();
-            }
-        });
+        //public RelayCommand<Window> WindowMoveCommand => new RelayCommand<Window>((w) =>
+        //{
+        //    if (w!=null)
+        //    {
+        //        w.DragMove();
+        //    }
+        //});
 
         #endregion 命令
     }

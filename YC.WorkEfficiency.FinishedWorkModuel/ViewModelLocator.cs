@@ -14,26 +14,27 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using GalaSoft.MvvmLight.Ioc;
+using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels;
 
-namespace YC.WorkEfficiency.View.ViewModels
+namespace YC.WorkEfficiency.FinishedWorkModuel
 {
     public class ViewModelLocator
     {
         public ViewModelLocator()
         {
             //构造函数
-            SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register(new FinishedWorkViewModel());
         }
 
         /// <summary>
         /// 返回MainViewModel
         /// </summary>
-        public MainViewModel MainViewModel
+        public FinishedWorkViewModel FinishedWorkViewModel
         {
             get
             {
-                return SimpleIoc.Default.GetInstance<MainViewModel>();
+                return SimpleIoc.Default.GetViewModelInstance<FinishedWorkViewModel>();
             }
         }
         #region 属性

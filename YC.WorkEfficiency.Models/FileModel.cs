@@ -132,6 +132,14 @@ namespace YC.WorkEfficiency.Models
         [Column("StateColor")]
         public string StateColor { get; set; }
 
+        private string _UserGuid;
+
+        public string UserGuid
+        {
+            get { return _UserGuid; }
+            set { _UserGuid = value; }
+        }
+
         #endregion 扩展属性
     }
 }

@@ -39,7 +39,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         private void MessagerRegistMethod()
         {
-            Messenger.Default.Register("AddFinishedWork", "AddFinishedWork", );
+            Messenger.Default.Register<FileModel>(this, "AddFinishedWork", AddFinishedWork);
         }
         #region 属性
         public ObservableCollection<FileModel> FinishedWorkList { get; set; }
@@ -81,8 +81,8 @@ namespace YC.WorkEfficiency.ViewModels
             }
         }
 
-        [RegistMethod]
-        private void AddFinishedWork(FileModel entity)
+        
+        public void AddFinishedWork(FileModel entity)
         {
             FinishedWorkList.Add(entity);
         }

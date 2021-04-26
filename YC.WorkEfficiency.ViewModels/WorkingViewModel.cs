@@ -29,7 +29,7 @@ namespace YC.WorkEfficiency.ViewModels
         {
             //构造函数
             Title = "未完成的工作";
-            GetData();
+            InitData();
         }
 
         #region 属性
@@ -44,9 +44,21 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        private void InitData()
+        {
+            GetData();
+            MessengerRegist();
+            StartWork();
+        }
+        /// <summary>
+        /// 获取数据
+        /// </summary>
         private void GetData()
         {
-            using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
                 //fileModelDataContext.SaveChanges();
@@ -54,9 +66,7 @@ namespace YC.WorkEfficiency.ViewModels
                 //1、第一步，先获取当前的时间
                 TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
                 //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var result = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
-
-                var EndResult = fileModelDataContext.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true).ToList();
+                var result = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
                 //3、在workList中的每一条都与互相排序
                 result.Sort((left, right) =>
                 {
@@ -70,16 +80,25 @@ namespace YC.WorkEfficiency.ViewModels
                     }
                 });
                 WorkingList = new ObservableCollection<FileModel>(result);
-                
             }
         }
+        /// <summary>
+        /// 注册消息
+        /// </summary>
+        private void MessengerRegist()
+        {
+            Messenger.Default.Register<FileModel>(this, "AddNoFinishedWork", AddNoFinishedWork);
+        }
 
-        [RegistMethod]
+
+        #region 消息
         private void AddNoFinishedWork(FileModel entity)
         {
             WorkingList.Add(entity);
         }
+        #endregion
 
+        #region 开启一个新的线程来执行这个方法
         private void StartWork()
         {
             Thread td = new Thread(ActionWork);
@@ -110,7 +129,9 @@ namespace YC.WorkEfficiency.ViewModels
                     }
                 }
             }
-        }
+        } 
+        #endregion
+
         #endregion
 
         #region 命令
@@ -148,13 +169,13 @@ namespace YC.WorkEfficiency.ViewModels
                 f.IsFinished = true;
 
                 WorkingList.Remove(f);
-                fileModelData.EndingList.Add(f);
-                Messenger.Default.Send
+                //EndingList.Add(f);
+                Messenger.Default.Send("AddFinishedWork", f);
 
-                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {
-                    fileModelDataContext.Update(f);
-                    fileModelDataContext.SaveChanges();
+                    work.Update(f);
+                    work.SaveChanges();
                 }
             }
         });
