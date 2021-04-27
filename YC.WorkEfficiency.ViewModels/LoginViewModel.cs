@@ -18,7 +18,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using YC.WorkEfficiency.DataAccess;
+using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -34,7 +36,11 @@ namespace YC.WorkEfficiency.ViewModels
         #region 属性
         public BaseCommand baseCommand { get; set; } = new BaseCommand();
 
-        public ObservableCollection<string> HaveLoginUserName { get; set; }
+        private UserModel _User;
+        public UserModel User { get=>_User; set { _User = value;DoNotify(); } }
+
+        //public UserModel SelectUserModel { get; set; }
+        public ObservableCollection<UserModel> HaveLoginUserName { get; set; }
         #endregion
 
         #region 公共方法
@@ -44,22 +50,41 @@ namespace YC.WorkEfficiency.ViewModels
         #region 私有方法
         private void InitData()
         {
-            
-            using (WorkEfficiencyDataContext work =new WorkEfficiencyDataContext())
-            {
-                var current= work.UserModelDB.Select(s => s.UserName);
-                HaveLoginUserName = new ObservableCollection<string>(current);
-            }
+            HaveLoginUserName = new ObservableCollection<UserModel>();
+            User = new UserModel();
+            MessengerRegister();
+            GetLoginName();
         }
         #endregion
 
         #region 命令
         public RelayCommand<Window> LoginCommand => new RelayCommand<Window>((w) => 
         {
-            if (true)
+            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
             {
-                w.DialogResult = true;
-                w.Close();
+                var current = work.UserModelDB.Where(w => w.UserName == User.UserName && w.PassWord == User.PassWord).FirstOrDefault();
+                var ViewDataUserModel = User;
+                if (current != null)
+                {
+                    if (!current.IsLogin)
+                    {
+                        User = current;
+                        if (ViewDataUserModel.IsRemember)
+                        {
+                            User.IsRemember = true;
+                        }
+                        User.IsLogin = true;
+                        work.UserModelDB.Update(User);
+                        work.SaveChanges();
+                        GlobalData.GetInstance().UserInfo = User;
+                        w.DialogResult = true;
+                        w.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("当前用户已登陆，请勿重复登陆！");
+                    }
+                }
             }
         });
 
@@ -67,6 +92,49 @@ namespace YC.WorkEfficiency.ViewModels
         {
             Messenger.Default.Send("CreateRegisterView");
         });
+
+        public RelayCommand<string> SelectUserNameCommand => new RelayCommand<string>((u) =>
+        {
+            var current = HaveLoginUserName.FirstOrDefault(f => f.GuidId == u);
+            if (current != null)
+            {
+                if (current.IsRemember)
+                {
+                    User = current;
+                }
+                else
+                {
+                    User.ClearInfo();
+                    User.UserName = current.UserName;
+                }
+            }
+        });
+
+        #endregion
+
+        #region 消息
+        /// <summary>
+        /// 消息注册
+        /// </summary>
+        private void MessengerRegister()
+        {
+            Messenger.Default.Register(this, "GetLoginName", GetLoginName);
+        }
+        /// <summary>
+        /// 获取登陆的用户名
+        /// </summary>
+        private void GetLoginName()
+        {
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+            {
+                HaveLoginUserName.Clear();
+                var current = work.UserModelDB.Where(w=>w.GuidId!=null).ToList();
+                for (int i = 0; i < current.Count; i++)
+                {
+                    HaveLoginUserName.Add(current[i]);
+                }
+            }
+        }
         #endregion
     }
 }

@@ -7,7 +7,7 @@
 // 文件版本：V1.0.0
 // ===============================================================
 // 功能描述：
-//
+//主要的工作的类
 //
 //----------------------------------------------------------------*/
 
@@ -19,6 +19,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YC.WorkEfficiency.Models
 {
+
     [Table("FileModel")]
     public class FileModel :BaseModel
     {
@@ -139,6 +140,28 @@ namespace YC.WorkEfficiency.Models
         {
             get { return _UserGuid; }
             set { _UserGuid = value; DoNotify(); }
+        }
+
+        private string _FileTypeGuid;
+        /// <summary>
+        /// 项目类型ID
+        /// </summary>
+        [Column("FileTypeGuid")]
+        public string FileTypeGuid
+        {
+            get { return _FileTypeGuid; }
+            set { _FileTypeGuid = value; DoNotify(); }
+        }
+
+        private string _FileType;
+        /// <summary>
+        /// 项目类型
+        /// </summary>
+        [Column("FileType")]
+        public string FileType
+        {
+            get { return _FileType; }
+            set { _FileType = value; DoNotify(); }
         }
 
         #endregion 扩展属性

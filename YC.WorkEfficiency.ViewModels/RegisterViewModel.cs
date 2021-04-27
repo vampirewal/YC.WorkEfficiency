@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
@@ -25,17 +26,21 @@ namespace YC.WorkEfficiency.ViewModels
     {
         public RegisterViewModel()
         {
+            baseCommand = new BaseCommand();
+            Title = "注册";
             //构造函数
             NewUserModel = new UserModel()
             { 
                 GuidId= Guid.NewGuid().ToString(),
                 IsLogin=false,
-                IsRemember=0
+                IsRemember=false
             };
         }
 
         #region 属性
         public UserModel NewUserModel { get; set; }
+
+        public BaseCommand baseCommand { get; set; } 
         #endregion
 
         #region 公共方法
@@ -47,8 +52,9 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-        public RelayCommand RegisterUserCommand => new RelayCommand(()=> 
+        public RelayCommand<Window> RegisterUserCommand => new RelayCommand<Window>((w)=> 
         {
+            bool isok = false;
             using(WorkEfficiencyDataContext work =new WorkEfficiencyDataContext())
             {
                 var OldUser= work.UserModelDB.FirstOrDefault(f => f.UserName == NewUserModel.UserName);
@@ -56,7 +62,13 @@ namespace YC.WorkEfficiency.ViewModels
                 {
                     work.UserModelDB.Add(NewUserModel);
                     work.SaveChanges();
+                    isok = true;
                 }
+            }
+            if (isok)
+            {
+                w.DialogResult = true;
+                WindowsManager.CloseWindow(w);
             }
         });
         #endregion

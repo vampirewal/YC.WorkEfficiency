@@ -13,6 +13,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using YC.WorkEfficiency.Core;
 using YC.WorkEfficiency.Models;
@@ -21,13 +22,11 @@ namespace YC.WorkEfficiency.ViewModels.Common
 {
     public class GlobalData:BaseSingleton<GlobalData>
     {
-        public GlobalData()
-        {
-            //构造函数
-        }
 
         #region 属性
-        public UserModel LoginUserInfo { get; set; }
+        public UserModel UserInfo { get; set; } = new UserModel();
+
+        public ObservableCollection<UserModel> HaveLoginUserName { get; set; } = new ObservableCollection<UserModel>();
         #endregion
 
         #region 公共方法

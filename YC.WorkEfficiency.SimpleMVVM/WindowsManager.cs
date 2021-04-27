@@ -94,6 +94,19 @@ namespace YC.WorkEfficiency.SimpleMVVM
             return window.ShowDialog();
         }
 
+        public static bool CreatDialogWindowToBool(Window window)
+        {
+            windows.Add(window);
+            if (window.ShowDialog() == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// 创建新窗体
         /// </summary>

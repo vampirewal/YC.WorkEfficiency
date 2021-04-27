@@ -32,8 +32,12 @@
                                         VerticalContentAlignment="Center"
                                         Background="Transparent"
                                         BorderThickness="0"
+                                        DisplayMemberPath="{TemplateBinding DisplayMemberPath}"
                                         IsEditable="True"
-                                        ItemsSource="{TemplateBinding ItemsSource}" />
+                                        ItemsSource="{TemplateBinding ItemsSource}"
+                                        SelectedItem="{TemplateBinding SelectedItem}"
+                                        SelectedValue="{TemplateBinding SelectedValue}"
+                                        SelectedValuePath="{TemplateBinding SelectedValuePath}" />
                                 </Grid>
                             </Border>
                         </ControlTemplate>

@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.View
 {
@@ -20,6 +21,7 @@ namespace YC.WorkEfficiency.View
         public RegisterView()
         {
             InitializeComponent();
+            this.DataContext = new RegisterViewModel();
         }
     }
 }

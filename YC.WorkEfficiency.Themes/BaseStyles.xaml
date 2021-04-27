@@ -35,15 +35,13 @@
                 TargetType="Border">
                 <Setter Property="CornerRadius" Value="5" />
                 <Setter Property="Margin" Value="5" />
-                <Setter Property="Background"
-                        Value="{StaticResource Color3}" />
+                <Setter Property="Background" Value="{StaticResource Color3}" />
             </Style>
             <!--#endregion-->
 
             <!--#region 窗体顶部标题栏样式-->
             <Style x:Key="TopBorderStyle" TargetType="Border">
-                <Setter Property="Background"
-                        Value="{StaticResource TopTitleColor}" />
+                <Setter Property="Background" Value="{StaticResource TopTitleColor}" />
                 <Setter Property="CornerRadius" Value="5 5 0 0" />
                 <Setter Property="Height" Value="30" />
                 <Setter Property="VerticalAlignment" Value="Top" />

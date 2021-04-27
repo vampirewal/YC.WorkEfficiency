@@ -51,12 +51,12 @@ namespace YC.WorkEfficiency.Models
             set { _PassWord = value; DoNotify(); }
         }
 
-        private int _IsRemember;
+        private bool _IsRemember;
         /// <summary>
         /// 是否记住密码，0是不记住，1是记住
         /// </summary>
         [Column("IsRemember")]
-        public int IsRemember
+        public bool IsRemember
         {
             get { return _IsRemember; }
             set { _IsRemember = value; DoNotify(); }
@@ -73,5 +73,13 @@ namespace YC.WorkEfficiency.Models
             set { _IsLogin = value; DoNotify(); }
         }
 
+        public void ClearInfo()
+        {
+            this.GuidId = string.Empty;
+            this.UserName = string.Empty;
+            this.PassWord = string.Empty;
+            this.IsRemember = false;
+            this.IsLogin = false;
+        }
     }
 }

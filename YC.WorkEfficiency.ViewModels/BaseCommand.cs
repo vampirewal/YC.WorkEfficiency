@@ -14,8 +14,12 @@
 #endregion << 文 件 说 明 >>
 
 using System;
+using System.Linq;
 using System.Windows;
+using YC.WorkEfficiency.DataAccess;
+using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -32,6 +36,13 @@ namespace YC.WorkEfficiency.ViewModels
         {
             if (w.Name == "MainView"||w.Name== "LoginWindow")
             {
+                using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                {
+                    var current = GlobalData.GetInstance().UserInfo;
+                    current.IsLogin = false;
+                    work.UserModelDB.Update(current);
+                    work.SaveChanges();
+                }
                 System.Environment.Exit(0);
                 Application.Current.Shutdown();
             }
