@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:YC.WorkEfficiency.View"
     xmlns:vm1="clr-namespace:YC.WorkEfficiency.ViewModels;assembly=YC.WorkEfficiency.ViewModels"
-    StartupUri="LoginView.xaml">
+    ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

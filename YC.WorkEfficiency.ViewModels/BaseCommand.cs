@@ -30,7 +30,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         public RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
         {
-            if (w.Name == "MainView")
+            if (w.Name == "MainView"||w.Name== "LoginWindow")
             {
                 System.Environment.Exit(0);
                 Application.Current.Shutdown();

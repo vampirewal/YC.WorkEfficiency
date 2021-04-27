@@ -5,6 +5,12 @@
             <SolidColorBrush x:Key="redFont" Color="#d93a49" />
             <SolidColorBrush x:Key="DefaultButtonColor" Color="#74787c" />
             <SolidColorBrush x:Key="MainColor" Color="#e0861a" />
+            <SolidColorBrush x:Key="TopTitleColor" Color="#0f0f2d" />
+            <SolidColorBrush x:Key="BackgroundColor" Color="#181735" />
+            <SolidColorBrush x:Key="TextColor1" Color="#fe6584" />
+            <SolidColorBrush x:Key="TextColor2" Color="#ff4c70" />
+            <SolidColorBrush x:Key="Color3" Color="#393850" />
+            <SolidColorBrush x:Key="Color4" Color="#3a3952" />
         </ResourceDictionary>
 
         <ResourceDictionary>
@@ -16,7 +22,7 @@
                             Direction="0"
                             Opacity="0.7"
                             ShadowDepth="0"
-                            Color="#e0861a" />
+                            Color="#3a3952" />
                     </Setter.Value>
                 </Setter>
             </Style>
@@ -29,13 +35,15 @@
                 TargetType="Border">
                 <Setter Property="CornerRadius" Value="5" />
                 <Setter Property="Margin" Value="5" />
-                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+                <Setter Property="Background"
+                        Value="{StaticResource Color3}" />
             </Style>
             <!--#endregion-->
 
             <!--#region 窗体顶部标题栏样式-->
             <Style x:Key="TopBorderStyle" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+                <Setter Property="Background"
+                        Value="{StaticResource TopTitleColor}" />
                 <Setter Property="CornerRadius" Value="5 5 0 0" />
                 <Setter Property="Height" Value="30" />
                 <Setter Property="VerticalAlignment" Value="Top" />

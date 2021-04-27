@@ -62,5 +62,16 @@ namespace YC.WorkEfficiency.Models
             set { _IsRemember = value; DoNotify(); }
         }
 
+        private bool _IsLogin;
+        /// <summary>
+        /// 是否登陆
+        /// </summary>
+        [Column("IsLogin")]
+        public bool IsLogin
+        {
+            get { return _IsLogin; }
+            set { _IsLogin = value; DoNotify(); }
+        }
+
     }
 }

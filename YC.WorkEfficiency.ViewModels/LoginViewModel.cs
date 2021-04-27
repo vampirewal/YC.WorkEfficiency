@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.SimpleMVVM;
 
@@ -53,7 +54,19 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
+        public RelayCommand<Window> LoginCommand => new RelayCommand<Window>((w) => 
+        {
+            if (true)
+            {
+                w.DialogResult = true;
+                w.Close();
+            }
+        });
 
+        public RelayCommand RegisterCommand => new RelayCommand(() =>
+        {
+            Messenger.Default.Send("CreateRegisterView");
+        });
         #endregion
     }
 }

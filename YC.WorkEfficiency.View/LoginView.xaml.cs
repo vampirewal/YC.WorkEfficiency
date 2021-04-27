@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using YC.WorkEfficiency.SimpleMVVM;
 using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.View
@@ -22,6 +23,13 @@ namespace YC.WorkEfficiency.View
         {
             InitializeComponent();
             this.DataContext = new LoginViewModel();
+
+            Messenger.Default.Register(this, "CreateRegisterView", CreateRegisterView);
+        }
+
+        private void CreateRegisterView()
+        {
+            WindowsManager.CreatDialogWindow(new RegisterView());
         }
     }
 }

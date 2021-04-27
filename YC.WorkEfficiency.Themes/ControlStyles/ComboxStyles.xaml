@@ -10,22 +10,25 @@
                         <ControlTemplate TargetType="ComboBox">
                             <Border
                                 Background="White"
-                                CornerRadius="5" 
-                                Style="{StaticResource BorderOnlyEffect}">
+                                BorderBrush="#ddd"
+                                BorderThickness="1"
+                                CornerRadius="5">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="35" />
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock
-                                        HorizontalAlignment="Center"
+                                        Margin="8,0,0,0"
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         FontFamily="../Assets/Fonts/#iconfont"
                                         FontSize="{TemplateBinding FontSize}"
+                                        Opacity="0.5"
                                         Text="&#xe725;" />
                                     <ComboBox
                                         Grid.Column="1"
-                                        Margin="5,0"
+                                        Margin="3,0"
                                         VerticalContentAlignment="Center"
                                         Background="Transparent"
                                         BorderThickness="0"

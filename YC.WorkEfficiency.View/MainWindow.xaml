@@ -167,6 +167,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="15"
+                            Foreground="White"
                             Text="{Binding Title}" />
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
@@ -238,9 +239,10 @@
                                 <ResourceDictionary>
                                     <Style x:Key="CardBorder" TargetType="Border">
                                         <Setter Property="Margin" Value="5" />
-                                        <Setter Property="Background" Value="{StaticResource BaseBackground}" />
+                                        <Setter Property="Background" Value="{StaticResource TextColor1}" />
                                         <Setter Property="BorderThickness" Value="1" />
                                         <Setter Property="CornerRadius" Value="3" />
+
                                         <Setter Property="Effect">
                                             <Setter.Value>
                                                 <DropShadowEffect
@@ -248,7 +250,7 @@
                                                     Direction="0"
                                                     Opacity="0.7"
                                                     ShadowDepth="0"
-                                                    Color="#e0861a" />
+                                                    Color="#3a3952" />
                                             </Setter.Value>
                                         </Setter>
                                         <Style.Triggers>
@@ -257,7 +259,7 @@
                                                     <Storyboard>
                                                         <ColorAnimation
                                                             Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
-                                                            To="#e0861a"
+                                                            To="#fe6584"
                                                             Duration="0:0:0.2" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
@@ -267,7 +269,7 @@
                                                     <Storyboard>
                                                         <ColorAnimation
                                                             Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
-                                                            To="#f2eada"
+                                                            To="#ff4c70"
                                                             Duration="0:0:0.2" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
@@ -281,30 +283,35 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    Foreground="White"
                                     Text="{Binding TotleWorkTime}" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    Foreground="White"
                                     Text="今日工作" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    Foreground="White"
                                     Text="本周工作" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    Foreground="White"
                                     Text="本月工作" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
+                                    Foreground="White"
                                     Text="今年工作" />
                             </Border>
                         </UniformGrid>
