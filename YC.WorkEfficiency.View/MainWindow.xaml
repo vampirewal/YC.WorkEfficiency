@@ -172,19 +172,27 @@
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button
+                            Command="{Binding OpenSettingWindow}"
+                            Content="&#xe667;"
+                            Style="{StaticResource WindowControlButtonStyle}"
+                            ToolTip="设置" />
+                        <Button
                             Command="{Binding baseCommand.MinWindowCommand}"
                             CommandParameter="{Binding ElementName=MainView}"
                             Content="&#xe65f;"
-                            Style="{StaticResource WindowControlButtonStyle}" />
+                            Style="{StaticResource WindowControlButtonStyle}"
+                            ToolTip="最小化" />
                         <Button
                             Command="{Binding baseCommand.MaxWindowCommand}"
                             CommandParameter="{Binding ElementName=MainView}"
                             Content="&#xe653;"
-                            Style="{StaticResource WindowControlButtonStyle}" />
+                            Style="{StaticResource WindowControlButtonStyle}"
+                            ToolTip="最大化" />
                         <Button
                             Command="{Binding baseCommand.CloseWindowCommand}"
                             CommandParameter="{Binding ElementName=MainView}"
-                            Style="{StaticResource CloseWindowButtonStyle}" />
+                            Style="{StaticResource CloseWindowButtonStyle}"
+                            ToolTip="关闭" />
                     </StackPanel>
                 </Grid>
                 <i:Interaction.Triggers>
@@ -226,6 +234,7 @@
                             <Button
                                 Command="{Binding AddWorkCommand}"
                                 Content="&#xe613;"
+                                Foreground="White"
                                 Style="{StaticResource TransparentIconButton}" />
 
                         </StackPanel>
@@ -715,15 +724,9 @@
                         VerticalAlignment="Bottom"
                         Background="White"
                         BorderThickness="1"
-                        CornerRadius="5">
-                        <Border.Effect>
-                            <DropShadowEffect
-                                BlurRadius="5"
-                                Direction="0"
-                                Opacity="0.7"
-                                ShadowDepth="0"
-                                Color="#e0861a" />
-                        </Border.Effect>
+                        CornerRadius="5"
+                        Style="{StaticResource BorderOnlyEffect}">
+
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20" />

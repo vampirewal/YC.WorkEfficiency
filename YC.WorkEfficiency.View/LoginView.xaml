@@ -9,36 +9,40 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="LoginWindow"
     Title="{Binding Title}"
-    Width="300"
+    Width="288.4"
     Height="400"
+    FontFamily="Bahnschrift SemiBold"
     ResizeMode="NoResize"
     Style="{StaticResource WindowDefauleStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
     </Window.Resources>
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
+
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
                 <i:InvokeCommandAction Command="{Binding baseCommand.WindowMoveCommand}" CommandParameter="{Binding ElementName=LoginWindow}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid>
+            <Border CornerRadius="5">
+                <Border.Background>
+                    <ImageBrush ImageSource="/YC.WorkEfficiency.Themes;component/Assets/Images/时间管理.png" />
+                </Border.Background>
+            </Border>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Border Background="White" CornerRadius="5,5,0,0" />
-                <!--<ComboBox
-
-                Height="30"
-                FontSize="15"
-                Style="{StaticResource LoginComBox}" />-->
+                <!--<Border Background="White" CornerRadius="5,5,0,0" />-->
                 <Button
                     Margin="0"
                     HorizontalAlignment="Right"
@@ -46,30 +50,31 @@
                     Command="{Binding baseCommand.CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=LoginWindow}"
                     Style="{StaticResource CloseWindowButtonStyle}" />
-
             </Grid>
+
+
+
+
             <Border
                 Width="200"
-                Height="300"
+                Height="200"
+                Margin="0,60,0,0"
                 Background="White"
                 CornerRadius="5"
                 Style="{StaticResource BorderOnlyEffect}">
                 <StackPanel Margin="10">
-
                     <ComboBox
                         Name="SelectName"
                         DisplayMemberPath="UserName"
                         FontSize="20"
+                        IsEditable="False"
                         ItemsSource="{Binding HaveLoginUserName}"
-                        SelectedItem="{Binding SelectUserModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedValuePath="GuidId"
-                        >
+                        SelectedValuePath="GuidId">
                         <ComboBox.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.MergedDictionaries>
                                     <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
                                     <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                    <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
                                 </ResourceDictionary.MergedDictionaries>
                             </ResourceDictionary>
                         </ComboBox.Resources>
@@ -95,25 +100,129 @@
                             Style="{StaticResource CheckBox1}" />
 
                     </StackPanel>
+                    <!--<cc:GradualColorButton
+                        Width="80"
+                        BtnCornerRadius="3"
+                        Content="登陆"
+                        NewColor="#3a3952"
+                        OldColor="#393850" />-->
                     <Button
-                        Width="100"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"
                         Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=LoginWindow}"
-                        Content="登   陆"
-                        FontSize="20"
-                        Foreground="Black"
-                        Style="{StaticResource TransparentUnderLineButton}" />
-                    <Button
-                        Width="100"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        Command="{Binding RegisterCommand}"
-                        Content="注   册"
-                        FontSize="20"
-                        Foreground="Black"
-                        Style="{StaticResource TransparentUnderLineButton}" />
+                        CommandParameter="{Binding ElementName=LoginWindow}" Margin="5"
+                        Content="登   陆">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Width" Value="100" />
+                                <Setter Property="Height" Value="30" />
+                                <Setter Property="Background" Value="#fe6584" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="FontSize" Value="15" />
+
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border
+                                                Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="4">
+                                                <ContentPresenter
+                                                    x:Name="contentPresenter"
+                                                    Margin="5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Content="{TemplateBinding Content}"
+                                                    Focusable="False"
+                                                    RecognizesAccessKey="True"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    To="#FFFB2752"
+                                                    Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    To="#fe6584"
+                                                    Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Command="{Binding RegisterCommand}" Content="注   册">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Width" Value="100" />
+                                <Setter Property="Height" Value="30" />
+                                <Setter Property="Background" Value="#fe6584" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="FontSize" Value="15" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border
+                                                Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="4">
+                                                <ContentPresenter
+                                                    x:Name="contentPresenter"
+                                                    Margin="5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Content="{TemplateBinding Content}"
+                                                    Focusable="False"
+                                                    RecognizesAccessKey="True"
+                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    To="#FFFB2752"
+                                                    Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                    To="#fe6584"
+                                                    Duration="0:0:0.1" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
                 </StackPanel>
 
             </Border>

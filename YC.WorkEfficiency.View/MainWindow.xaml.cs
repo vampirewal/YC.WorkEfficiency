@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using YC.WorkEfficiency.SimpleMVVM;
 using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.View
@@ -25,10 +26,19 @@ namespace YC.WorkEfficiency.View
         {
             InitializeComponent();
             this.DataContext = new MainViewModel();
-            //Border b;
-            //b.
+            Messenger.Default.Register(this, "ShowSettingWindow", ShowSettingWindow);
         }
 
-        
+        private void ShowSettingWindow()
+        {
+            if(WindowsManager.CreatDialogWindowToBool(new SettingView()))
+            {
+                //弹出设置保存成功的提示
+            }
+            else
+            {
+                //弹出设置保存失败的提示
+            }
+        }
     }
 }

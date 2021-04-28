@@ -13,13 +13,13 @@ namespace YC.WorkEfficiency.View
         protected override void OnStartup(StartupEventArgs e)
         {
             //base.OnStartup(e);
+            //此处调用一下，方便初次打开系统的时候，创建数据库
             WorkEfficiencyDataContext dbContext = new WorkEfficiencyDataContext();
             dbContext.Database.EnsureCreated();
 
-            if (new LoginView().ShowDialog() == true)
+            //此处使用同一的windowManager进行窗口的创建管理
+            if (WindowsManager.CreatDialogWindowToBool(new LoginView())==true)
             {
-                //上面这个showDialog可以是登陆窗口，登陆成功之后，进入
-                //new MainWindow().ShowDialog();
                 WindowsManager.CreatWindow(new MainWindow(), ShowMode.Dialog);
             }
         }

@@ -169,38 +169,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         });
 
-        //public RelayCommand RefreshData => new RelayCommand(() =>
-        //{
-        //    //GetData();
-        //});
-
-        //public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
-        //{
-        //    if (f != null)
-        //    {
-        //        f.CreateTime = DateTime.Now;
-        //        f.IsEdit = false;
-        //    }
-        //});
-
-        //public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
-        //{
-        //    if (f != null)
-        //    {
-        //        f.EndTime = DateTime.Now;
-        //        f.IsFinished = true;
-
-        //        fileModelData.WorkingList.Remove(f);
-        //        fileModelData.EndingList.Add(f);
-
-        //        using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
-        //        {
-        //            fileModelDataContext.Update(f);
-        //            fileModelDataContext.SaveChanges();
-        //        }
-        //    }
-        //});
-
+        
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
             //FileModel fileModel = o as FileModel;
@@ -226,6 +195,8 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         });
+
+        public RelayCommand OpenSettingWindow => new RelayCommand(() => { Messenger.Default.Send("ShowSettingWindow"); });
         #endregion
 
         #region 消息

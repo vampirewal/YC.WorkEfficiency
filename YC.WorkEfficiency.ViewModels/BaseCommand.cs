@@ -34,7 +34,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         public RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
         {
-            if (w.Name == "MainView"||w.Name== "LoginWindow")
+            if (w.Name == "MainView")
             {
                 using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
                 {
@@ -43,6 +43,11 @@ namespace YC.WorkEfficiency.ViewModels
                     work.UserModelDB.Update(current);
                     work.SaveChanges();
                 }
+                System.Environment.Exit(0);
+                Application.Current.Shutdown();
+            }
+            else if (w.Name == "LoginWindow")
+            {
                 System.Environment.Exit(0);
                 Application.Current.Shutdown();
             }
