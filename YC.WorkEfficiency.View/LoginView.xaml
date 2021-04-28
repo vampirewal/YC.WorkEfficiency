@@ -28,7 +28,7 @@
 
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
-                <i:InvokeCommandAction Command="{Binding baseCommand.WindowMoveCommand}" CommandParameter="{Binding ElementName=LoginWindow}" />
+                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=LoginWindow}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid>
@@ -47,7 +47,7 @@
                     Margin="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Command="{Binding baseCommand.CloseWindowCommand}"
+                    Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding ElementName=LoginWindow}"
                     Style="{StaticResource CloseWindowButtonStyle}" />
             </Grid>
@@ -100,15 +100,10 @@
                             Style="{StaticResource CheckBox1}" />
 
                     </StackPanel>
-                    <!--<cc:GradualColorButton
-                        Width="80"
-                        BtnCornerRadius="3"
-                        Content="登陆"
-                        NewColor="#3a3952"
-                        OldColor="#393850" />-->
                     <Button
+                        Margin="5"
                         Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=LoginWindow}" Margin="5"
+                        CommandParameter="{Binding ElementName=LoginWindow}"
                         Content="登   陆">
                         <Button.Style>
                             <Style TargetType="Button">

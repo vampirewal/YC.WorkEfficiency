@@ -31,6 +31,10 @@ namespace YC.WorkEfficiency.ViewModels
             Title = "未完成的工作";
             InitData();
         }
+        public override object GetResult()
+        {
+            return null;
+        }
 
         #region 属性
         public ObservableCollection<FileModel> WorkingList { get; set; }

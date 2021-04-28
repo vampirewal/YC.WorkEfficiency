@@ -21,7 +21,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
     /// <summary>
     /// ViewModel基类
     /// </summary>
-    public class ViewModelBase : NotifyBase
+    public  class ViewModelBase : NotifyBase
     {
         /// <summary>
         /// 判断是不是设计器模式
@@ -46,5 +46,47 @@ namespace YC.WorkEfficiency.SimpleMVVM
         }
 
         public string Title { get; set; } = "未命名窗体";
+
+        /// <summary>
+        /// 当窗体是DialogShow的方式打开的时候，可以通过重写这个方法，将值传回主窗体
+        /// </summary>
+        /// <returns></returns>
+        public virtual object GetResult()
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 通用的窗体关闭命令，但是每个窗体的关闭可能需要做的事情不一样，故非DialogWindow窗体，重写这个命令。
+        /// </summary>
+        public virtual RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) => 
+        {
+            WindowsManager.CloseWindow(w);
+        });
+
+        public virtual RelayCommand<Window> MaxWindowCommand => new RelayCommand<Window>((w) =>
+        {
+            if (w.WindowState == WindowState.Normal)
+            {
+                w.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                w.WindowState = WindowState.Normal;
+            }
+        });
+
+        public virtual RelayCommand<Window> MinWindowCommand => new RelayCommand<Window>((w) => 
+        {
+            w.WindowState = WindowState.Minimized; 
+        });
+
+        public virtual RelayCommand<Window> WindowMoveCommand => new RelayCommand<Window>((w) =>
+        {
+            if (w != null)
+            {
+                w.DragMove();
+            }
+        });
     }
 }

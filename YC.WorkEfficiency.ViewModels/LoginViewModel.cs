@@ -32,9 +32,16 @@ namespace YC.WorkEfficiency.ViewModels
             Title = "登陆";
             InitData();
         }
+        #region 重写
+
+        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
+        {
+            System.Environment.Exit(0);
+            Application.Current.Shutdown();
+        }); 
+        #endregion
 
         #region 属性
-        public BaseCommand baseCommand { get; set; } = new BaseCommand();
 
         private UserModel _User;
         public UserModel User { get=>_User; set { _User = value;DoNotify(); } }
@@ -135,6 +142,8 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         }
+
+        
         #endregion
     }
 }

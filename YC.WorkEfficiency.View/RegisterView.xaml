@@ -18,7 +18,7 @@
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
-                <i:InvokeCommandAction Command="{Binding baseCommand.WindowMoveCommand}" CommandParameter="{Binding ElementName=RegisterWindow}" />
+                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=RegisterWindow}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid>
@@ -37,7 +37,7 @@
                 Margin="0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Command="{Binding baseCommand.CloseWindowCommand}"
+                Command="{Binding CloseWindowCommand}"
                 CommandParameter="{Binding ElementName=RegisterWindow}"
                 Style="{StaticResource CloseWindowButtonStyle}" />
             <Border

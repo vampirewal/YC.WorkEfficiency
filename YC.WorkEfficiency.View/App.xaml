@@ -17,7 +17,6 @@
                     <!--#region Window窗体的样式-->
                     <Style x:Key="WindowDefauleStyle" TargetType="Window">
                         <Setter Property="Background" Value="{x:Null}" />
-                        <!--<Setter Property="WindowStartupLocation" Value="CenterScreen"/>-->
                         <Setter Property="WindowStyle" Value="None" />
                         <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
                         <Setter Property="AllowsTransparency" Value="True" />

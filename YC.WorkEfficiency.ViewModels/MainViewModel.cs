@@ -21,10 +21,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.Themes;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
@@ -41,6 +43,26 @@ namespace YC.WorkEfficiency.ViewModels
 
             
         }
+
+        #region 重写
+        public override object GetResult()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) => 
+        {
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+            {
+                var current = GlobalData.GetInstance().UserInfo;
+                current.IsLogin = false;
+                work.UserModelDB.Update(current);
+                work.SaveChanges();
+            }
+            System.Environment.Exit(0);
+            Application.Current.Shutdown();
+        });
+        #endregion
 
         #region 属性
 
@@ -197,6 +219,32 @@ namespace YC.WorkEfficiency.ViewModels
         });
 
         public RelayCommand OpenSettingWindow => new RelayCommand(() => { Messenger.Default.Send("ShowSettingWindow"); });
+
+        public RelayCommand UpLoadAttachmentCommand => new RelayCommand(()=> 
+        {
+            if (selectedItem==null)
+            {
+                //先判断一下当前选择的工作，是否为空
+
+                return;
+            }
+            OpenFileDialog ofd = new OpenFileDialog() 
+            {
+                Title="请选择要上传的文件",
+                Filter="Excel文件(2003以上)|*.xlsx|Excel文件（97-2003）|*.xls|Word文件|*.docx|文本文件|*.txt|JPG图片|*.jpg|PNG图片|*.png",
+                FileName = string.Empty,
+                Multiselect = true
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                //DialogWindow.Show("选择成功", MessageType.Successful, WindowsManager.Windows["MainView"]);
+
+                string[] filefullName = ofd.FileNames;
+
+                
+            }
+        });
         #endregion
 
         #region 消息
@@ -232,6 +280,12 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         }
+
+        
+        #endregion
+
+        #region 事件
+
         #endregion
     }
 }

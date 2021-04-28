@@ -36,6 +36,10 @@ namespace YC.WorkEfficiency.ViewModels
                 IsRemember=false
             };
         }
+        public override object GetResult()
+        {
+            return null;
+        }
 
         #region 属性
         public UserModel NewUserModel { get; set; }

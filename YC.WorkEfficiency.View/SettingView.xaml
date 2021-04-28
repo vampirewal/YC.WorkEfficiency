@@ -16,7 +16,7 @@
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
-                <i:InvokeCommandAction Command="{Binding baseCommand.WindowMoveCommand}" CommandParameter="{Binding ElementName=SettingWindow}" />
+                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=SettingWindow}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid>
@@ -27,7 +27,7 @@
             <Button
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Command="{Binding baseCommand.CloseWindowCommand}"
+                Command="{Binding CloseWindowCommand}"
                 CommandParameter="{Binding ElementName=SettingWindow}"
                 Style="{StaticResource CloseWindowButtonStyle}" />
             <TextBlock

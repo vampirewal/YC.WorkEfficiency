@@ -18,7 +18,7 @@ namespace YC.WorkEfficiency.View
             dbContext.Database.EnsureCreated();
 
             //此处使用同一的windowManager进行窗口的创建管理
-            if (WindowsManager.CreatDialogWindowToBool(new LoginView())==true)
+            if (WindowsManager.CreatDialogWindowToBool(new LoginView()))
             {
                 WindowsManager.CreatWindow(new MainWindow(), ShowMode.Dialog);
             }

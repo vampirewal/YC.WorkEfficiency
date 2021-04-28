@@ -53,8 +53,8 @@ namespace YC.WorkEfficiency.ViewModels
             }
             else
             {
-                w.Close();
-                GC.Collect();
+                w.DialogResult = false;
+                WindowsManager.CloseWindow(w);
             }
         });
 

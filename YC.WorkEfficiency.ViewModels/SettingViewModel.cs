@@ -14,19 +14,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using YC.WorkEfficiency.SimpleMVVM;
 
 namespace YC.WorkEfficiency.ViewModels
 {
-    public class SettingViewModel
+    public class SettingViewModel:ViewModelBase
     {
         public SettingViewModel()
         {
             //构造函数
-            baseCommand = new BaseCommand();
         }
 
         #region 属性
-        public BaseCommand baseCommand { get; set; }
         #endregion
 
         #region 公共方法

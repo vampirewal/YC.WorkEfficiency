@@ -94,6 +94,8 @@ namespace YC.WorkEfficiency.SimpleMVVM
             return window.ShowDialog();
         }
 
+        
+
         public static bool CreatDialogWindowToBool(Window window)
         {
             windows.Add(window);
@@ -167,6 +169,8 @@ namespace YC.WorkEfficiency.SimpleMVVM
         /// <param name="window"></param>
         public static void CloseWindow(Window window)
         {
+            window.DialogResult = false;
+            windows.Remove(window);
             window.Close();
             GC.Collect();
         }
@@ -181,6 +185,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
             {
                 if (window.GetType().FullName == windowType.FullName)
                 {
+                    windows.Remove(window);
                     window.Close();
                     break;
                 }
@@ -197,6 +202,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
             {
                 if (window.GetType().FullName == windowType.FullName)
                 {
+                    windows.Remove(window);
                     window.Close();
                 }
             }

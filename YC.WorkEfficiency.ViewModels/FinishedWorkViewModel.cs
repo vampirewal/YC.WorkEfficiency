@@ -29,6 +29,10 @@ namespace YC.WorkEfficiency.ViewModels
             //构造函数
             InitData();
         }
+        public override object GetResult()
+        {
+            return null;
+        }
 
         private void InitData()
         {
@@ -86,10 +90,12 @@ namespace YC.WorkEfficiency.ViewModels
         }
 
         
+
+
         #endregion
 
         #region 命令
-        
+
 
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
