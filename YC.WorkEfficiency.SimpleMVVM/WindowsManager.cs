@@ -88,15 +88,21 @@ namespace YC.WorkEfficiency.SimpleMVVM
         /// 创建对话框窗体
         /// </summary>
         /// <param name="window"></param>
-        public static object CreatDialogWindow(Window window)
+        public static object CreateDialogWindow(Window window)
         {
             windows.Add(window);
             return window.ShowDialog();
         }
 
+        public static object CreateDialogWindowByViewModelResult(Window window,ViewModelBase vm)
+        {
+            windows.Add(window);
+            window.ShowDialog();
+            return vm.GetResult();
+        }
         
 
-        public static bool CreatDialogWindowToBool(Window window)
+        public static bool CreateDialogWindowToBool(Window window)
         {
             windows.Add(window);
             if (window.ShowDialog() == true)

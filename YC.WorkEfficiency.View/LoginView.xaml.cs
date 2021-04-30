@@ -29,7 +29,7 @@ namespace YC.WorkEfficiency.View
 
         private void CreateRegisterView()
         {
-            if(WindowsManager.CreatDialogWindowToBool(new RegisterView())==true)
+            if(WindowsManager.CreateDialogWindowToBool(new RegisterView()))
             {
                 Messenger.Default.Send("GetLoginName");
             }

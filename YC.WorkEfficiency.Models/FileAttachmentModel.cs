@@ -33,6 +33,15 @@ namespace YC.WorkEfficiency.Models
         //    get { return _GuidId; }
         //    set { _GuidId = value; }
         //}
+        private string _AttachmentName;
+        [Column("AttachmentName")]
+        public string AttachmentName
+        {
+            get { return _AttachmentName; }
+            set { _AttachmentName = value; DoNotify(); }
+        }
+
+
 
         private string _ParentGuidId;
         /// <summary>
@@ -56,12 +65,12 @@ namespace YC.WorkEfficiency.Models
             set { _Attachment = value; DoNotify(); }
         }
 
-        private int _AttachmentType;
+        private string _AttachmentType;
         /// <summary>
         /// 附件类型，1是图片，2是文件（word或excel这种）
         /// </summary>
         [Column("AttachmentType")]
-        public int AttachmentType
+        public string AttachmentType
         {
             get { return _AttachmentType; }
             set { _AttachmentType = value; DoNotify(); }

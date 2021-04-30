@@ -31,7 +31,7 @@ namespace YC.WorkEfficiency.View
 
         private void ShowSettingWindow()
         {
-            if (WindowsManager.CreatDialogWindowToBool(new SettingView()))
+            if (WindowsManager.CreateDialogWindowToBool(new SettingView()))
             {
                 //弹出设置保存成功的提示
             }

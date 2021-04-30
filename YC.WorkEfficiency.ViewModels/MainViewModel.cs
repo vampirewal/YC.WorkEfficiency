@@ -33,24 +33,19 @@ namespace YC.WorkEfficiency.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        
+
 
         public MainViewModel()
         {
             //构造函数
             Title = "时间效率管理";
             InitData();
-
-            
         }
 
         #region 重写
-        public override object GetResult()
-        {
-            throw new NotImplementedException();
-        }
 
-        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) => 
+
+        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
         {
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
@@ -114,10 +109,10 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void InitData()
         {
-            
+
             fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
-            
-            
+
+
             LoadModuels();
             MessengerRegister();
             GetTotleTime();
@@ -131,30 +126,43 @@ namespace YC.WorkEfficiency.ViewModels
             NoFinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
 
             FinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["已完成的工作"];
-            
+
         }
 
+        private string GetFileExtension(string FileExtension)
+        {
+            string str = string.Empty;
+            switch (FileExtension)
+            {
+                case ".xlsx":
+                    str = "Excel文件";
+                    break;
+                default:
+                    break;
+            }
+            return str;
+        }
         private void GetTotleTime()
         {
-            Task.Run(()=> 
+            Task.Run(() =>
             {
                 int day = 0;
                 int hours = 0;
                 int minutes = 0;
                 int seconds = 0;
-                using (WorkEfficiencyDataContext fileModelDataContext =new WorkEfficiencyDataContext())
+                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                 {
-                    var current= fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true).ToList();
-                    
+                    var current = fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true).ToList();
+
                     foreach (var item in current)
                     {
                         string itemday = item.AfterTime.Split('-')[0];
                         string newitemday = itemday.Replace('天', ' ');
                         day += Convert.ToInt32(newitemday.Trim());
 
-                        string[] times= item.AfterTime.Split('-')[1].Split(':');
-                        seconds+= Convert.ToInt32(times[2]);
-                        minutes+= Convert.ToInt32(times[1]);
+                        string[] times = item.AfterTime.Split('-')[1].Split(':');
+                        seconds += Convert.ToInt32(times[2]);
+                        minutes += Convert.ToInt32(times[1]);
                         hours += Convert.ToInt32(times[0]);
 
                     }
@@ -191,60 +199,128 @@ namespace YC.WorkEfficiency.ViewModels
 
         });
 
-        
+
         public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
             //FileModel fileModel = o as FileModel;
             //MessageBox.Show(SelectedItem.GuidId);
             //SelectedItem = o;
-            if (o!=null)
+            if (o != null)
             {
                 string guid = o.GuidId;
-                using(WorkEfficiencyDataContext fileAttachmentModelData =new WorkEfficiencyDataContext())
+                using (WorkEfficiencyDataContext fileAttachmentModelData = new WorkEfficiencyDataContext())
                 {
                     fileAttachmentModelData.Database.EnsureCreated();
                     fileAttachmentModels.Clear();
-                    var current= fileAttachmentModelData.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
-                    if (current.Count>0)
+                    var current = fileAttachmentModelData.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
+                    if (current.Count > 0)
                     {
                         foreach (var item in current)
                         {
                             fileAttachmentModels.Add(item);
                         }
-                        
+
                     }
-                    
+
                 }
             }
         });
 
-        public RelayCommand OpenSettingWindow => new RelayCommand(() => { Messenger.Default.Send("ShowSettingWindow"); });
-
-        public RelayCommand UpLoadAttachmentCommand => new RelayCommand(()=> 
+        public RelayCommand OpenSettingWindow => new RelayCommand(() =>
         {
-            if (selectedItem==null)
+            Messenger.Default.Send("ShowSettingWindow");
+        });
+
+        public RelayCommand UpLoadAttachmentCommand => new RelayCommand(() =>
+        {
+            if (selectedItem == null)
             {
                 //先判断一下当前选择的工作，是否为空
 
                 return;
             }
-            OpenFileDialog ofd = new OpenFileDialog() 
+            OpenFileDialog ofd = new OpenFileDialog()
             {
-                Title="请选择要上传的文件",
-                Filter="Excel文件(2003以上)|*.xlsx|Excel文件（97-2003）|*.xls|Word文件|*.docx|文本文件|*.txt|JPG图片|*.jpg|PNG图片|*.png",
+                Title = "请选择要上传的文件",
+                Filter = "Excel文件(2003以上)|*.xlsx|Excel文件（97-2003）|*.xls|Word文件|*.docx|文本文件|*.txt|JPG图片|*.jpg|PNG图片|*.png",
                 FileName = string.Empty,
                 Multiselect = true
             };
 
             if (ofd.ShowDialog() == true)
             {
-                //DialogWindow.Show("选择成功", MessageType.Successful, WindowsManager.Windows["MainView"]);
+                Task.Run(() => {
 
-                string[] filefullName = ofd.FileNames;
+                    List<string> filefullName = ofd.FileNames.ToList();
+                    foreach (var filePath in filefullName)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(filePath);
+                        string fileType = Path.GetExtension(filePath);
+                        try
+                        {
+                            //FileInfo fileInfo = new FileInfo(filePath);
 
-                
+
+                            using (FileStream fs = new FileStream(filePath, FileMode.Open))
+                            {
+                                BinaryReader brFile = new BinaryReader(fs);
+                                Byte[] byData = brFile.ReadBytes((int)fs.Length);
+                                FileAttachmentModel fam = new FileAttachmentModel()
+                                {
+                                    GuidId = Guid.NewGuid().ToString(),
+                                    AttachmentName = fileName,
+                                    ParentGuidId = selectedItem.GuidId,
+                                    Attachment = byData,
+                                    AttachmentType = fileType,
+                                    AttachmentByte = byData.Length / 1024
+
+                                };
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    fileAttachmentModels.Add(fam);
+                                });
+
+                                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                                {
+                                    work.FileAttachmentModelDB.Add(fam);
+                                    work.SaveChanges();
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                DialogWindow.Show($"{fileName} 上传文件失败，请查看上传文件是否已经被打开！", MessageType.Error, WindowsManager.Windows["MainView"]);
+                            });
+                        }
+                    }
+                });
+
+
             }
         });
+
+        public RelayCommand<FileAttachmentModel> DownloadAttachment => new RelayCommand<FileAttachmentModel>((f) =>
+          {
+              byte[] currentFile = f.Attachment;
+              //Environment.GetFolderPath(Environment.SpecialFolder.Desktop); 获取桌面路径
+              BinaryWriter bw = new BinaryWriter(File.Open($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}\\{f.AttachmentName}{f.AttachmentType}", FileMode.OpenOrCreate));
+              bw.Write(currentFile);
+              bw.Close();
+              DialogWindow.Show("已成功将文件保存到桌面！", MessageType.Successful, WindowsManager.Windows["MainView"]);
+          });
+
+        public RelayCommand<FileAttachmentModel> DeleteAttachmentCommand => new RelayCommand<FileAttachmentModel>((f) =>
+            {
+                fileAttachmentModels.Remove(f);
+                using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                {
+                    work.FileAttachmentModelDB.Remove(f);
+                    work.SaveChanges();
+                }
+                DialogWindow.Show("已成功将文件删除！", MessageType.Successful, WindowsManager.Windows["MainView"]);
+            });
         #endregion
 
         #region 消息

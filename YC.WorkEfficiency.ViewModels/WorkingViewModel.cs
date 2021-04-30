@@ -156,11 +156,15 @@ namespace YC.WorkEfficiency.ViewModels
                 f.IsEdit = false;
             }
         });
-        public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
+        public RelayCommand<FileModel> WorkSelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
             if (o != null)
             {
                 Messenger.Default.Send("ShowWorkInfo", o);
+                if (WorkingList.Count==1)
+                {
+                    Messenger.Default.Send("RefreshWorkingSelectedItem");
+                }
             }
         });
 

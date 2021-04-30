@@ -29,7 +29,6 @@
             HeadersVisibility="All"
             ItemsSource="{Binding FinishedWorkList}"
             RowHeaderWidth="60"
-            SelectedItem="{Binding SelectedItem}"
             SelectionMode="Single"
             VerticalScrollBarVisibility="Auto">
             <DataGrid.Resources>
@@ -46,9 +45,16 @@
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </DataGrid.Resources>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
-                    Width="80"
+                    Width="auto"
                     Header="状态"
                     IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -57,8 +63,7 @@
                                 x:Name="StatePoint"
                                 Width="20"
                                 Height="20"
-                                Margin="5"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Data="{StaticResource StatePoint}"
                                 Fill="Green"
@@ -68,10 +73,13 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="auto" Header="工作名">
+                <DataGridTemplateColumn
+                    Width="auto"
+                    MaxWidth="200"
+                    Header="工作名">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel>
+                            <StackPanel HorizontalAlignment="Center">
                                 <TextBlock x:Name="ShowFileTitle" Text="{Binding FileTitle}" />
                                 <TextBox x:Name="EditText" Text="{Binding FileTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
@@ -99,7 +107,7 @@
                 <DataGridTemplateColumn Width="auto" Header="结束时间">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel>
+                            <StackPanel HorizontalAlignment="Center">
                                 <hc:DateTimePicker
                                     x:Name="datepicker"
                                     IsEnabled="{Binding IsEdit, Converter={StaticResource Boolean2VisibilityConverter}}"
@@ -164,7 +172,7 @@
             </DataGrid.ContextMenu>-->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding SelectionChangeCommand}" CommandParameter="{Binding SelectedItem, ElementName=FinishedWorkList}" />
+                    <i:InvokeCommandAction Command="{Binding FinishedWorkSelectionChangeCommand}" CommandParameter="{Binding SelectedItem, ElementName=FinishedWorkList}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>

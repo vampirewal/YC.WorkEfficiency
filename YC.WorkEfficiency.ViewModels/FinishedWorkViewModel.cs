@@ -97,7 +97,7 @@ namespace YC.WorkEfficiency.ViewModels
         #region 命令
 
 
-        public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
+        public RelayCommand<FileModel> FinishedWorkSelectionChangeCommand => new RelayCommand<FileModel>((o) =>
         {
             if (o != null)
             {

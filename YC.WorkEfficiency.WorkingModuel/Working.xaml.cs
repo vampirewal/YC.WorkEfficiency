@@ -29,10 +29,15 @@ namespace YC.WorkEfficiency.WorkingModuel
         {
             InitializeComponent();
             this.DataContext = new WorkingViewModel();
+            Messenger.Default.Register(this, "RefreshWorkingSelectedItem", RefreshWorkingSelectedItem);
         }
 
         public object Window => this;
 
-        
+        private void RefreshWorkingSelectedItem()
+        {
+            
+            NoFinishedList.SelectedItem = null;
+        }
     }
 }

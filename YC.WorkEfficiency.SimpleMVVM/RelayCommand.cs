@@ -44,6 +44,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
             this.delCommand = command;
         }
 
+        
 
         private DelegateCommand delCommand;
 
