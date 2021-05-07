@@ -26,7 +26,7 @@
                             BeginTime="0:0:0.2"
                             Storyboard.TargetName="LeftMenuList"
                             Storyboard.TargetProperty="Width"
-                            To="15"
+                            To="0"
                             Duration="0:0:0.2" />
                     </Storyboard>
                     <Storyboard x:Key="RightMenu">
@@ -34,12 +34,13 @@
                             BeginTime="0:0:0.2"
                             Storyboard.TargetName="LeftMenuList"
                             Storyboard.TargetProperty="Width"
-                            To="160"
+                            To="300"
                             Duration="0:0:0.2" />
                     </Storyboard>
 
                     <Style x:Key="LeftMenuControl" TargetType="ToggleButton">
                         <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="ToolTip" Value="收起菜单栏" />
                         <Setter Property="Content">
                             <Setter.Value>
                                 <Path
@@ -51,10 +52,24 @@
                                     Stretch="Uniform" />
                             </Setter.Value>
                         </Setter>
-                        <Setter Property="ToolTip" Value="收起菜单栏" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border
+                                        Name="back"
+                                        Width="{TemplateBinding Width}"
+                                        Height="{TemplateBinding Height}"
+                                        Background="{TemplateBinding Background}"
+                                        BorderThickness="0"
+                                        CornerRadius="5"
+                                        ToolTip="{TemplateBinding ToolTip}">
+                                        <ContentPresenter Content="{TemplateBinding Content}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <Path
@@ -74,6 +89,7 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
+
 
                     <Style x:Key="ToggleFileInfoPanel" TargetType="ToggleButton">
                         <Setter Property="Background" Value="Transparent" />
@@ -127,7 +143,9 @@
                             To="300"
                             Duration="0:0:0.2" />
                     </Storyboard>
+
                 </ResourceDictionary>
+                <ResourceDictionary />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -141,14 +159,14 @@
             <BeginStoryboard Storyboard="{StaticResource RightMenu}" />
         </EventTrigger>
 
-        <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="Toggle_FileInfoPanel">
+        <!--<EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="Toggle_FileInfoPanel">
             <EventTrigger.Actions>
                 <BeginStoryboard Storyboard="{StaticResource UpFileInfoPanel}" />
             </EventTrigger.Actions>
         </EventTrigger>
         <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="Toggle_FileInfoPanel">
             <BeginStoryboard Storyboard="{StaticResource BottomFileInfoPanel}" />
-        </EventTrigger>
+        </EventTrigger>-->
     </Window.Triggers>
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <Grid>
@@ -216,10 +234,10 @@
                 <Border
                     Margin="5"
                     BorderBrush="Gray"
-                    BorderThickness="1">
+                    BorderThickness="0,0,1,0">
                     <DockPanel
                         Name="LeftMenuList"
-                        Width="150"
+                        Width="300"
                         LastChildFill="True">
 
                         <StackPanel
@@ -326,28 +344,31 @@
                     </DockPanel>
                 </Border>
 
-                <GridSplitter
-                    Grid.Column="1"
-                    Width="10"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Stretch"
-                    Background="Transparent" />
+
                 <ToggleButton
                     x:Name="ToggleMenuControl"
                     Grid.Column="1"
                     Width="10"
                     Height="50"
                     Margin="0,0,5,0"
-                    Background="Transparent"
                     BorderThickness="0"
                     DockPanel.Dock="Right"
-                    Style="{StaticResource LeftMenuControl}" />
+                    Style="{StaticResource LeftMenuControl}">
+                    <ToggleButton.Background>
+                        <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                            <GradientStop Offset="0" Color="#A0A0A0" />
+                            <GradientStop Offset="0.15" Color="#E5E5E5" />
+                            <GradientStop Offset="0.8" Color="#ECECEC" />
+                            <GradientStop Offset="1" Color="#E5E5E5" />
+                        </LinearGradientBrush>
+                    </ToggleButton.Background>
+                </ToggleButton>
 
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition Height="10"/>
-                        <RowDefinition Height="auto" />
+                        <RowDefinition MinHeight="100" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition MinHeight="10" />
                     </Grid.RowDefinitions>
                     <TabControl BorderThickness="0" Style="{StaticResource MainTabControlStyle}">
                         <TabControl.Resources>
@@ -421,20 +442,80 @@
                         </TabItem>-->
                     </TabControl>
 
-                    <GridSplitter Grid.Row="1"
-                                  Height="5"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Center" />
-                    <ToggleButton x:Name="Toggle_FileInfoPanel"
-                                  Margin="5,0"
-                                  Grid.Row="1" Width="30"
-                                  BorderThickness="0,0,0,1"
-                                  IsChecked="True"
-                                  Style="{StaticResource ToggleFileInfoPanel}" />
+                    <GridSplitter
+                        Grid.Row="1"
+                        Height="10"
+                        Margin="5,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        ResizeDirection="Auto">
+                        <GridSplitter.Template>
+                            <ControlTemplate TargetType="GridSplitter">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="0"
+                                    CornerRadius="5">
+                                    <Canvas
+                                        Width="50"
+                                        Height="6"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        RenderOptions.EdgeMode="Aliased"
+                                        UseLayoutRounding="True">
+                                        <Line
+                                            Stroke="White"
+                                            StrokeThickness="1"
+                                            X1="0"
+                                            X2="50"
+                                            Y1="0"
+                                            Y2="0" />
+                                        <Line
+                                            Stroke="#A0A0A0"
+                                            StrokeThickness="1"
+                                            X1="0"
+                                            X2="50"
+                                            Y1="1"
+                                            Y2="1" />
+                                        <Line
+                                            Stroke="White"
+                                            StrokeThickness="1"
+                                            X1="0"
+                                            X2="50"
+                                            Y1="4"
+                                            Y2="4" />
+                                        <Line
+                                            Stroke="#A0A0A0"
+                                            StrokeThickness="1"
+                                            X1="0"
+                                            X2="50"
+                                            Y1="5"
+                                            Y2="5" />
+                                    </Canvas>
+                                </Border>
+                            </ControlTemplate>
+                        </GridSplitter.Template>
+                        <GridSplitter.Background>
+                            <LinearGradientBrush StartPoint="0.5,1" EndPoint="0.5,0">
+                                <GradientStop Offset="0" Color="#A0A0A0" />
+                                <GradientStop Offset="0.15" Color="#E5E5E5" />
+                                <GradientStop Offset="0.8" Color="#ECECEC" />
+                                <GradientStop Offset="1" Color="#E5E5E5" />
+                            </LinearGradientBrush>
+                        </GridSplitter.Background>
+                    </GridSplitter>
+                    <!--<ToggleButton
+                        x:Name="Toggle_FileInfoPanel"
+                        Grid.Row="1"
+                        Width="30"
+                        Margin="5,0"
+                        BorderThickness="0,0,0,1"
+                        IsChecked="True"
+                        Style="{StaticResource ToggleFileInfoPanel}" />-->
                     <Border
                         Name="FileInfoPanel"
                         Grid.Row="2"
-                        Height="20"
+                        Height="auto"
+                        MinHeight="20"
                         Margin="5"
                         VerticalAlignment="Bottom"
                         Background="White"
@@ -447,7 +528,7 @@
                                 <RowDefinition Height="20" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            
+
                             <ScrollViewer Grid.Row="1">
                                 <ScrollViewer.Resources>
                                     <ResourceDictionary>

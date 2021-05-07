@@ -45,7 +45,7 @@ namespace YC.WorkEfficiency.ViewModels
         #region 重写
 
 
-        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
+        public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
@@ -123,9 +123,12 @@ namespace YC.WorkEfficiency.ViewModels
         private void LoadModuels()
         {
             LoadModulesServices.Instance.LoadModules();
-            NoFinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
+            //NoFinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
 
-            FinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["已完成的工作"];
+            //FinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["已完成的工作"];
+
+            NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("未完成的工作", new WorkingViewModel());
+            NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("已完成的工作", new FinishedWorkViewModel());
 
         }
 
@@ -228,7 +231,12 @@ namespace YC.WorkEfficiency.ViewModels
 
         public RelayCommand OpenSettingWindow => new RelayCommand(() =>
         {
-            Messenger.Default.Send("ShowSettingWindow");
+            //Messenger.Default.Send("ShowSettingWindow");
+            if (Convert.ToBoolean(WindowsManager.CreateDialogWindowByViewModelResult("SettingView", new SettingViewModel())))
+            {
+                DialogWindow.Show("保存设置成功！", MessageType.Successful, WindowsManager.Windows["MainView"]);
+            }
+            
         });
 
         public RelayCommand UpLoadAttachmentCommand => new RelayCommand(() =>

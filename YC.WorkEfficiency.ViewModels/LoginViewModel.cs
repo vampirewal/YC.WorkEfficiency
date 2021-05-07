@@ -24,7 +24,7 @@ using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
 {
-    public class LoginViewModel:ViewModelBase
+    public class LoginViewModel: ViewModelBase
     {
         public LoginViewModel()
         {
@@ -34,11 +34,17 @@ namespace YC.WorkEfficiency.ViewModels
         }
         #region 重写
 
-        public override RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) =>
+        public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
             System.Environment.Exit(0);
             Application.Current.Shutdown();
-        }); 
+        });
+
+        private bool isLogin=false;
+        public override object GetResult()
+        {
+            return isLogin;
+        }
         #endregion
 
         #region 属性
@@ -84,7 +90,8 @@ namespace YC.WorkEfficiency.ViewModels
                         work.UserModelDB.Update(User);
                         work.SaveChanges();
                         GlobalData.GetInstance().UserInfo = User;
-                        w.DialogResult = true;
+                        //w.DialogResult = true;
+                        isLogin = true;
                         w.Close();
                     }
                     else
@@ -97,7 +104,12 @@ namespace YC.WorkEfficiency.ViewModels
 
         public RelayCommand RegisterCommand => new RelayCommand(() =>
         {
-            Messenger.Default.Send("CreateRegisterView");
+            //Messenger.Default.Send("CreateRegisterView");
+            if(Convert.ToBoolean(WindowsManager.CreateDialogWindowByViewModelResult("RegisterView", new RegisterViewModel())))
+            {
+                GetLoginName();
+            }
+
         });
 
         public RelayCommand<string> SelectUserNameCommand => new RelayCommand<string>((u) =>

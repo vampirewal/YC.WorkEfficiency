@@ -19,10 +19,11 @@ using System.Windows;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.Themes;
 
 namespace YC.WorkEfficiency.ViewModels
 {
-    public class RegisterViewModel:ViewModelBase
+    public class RegisterViewModel: ViewModelBase
     {
         public RegisterViewModel()
         {
@@ -36,9 +37,10 @@ namespace YC.WorkEfficiency.ViewModels
                 IsRemember=false
             };
         }
+        private bool isRegister = false;
         public override object GetResult()
         {
-            return null;
+            return isRegister;
         }
 
         #region 属性
@@ -56,9 +58,10 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-        public RelayCommand<Window> RegisterUserCommand => new RelayCommand<Window>((w)=> 
+        public RelayCommand RegisterUserCommand => new RelayCommand(()=> 
         {
             bool isok = false;
+            Window w = View as Window;
             using(WorkEfficiencyDataContext work =new WorkEfficiencyDataContext())
             {
                 var OldUser= work.UserModelDB.FirstOrDefault(f => f.UserName == NewUserModel.UserName);
@@ -67,6 +70,11 @@ namespace YC.WorkEfficiency.ViewModels
                     work.UserModelDB.Add(NewUserModel);
                     work.SaveChanges();
                     isok = true;
+                    isRegister = true;
+                }
+                else
+                {
+                    DialogWindow.Show("已存在相同的用户名！", MessageType.Error, WindowsManager.Windows["RegisterWindow"]);
                 }
             }
             if (isok)

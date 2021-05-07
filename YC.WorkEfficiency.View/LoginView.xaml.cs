@@ -22,17 +22,17 @@ namespace YC.WorkEfficiency.View
         public LoginView()
         {
             InitializeComponent();
-            this.DataContext = new LoginViewModel();
+            //this.DataContext = new LoginViewModel();
 
-            Messenger.Default.Register(this, "CreateRegisterView", CreateRegisterView);
+            //Messenger.Default.Register(this, "CreateRegisterView", CreateRegisterView);
         }
 
-        private void CreateRegisterView()
-        {
-            if(WindowsManager.CreateDialogWindowToBool(new RegisterView()))
-            {
-                Messenger.Default.Send("GetLoginName");
-            }
-        }
+        //private void CreateRegisterView()
+        //{
+        //    if(WindowsManager.CreateDialogWindowToBool(new RegisterView()))
+        //    {
+        //        Messenger.Default.Send("GetLoginName");
+        //    }
+        //}
     }
 }

@@ -21,7 +21,7 @@ namespace YC.WorkEfficiency.View
         public RegisterView()
         {
             InitializeComponent();
-            this.DataContext = new RegisterViewModel();
+            
         }
     }
 }

@@ -25,21 +25,22 @@ namespace YC.WorkEfficiency.View
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel();
-            Messenger.Default.Register(this, "ShowSettingWindow", ShowSettingWindow);
+            //this.DataContext = new MainViewModel();
+            //Messenger.Default.Register(this, "ShowSettingWindow", ShowSettingWindow);
         }
 
-        private void ShowSettingWindow()
-        {
-            if (WindowsManager.CreateDialogWindowToBool(new SettingView()))
-            {
-                //弹出设置保存成功的提示
-            }
-            else
-            {
-                //弹出设置保存失败的提示
-            }
+        //private void ShowSettingWindow()
+        //{
+        //    if (WindowsManager.CreateDialogWindowToBool(new SettingView()))
+        //    {
+        //        //弹出设置保存成功的提示
+        //    }
+        //    else
+        //    {
+        //        //弹出设置保存失败的提示
+        //    }
 
-        }
+
+        //}
     }
 }

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Fonts\iconfont.ttf" />
+    <None Remove="Assets\Fonts\youyuan.TTF" />
     <None Remove="Assets\Images\时间管理.png" />
   </ItemGroup>
 
@@ -17,6 +18,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\Fonts\iconfont.ttf" />
+    <Resource Include="Assets\Fonts\youyuan.TTF" />
     <Resource Include="Assets\Images\时间管理.png" />
   </ItemGroup>
 

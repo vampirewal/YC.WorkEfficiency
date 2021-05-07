@@ -97,7 +97,11 @@ namespace YC.WorkEfficiency.ViewModels.Common
             }
         }
 
-
+        public FrameworkElement OpenModuleBindingVM(string ModuleName,ViewModelBase vm)
+        {
+            ModulesDic[ModuleName].DataContext = vm;
+            return ModulesDic[ModuleName];
+        }
         #endregion
     }
 }

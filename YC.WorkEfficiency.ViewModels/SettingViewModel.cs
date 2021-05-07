@@ -14,18 +14,33 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using YC.WorkEfficiency.SimpleMVVM;
 
 namespace YC.WorkEfficiency.ViewModels
 {
-    public class SettingViewModel:ViewModelBase
+    public class SettingViewModel: ViewModelBase
     {
         public SettingViewModel()
         {
             //构造函数
         }
 
+        private bool IsSetting = false;
+        public override object GetResult()
+        {
+            return IsSetting;
+        }
+
+        public override RelayCommand CloseWindowCommand => new RelayCommand(()=> 
+        {
+            Window w = View as Window;
+            w.DialogResult = false;
+            WindowsManager.CloseWindow(w);
+        });
+
         #region 属性
+
         #endregion
 
         #region 公共方法
@@ -37,7 +52,11 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-
+        public RelayCommand SaveSetting => new RelayCommand(() =>
+          {
+              (View as Window).DialogResult = true;
+              WindowsManager.CloseWindow((View as Window));
+          });
         #endregion
     }
 }

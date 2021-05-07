@@ -29,10 +29,7 @@ namespace YC.WorkEfficiency.ViewModels
             //构造函数
             InitData();
         }
-        public override object GetResult()
-        {
-            return null;
-        }
+        
 
         private void InitData()
         {
@@ -88,9 +85,6 @@ namespace YC.WorkEfficiency.ViewModels
         {
             FinishedWorkList.Add(entity);
         }
-
-        
-
 
         #endregion
 

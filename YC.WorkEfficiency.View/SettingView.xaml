@@ -11,7 +11,9 @@
     Width="800"
     Height="450"
     ResizeMode="NoResize"
+    ShowInTaskbar="False"
     Style="{StaticResource WindowDefauleStyle}"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <i:Interaction.Triggers>
@@ -23,6 +25,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <Button
                 HorizontalAlignment="Right"
@@ -36,6 +39,27 @@
                 FontSize="20"
                 Foreground="White"
                 Text="设置" />
+
+            <Grid Grid.Row="2">
+                <Grid.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                        </ResourceDictionary.MergedDictionaries>
+
+                    </ResourceDictionary>
+                </Grid.Resources>
+                <Button
+                    Width="100"
+                    Height="35"
+                    Margin="5,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Command="{Binding SaveSetting}"
+                    Content="保 存" />
+            </Grid>
+
         </Grid>
     </Border>
 </Window>

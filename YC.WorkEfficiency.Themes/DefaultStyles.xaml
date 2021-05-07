@@ -11,5 +11,10 @@
         <ResourceDictionary Source="CustomControl/PassWord/PasswordBoxStyles.xaml" />
         <ResourceDictionary Source="CustomControl/TextBox/TextBoxStyles.xaml" />
 
+        <ResourceDictionary>
+            <FontFamily x:Key="youyuan">
+                Assets/Fonts/#youyuan
+            </FontFamily>
+        </ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

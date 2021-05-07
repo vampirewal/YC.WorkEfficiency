@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels;
 
 namespace YC.WorkEfficiency.View
 {
@@ -18,9 +20,13 @@ namespace YC.WorkEfficiency.View
             dbContext.Database.EnsureCreated();
 
             //此处使用同一的windowManager进行窗口的创建管理
-            if (WindowsManager.CreateDialogWindowToBool(new LoginView()))
+            //if (WindowsManager.CreateDialogWindowToBool(new LoginView()))
+            //{
+            //    WindowsManager.CreatWindow(new MainWindow(), ShowMode.Dialog);
+            //}
+            if (Convert.ToBoolean( WindowsManager.CreateDialogWindowByViewModelResult(new LoginView(),new LoginViewModel())))
             {
-                WindowsManager.CreatWindow(new MainWindow(), ShowMode.Dialog);
+                WindowsManager.CreatWindow("MainWindow", ShowMode.Dialog,new MainViewModel());
             }
         }
     }

@@ -21,7 +21,6 @@ namespace YC.WorkEfficiency.View
         public SettingView()
         {
             InitializeComponent();
-            this.DataContext = new SettingViewModel();
         }
     }
 }

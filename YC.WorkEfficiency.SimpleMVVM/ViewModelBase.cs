@@ -56,12 +56,13 @@ namespace YC.WorkEfficiency.SimpleMVVM
             return null;
         }
 
+        #region 命令
         /// <summary>
         /// 通用的窗体关闭命令，但是每个窗体的关闭可能需要做的事情不一样，故非DialogWindow窗体，重写这个命令。
         /// </summary>
-        public virtual RelayCommand<Window> CloseWindowCommand => new RelayCommand<Window>((w) => 
+        public virtual RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
-            WindowsManager.CloseWindow(w);
+            WindowsManager.CloseWindow(View as Window);
         });
 
         public virtual RelayCommand<Window> MaxWindowCommand => new RelayCommand<Window>((w) =>
@@ -76,9 +77,9 @@ namespace YC.WorkEfficiency.SimpleMVVM
             }
         });
 
-        public virtual RelayCommand<Window> MinWindowCommand => new RelayCommand<Window>((w) => 
+        public virtual RelayCommand<Window> MinWindowCommand => new RelayCommand<Window>((w) =>
         {
-            w.WindowState = WindowState.Minimized; 
+            w.WindowState = WindowState.Minimized;
         });
 
         public virtual RelayCommand<Window> WindowMoveCommand => new RelayCommand<Window>((w) =>
@@ -88,5 +89,6 @@ namespace YC.WorkEfficiency.SimpleMVVM
                 w.DragMove();
             }
         });
+        #endregion
     }
 }

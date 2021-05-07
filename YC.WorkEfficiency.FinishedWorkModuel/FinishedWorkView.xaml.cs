@@ -26,7 +26,7 @@ namespace YC.WorkEfficiency.FinishedWorkModuel
         public FinishedWorkView()
         {
             InitializeComponent();
-            this.DataContext = new FinishedWorkViewModel();
+            //this.DataContext = new FinishedWorkViewModel();
         }
 
         public object Window => this;

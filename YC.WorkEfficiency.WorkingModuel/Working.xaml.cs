@@ -28,7 +28,7 @@ namespace YC.WorkEfficiency.WorkingModuel
         public Working()
         {
             InitializeComponent();
-            this.DataContext = new WorkingViewModel();
+            //this.DataContext = new WorkingViewModel();
             Messenger.Default.Register(this, "RefreshWorkingSelectedItem", RefreshWorkingSelectedItem);
         }
 

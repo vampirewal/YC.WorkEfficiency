@@ -12,6 +12,7 @@
     Width="200"
     Height="250"
     ResizeMode="NoResize"
+    ShowInTaskbar="False"
     Style="{StaticResource WindowDefauleStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -69,7 +70,6 @@
                         HorizontalAlignment="Center"
                         HorizontalContentAlignment="Center"
                         Command="{Binding RegisterUserCommand}"
-                        CommandParameter="{Binding ElementName=RegisterWindow}"
                         Content="注   册"
                         FontSize="20"
                         Foreground="Black"
