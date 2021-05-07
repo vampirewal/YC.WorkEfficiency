@@ -25,10 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\YC.WorkEfficiency.Themes\YC.WorkEfficiency.Themes.csproj" />
     <ProjectReference Include="..\YC.WorkEfficiency.ViewModels\YC.WorkEfficiency.ViewModels.csproj" />
   </ItemGroup>
