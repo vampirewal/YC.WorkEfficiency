@@ -60,6 +60,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 属性
+        public double LoadHeight { get; set; } = 0;
 
         public BaseCommand baseCommand { get; set; } = new BaseCommand();
 
@@ -77,6 +78,11 @@ namespace YC.WorkEfficiency.ViewModels
         }
 
         public ObservableCollection<FileAttachmentModel> fileAttachmentModels { get; set; }
+
+        /// <summary>
+        /// 获取到的该用户设置的文件类型
+        /// </summary>
+        public ObservableCollection<FileType> UserFileTypes { get; set; }
 
         #region 窗体显示属性
 
@@ -109,9 +115,8 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void InitData()
         {
-
             fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
-
+            UserFileTypes = new ObservableCollection<FileType>();
 
             LoadModuels();
             MessengerRegister();
@@ -123,13 +128,8 @@ namespace YC.WorkEfficiency.ViewModels
         private void LoadModuels()
         {
             LoadModulesServices.Instance.LoadModules();
-            //NoFinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["未完成的工作"];
-
-            //FinishedWorkFrame = LoadModulesServices.Instance.ModulesDic["已完成的工作"];
-
             NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("未完成的工作", new WorkingViewModel());
-            NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("已完成的工作", new FinishedWorkViewModel());
-
+            FinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("已完成的工作", new FinishedWorkViewModel());
         }
 
         private string GetFileExtension(string FileExtension)
@@ -179,6 +179,8 @@ namespace YC.WorkEfficiency.ViewModels
                 TotleWorkTime = $"累计工时：\r\n{tsTotle.Days}天{tsTotle.Hours}小时{tsTotle.Minutes}分{tsTotle.Seconds}秒";
             });
         }
+
+        
         #endregion 私有方法
 
         #region 命令
@@ -337,13 +339,13 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void MessengerRegister()
         {
-            Messenger.Default.Register<FileModel>(this, "ShowWorkInfo", ShowWorkInfo);
+            Messenger.Default.Register<FileModel,bool>(this, "ShowWorkInfo", ShowWorkInfo);
         }
         /// <summary>
         /// 将选择的FileModel，获取附件之后，将完整信息显示到下方的panel中
         /// </summary>
         /// <param name="entity"></param>
-        private void ShowWorkInfo(FileModel entity)
+        private bool ShowWorkInfo(FileModel entity)
         {
             if (entity!=null)
             {
@@ -362,7 +364,9 @@ namespace YC.WorkEfficiency.ViewModels
                         }
                     }
                 }
+                return true;
             }
+            return false;
         }
 
         

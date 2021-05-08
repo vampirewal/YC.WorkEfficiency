@@ -90,7 +90,13 @@ namespace YC.WorkEfficiency.ViewModels
                         work.UserModelDB.Update(User);
                         work.SaveChanges();
                         GlobalData.GetInstance().UserInfo = User;
-                        //w.DialogResult = true;
+                        //获取该用户的文件分类类型设置
+                        var fileTypeList= work.FileTypeDB.Where(w => w.UserId == User.GuidId).ToList();
+                        foreach (var item in fileTypeList)
+                        {
+                            GlobalData.GetInstance().UserFileTypes.Add(item);
+                        }
+
                         isLogin = true;
                         w.Close();
                     }

@@ -29,6 +29,9 @@ namespace YC.WorkEfficiency.Models
 
         #region 属性
         private string _UserGuid;
+        /// <summary>
+        /// 归属用户
+        /// </summary>
         [Column("UserGuid")]
         public string UserGuid
         {
@@ -36,6 +39,16 @@ namespace YC.WorkEfficiency.Models
             set { _UserGuid = value;DoNotify(); }
         }
 
+        private string _SysBackground;
+        /// <summary>
+        /// 系统的背景色
+        /// </summary>
+        [Column("SysBackground")]
+        public string SysBackground
+        {
+            get { return _SysBackground; }
+            set { _SysBackground = value; DoNotify(); }
+        }
 
         #endregion
     }

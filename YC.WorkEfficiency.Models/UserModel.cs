@@ -73,6 +73,7 @@ namespace YC.WorkEfficiency.Models
             set { _IsLogin = value; DoNotify(); }
         }
 
+        
         public void ClearInfo()
         {
             this.GuidId = string.Empty;

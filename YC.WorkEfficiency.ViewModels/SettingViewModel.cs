@@ -15,7 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using YC.WorkEfficiency.DataAccess;
+using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels.Common;
+using System.Linq;
+using YC.WorkEfficiency.Themes;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -24,6 +29,7 @@ namespace YC.WorkEfficiency.ViewModels
         public SettingViewModel()
         {
             //构造函数
+            CurrentUser = GlobalData.GetInstance().UserInfo;
         }
 
         private bool IsSetting = false;
@@ -40,7 +46,10 @@ namespace YC.WorkEfficiency.ViewModels
         });
 
         #region 属性
+        //当前登陆用户
+        public UserModel CurrentUser { get; set; }
 
+        public string fileTypeStr { get; set; }
         #endregion
 
         #region 公共方法
@@ -56,6 +65,36 @@ namespace YC.WorkEfficiency.ViewModels
           {
               (View as Window).DialogResult = true;
               WindowsManager.CloseWindow((View as Window));
+          });
+
+        public RelayCommand AddFileType => new RelayCommand(() =>
+          {
+              if (!string.IsNullOrEmpty(fileTypeStr))
+              {
+                  using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                  {
+                      if(work.FileTypeDB.Where(w => w.Types == fileTypeStr).Any())
+                      {
+                          DialogWindow.Show("已存在相同名称的文件类型，请重新输入！", MessageType.Error, WindowsManager.Windows["SettingWindow"]);
+                          return;
+                      }
+
+                      FileType fileType = new FileType()
+                      {
+                          GuidId = Guid.NewGuid().ToString(),
+                          UserId = CurrentUser.GuidId,
+                          Types = fileTypeStr
+                      };
+                      
+
+                      work.FileTypeDB.Add(fileType);
+                      work.SaveChanges();
+
+                      Messenger.Default.Send("AddFileType", fileType);
+                      DialogWindow.Show("创建新的文件类型成功！", MessageType.Successful, WindowsManager.Windows["SettingWindow"]);
+                      fileTypeStr = string.Empty;
+                  }
+              }
           });
         #endregion
     }

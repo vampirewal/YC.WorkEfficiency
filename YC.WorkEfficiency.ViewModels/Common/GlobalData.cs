@@ -26,7 +26,7 @@ namespace YC.WorkEfficiency.ViewModels.Common
         #region 属性
         public UserModel UserInfo { get; set; } = new UserModel();
 
-        public ObservableCollection<UserModel> HaveLoginUserName { get; set; } = new ObservableCollection<UserModel>();
+        public ObservableCollection<FileType> UserFileTypes { get; set; } = new ObservableCollection<FileType>();
         #endregion
 
         #region 公共方法

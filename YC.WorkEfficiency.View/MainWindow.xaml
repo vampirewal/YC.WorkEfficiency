@@ -368,7 +368,10 @@
                     <Grid.RowDefinitions>
                         <RowDefinition MinHeight="100" />
                         <RowDefinition Height="10" />
-                        <RowDefinition MinHeight="10" />
+                        <RowDefinition
+                            Height="{Binding LoadHeight, Mode=OneTime}"
+                            MinHeight="10"
+                            MaxHeight="{Binding ElementName=FileInfoPanel, Path=Height}" />
                     </Grid.RowDefinitions>
                     <TabControl BorderThickness="0" Style="{StaticResource MainTabControlStyle}">
                         <TabControl.Resources>
@@ -514,10 +517,8 @@
                     <Border
                         Name="FileInfoPanel"
                         Grid.Row="2"
-                        Height="auto"
                         MinHeight="20"
                         Margin="5"
-                        VerticalAlignment="Bottom"
                         Background="White"
                         BorderThickness="1"
                         CornerRadius="5"
@@ -560,7 +561,7 @@
                                         <RowDefinition Height="40" />
                                         <RowDefinition Height="40" />
                                         <RowDefinition Height="auto" MinHeight="40" />
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" MaxHeight="300" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100" />

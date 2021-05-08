@@ -30,6 +30,10 @@ namespace YC.WorkEfficiency.DataAccess
         public DbSet<UserModel> UserModelDB { get; set; }
         public DbSet<FileModel> FileModelDB { get; set; }
         public DbSet<FileAttachmentModel> FileAttachmentModelDB { get; set; }
+        public DbSet<FileType> FileTypeDB { get; set; }
+
+        public DbSet<UserSetting> UserSettingsDB { get; set; }
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -20,6 +20,7 @@ using System.Threading;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -38,6 +39,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         #region 属性
         public ObservableCollection<FileModel> WorkingList { get; set; }
+        public ObservableCollection<FileType> fileTypes { get; set; }
 
         private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
@@ -85,6 +87,8 @@ namespace YC.WorkEfficiency.ViewModels
                 });
                 WorkingList = new ObservableCollection<FileModel>(result);
             }
+
+            fileTypes = GlobalData.GetInstance().UserFileTypes;
         }
         /// <summary>
         /// 注册消息
@@ -93,6 +97,8 @@ namespace YC.WorkEfficiency.ViewModels
         {
             Messenger.Default.Register<FileModel>(this, "AddNoFinishedWork", AddNoFinishedWork);
             Messenger.Default.Register<FileModel>(this, "InsertFinishWork", InsertFinishWork);
+
+            Messenger.Default.Register<FileType>(this, "AddFileType", AddFileType);
         }
 
 
@@ -101,6 +107,7 @@ namespace YC.WorkEfficiency.ViewModels
         {
             WorkingList.Add(entity);
         }
+
         private void InsertFinishWork(FileModel entity)
         {
             if (WorkingList.Where(w => w.IsEdit == true).Count()==0)
@@ -108,6 +115,11 @@ namespace YC.WorkEfficiency.ViewModels
                 WorkingList.Insert(0, entity);
             }
             
+        }
+
+        private void AddFileType(FileType fileType)
+        {
+            fileTypes.Add(fileType);
         }
         #endregion
 
@@ -160,11 +172,15 @@ namespace YC.WorkEfficiency.ViewModels
         {
             if (o != null)
             {
-                Messenger.Default.Send("ShowWorkInfo", o);
-                if (WorkingList.Count==1)
-                {
-                    Messenger.Default.Send("RefreshWorkingSelectedItem");
-                }
+                //if(Messenger.Default.Send<bool>("ShowWorkInfo", o))
+                //{
+                //    //SelectedItem = null;
+                //}
+                //if (WorkingList.Count==1)
+                //{
+                //    SelectedItem = null;
+                //    //Messenger.Default.Send("RefreshWorkingSelectedItem");
+                //}
             }
         });
 
@@ -186,6 +202,21 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         });
+
+        public RelayCommand<FileModel> WatchInfoCommand => new RelayCommand<FileModel>((f) =>
+          {
+              if (f!=null)
+              {
+                  if (Messenger.Default.Send<bool>("ShowWorkInfo", f))
+                  {
+                      //SelectedItem = null;
+                  }
+              }
+          });
         #endregion
+
+        
+
+        
     }
 }

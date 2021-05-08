@@ -95,19 +95,7 @@ namespace YC.WorkEfficiency.Models
             set { _FileTitle = value; DoNotify(); }
         }
 
-        /// <summary>
-        /// 文件ID
-        /// </summary>
-        //[Key]
-        //public string GuidId
-        //{
-        //    get { return _GuidId; }
-        //    set
-        //    {
-        //        _GuidId = value;
-                
-        //    }
-        //}
+        
         [Column("IsEdit")]
         public bool IsEdit { get => isEdit; set { isEdit = value; DoNotify(); } }
 
@@ -135,6 +123,9 @@ namespace YC.WorkEfficiency.Models
         public string StateColor { get=>_StateColor; set { _StateColor = value; DoNotify(); } }
 
         private string _UserGuid;
+        /// <summary>
+        /// 归属用户
+        /// </summary>
         [Column("UserGuid")]
         public string UserGuid
         {
@@ -142,16 +133,20 @@ namespace YC.WorkEfficiency.Models
             set { _UserGuid = value; DoNotify(); }
         }
 
-        private string _FileTypeGuid;
+        private string _UserName;
         /// <summary>
-        /// 项目类型ID
+        /// 归属用户姓名
         /// </summary>
-        [Column("FileTypeGuid")]
-        public string FileTypeGuid
+        [Column("UserName")]
+        public string UserName
         {
-            get { return _FileTypeGuid; }
-            set { _FileTypeGuid = value; DoNotify(); }
+            get { return _UserName; }
+            set { _UserName = value; DoNotify(); }
         }
+
+
+        private string _FileTypeGuid;
+        
 
         private string _FileType;
         /// <summary>

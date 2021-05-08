@@ -39,7 +39,75 @@
                 FontSize="20"
                 Foreground="White"
                 Text="设置" />
+            <TabControl
+                Grid.Row="1"
+                Margin="5"
+                BorderThickness="0"
+                Style="{StaticResource MainTabControlStyle}">
+                <TabControl.Resources>
+                    <ResourceDictionary>
+                        <Style x:Key="NewTextbox" TargetType="TextBox">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="FontSize" Value="15" />
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Background" Value="White" />
+                                    <Setter Property="BorderThickness" Value="1" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
 
+                        <Style x:Key="HeaderTextblockStyle" TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Top" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <!--<Setter Property="FontWeight"
+                                        Value="Bold" />-->
+                            <Setter Property="FontSize" Value="13" />
+                        </Style>
+                    </ResourceDictionary>
+                </TabControl.Resources>
+                <TabItem
+                    Name="tab1"
+                    Width="200"
+                    Background="Transparent"
+                    Header="个人信息"
+                    Style="{StaticResource MainTabItemStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </TabItem>
+                <TabItem
+                    Name="tab2"
+                    Width="200"
+                    Background="Transparent"
+                    Header="个人设置"
+                    Style="{StaticResource MainTabItemStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="100"
+                            Height="30"
+                            Text="{Binding fileTypeStr, Mode=TwoWay}" />
+                        <Button
+                            Width="100"
+                            Height="30"
+                            Command="{Binding AddFileType}"
+                            Content="添加" />
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
             <Grid Grid.Row="2">
                 <Grid.Resources>
                     <ResourceDictionary>
@@ -53,7 +121,7 @@
                 <Button
                     Width="100"
                     Height="35"
-                    Margin="5,0"
+                    Margin="5"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Command="{Binding SaveSetting}"
