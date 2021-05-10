@@ -154,13 +154,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-
-
-            <!--<i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding FinishedWorkSelectionChangeCommand}" CommandParameter="{Binding SelectedItem, ElementName=FinishedWorkList}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>-->
         </DataGrid>
         <!--#endregion-->
     </Grid>

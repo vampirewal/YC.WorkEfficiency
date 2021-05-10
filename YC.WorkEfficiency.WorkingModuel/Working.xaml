@@ -188,17 +188,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-
-            <!--<DataGrid.ContextMenu>
-                <ContextMenu MinWidth="50">
-                    <MenuItem Command="{Binding RefreshData}" Header="刷新数据" />
-                </ContextMenu>
-            </DataGrid.ContextMenu>-->
-            <!--<i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding WorkSelectionChangeCommand}" CommandParameter="{Binding SelectedItem, ElementName=NoFinishedList}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>-->
         </DataGrid>
         <!--#endregion-->
     </Grid>
