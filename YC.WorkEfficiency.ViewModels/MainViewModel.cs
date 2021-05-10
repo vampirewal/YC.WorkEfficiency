@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using YC.WorkEfficiency.DataAccess;
@@ -33,8 +34,6 @@ namespace YC.WorkEfficiency.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-
-
         public MainViewModel()
         {
             //构造函数
@@ -43,8 +42,6 @@ namespace YC.WorkEfficiency.ViewModels
         }
 
         #region 重写
-
-
         public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
@@ -57,32 +54,47 @@ namespace YC.WorkEfficiency.ViewModels
             System.Environment.Exit(0);
             Application.Current.Shutdown();
         });
+
+        public override void InitData()
+        {
+            fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
+
+            fileTypes = new ObservableCollection<FileType>();
+
+            LoadModuels();
+            MessengerRegister();
+            GetFileType();
+            GetTotleTime();
+        }
         #endregion
 
         #region 属性
         public double LoadHeight { get; set; } = 0;
 
-        public BaseCommand baseCommand { get; set; } = new BaseCommand();
-
-        //public FileModelData fileModelData { get; set; }
         private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
-        //public ObservableCollection<>
+        
 
         private string _TotleWorkTime;
-
+        /// <summary>
+        /// 汇总工作时间
+        /// </summary>
         public string TotleWorkTime
         {
             get { return _TotleWorkTime; }
             set { _TotleWorkTime = value; DoNotify(); }
         }
 
+        /// <summary>
+        /// 附件集合
+        /// </summary>
         public ObservableCollection<FileAttachmentModel> fileAttachmentModels { get; set; }
 
+
         /// <summary>
-        /// 获取到的该用户设置的文件类型
+        /// 文件类型 集合
         /// </summary>
-        public ObservableCollection<FileType> UserFileTypes { get; set; }
+        public ObservableCollection<FileType> fileTypes { get; set; }
 
         #region 窗体显示属性
 
@@ -104,24 +116,23 @@ namespace YC.WorkEfficiency.ViewModels
 
         #endregion 窗体显示属性
 
+        #region 模块
+        /// <summary>
+        /// 未完成工作 模块
+        /// </summary>
         public FrameworkElement NoFinishedWorkFrame { get; set; }
-        public FrameworkElement FinishedWorkFrame { get; set; }
+        /// <summary>
+        /// 已完成工作 模块
+        /// </summary>
+        public FrameworkElement FinishedWorkFrame { get; set; } 
+        #endregion
+
         #endregion 属性
 
         #region 私有方法
 
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        private void InitData()
-        {
-            fileAttachmentModels = new ObservableCollection<FileAttachmentModel>();
-            UserFileTypes = new ObservableCollection<FileType>();
-
-            LoadModuels();
-            MessengerRegister();
-            GetTotleTime();
-        }
+        
+        
         /// <summary>
         /// 获取模块并加载到MainViewModel
         /// </summary>
@@ -131,7 +142,7 @@ namespace YC.WorkEfficiency.ViewModels
             NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("未完成的工作", new WorkingViewModel());
             FinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("已完成的工作", new FinishedWorkViewModel());
         }
-
+        //暂时废弃
         private string GetFileExtension(string FileExtension)
         {
             string str = string.Empty;
@@ -155,7 +166,7 @@ namespace YC.WorkEfficiency.ViewModels
                 int seconds = 0;
                 using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                 {
-                    var current = fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true).ToList();
+                    var current = fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true&&s.UserGuid==GlobalData.GetInstance().UserInfo.GuidId).ToList();
 
                     foreach (var item in current)
                     {
@@ -180,10 +191,28 @@ namespace YC.WorkEfficiency.ViewModels
             });
         }
 
-        
+        /// <summary>
+        /// 获取 文件类型
+        /// </summary>
+        private void GetFileType()
+        {
+            fileTypes.Clear();
+            using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                var current = work.FileTypeDB.Where(w => w.UserId == GlobalData.GetInstance().UserInfo.GuidId).ToList();
+                foreach (var item in current)
+                {
+                    item.HaveSetting = work.FileModelDB.Where(w => w.FileType == item.Types).ToList().Count;
+                    fileTypes.Add(item);
+                }
+            }
+        }
         #endregion 私有方法
 
         #region 命令
+        /// <summary>
+        /// 添加1条新的工作计划
+        /// </summary>
         public RelayCommand AddWorkCommand => new RelayCommand(() =>
         {
             var current = new FileModel()
@@ -192,45 +221,42 @@ namespace YC.WorkEfficiency.ViewModels
                 IsEdit = true,
                 IsFinished = false,
                 CreateTime = DateTime.Now,
-                EndTime = DateTime.Now
+                EndTime = DateTime.Now,
+                UserGuid=GlobalData.GetInstance().UserInfo.GuidId,
+                UserName=GlobalData.GetInstance().UserInfo.UserName
             };
-            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+            
+            if(Messenger.Default.Send<bool>("InsertFinishWork", current))
             {
-                work.FileModelDB.Add(current);
-                work.SaveChanges();
+                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                {
+                    work.FileModelDB.Add(current);
+                    work.SaveChanges();
+                }
             }
-            //WorkingList.Insert(0, current);
-            Messenger.Default.Send("InsertFinishWork", current);
 
         });
-
-
-        public RelayCommand<FileModel> SelectionChangeCommand => new RelayCommand<FileModel>((o) =>
+        /// <summary>
+        /// 文件详细面板选择文件类型的命令
+        /// </summary>
+        public RelayCommand<string> SelectionChangeCommand => new RelayCommand<string>((s) =>
         {
-            //FileModel fileModel = o as FileModel;
-            //MessageBox.Show(SelectedItem.GuidId);
-            //SelectedItem = o;
-            if (o != null)
+            
+            if (!string.IsNullOrEmpty(s))
             {
-                string guid = o.GuidId;
-                using (WorkEfficiencyDataContext fileAttachmentModelData = new WorkEfficiencyDataContext())
+                using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {
-                    fileAttachmentModelData.Database.EnsureCreated();
-                    fileAttachmentModels.Clear();
-                    var current = fileAttachmentModelData.FileAttachmentModelDB.Where(w => w.ParentGuidId == guid).ToList();
-                    if (current.Count > 0)
-                    {
-                        foreach (var item in current)
-                        {
-                            fileAttachmentModels.Add(item);
-                        }
+                    SelectedItem.FileType = s;
+                    SelectedItem.FileTypeGuid = work.FileTypeDB.Where(w => w.Types == s && w.UserId == SelectedItem.UserGuid).First().GuidId;
 
-                    }
-
+                    work.FileModelDB.Update(SelectedItem);
+                    work.SaveChanges();
                 }
             }
         });
-
+        /// <summary>
+        /// 打开设置窗体命令
+        /// </summary>
         public RelayCommand OpenSettingWindow => new RelayCommand(() =>
         {
             //Messenger.Default.Send("ShowSettingWindow");
@@ -240,7 +266,9 @@ namespace YC.WorkEfficiency.ViewModels
             }
             
         });
-
+        /// <summary>
+        /// 上传附件命令
+        /// </summary>
         public RelayCommand UpLoadAttachmentCommand => new RelayCommand(() =>
         {
             if (selectedItem == null)
@@ -310,7 +338,9 @@ namespace YC.WorkEfficiency.ViewModels
 
             }
         });
-
+        /// <summary>
+        /// 下载附件命令
+        /// </summary>
         public RelayCommand<FileAttachmentModel> DownloadAttachment => new RelayCommand<FileAttachmentModel>((f) =>
           {
               byte[] currentFile = f.Attachment;
@@ -320,7 +350,9 @@ namespace YC.WorkEfficiency.ViewModels
               bw.Close();
               DialogWindow.Show("已成功将文件保存到桌面！", MessageType.Successful, WindowsManager.Windows["MainView"]);
           });
-
+        /// <summary>
+        /// 删除附件命令
+        /// </summary>
         public RelayCommand<FileAttachmentModel> DeleteAttachmentCommand => new RelayCommand<FileAttachmentModel>((f) =>
             {
                 fileAttachmentModels.Remove(f);
@@ -331,6 +363,19 @@ namespace YC.WorkEfficiency.ViewModels
                 }
                 DialogWindow.Show("已成功将文件删除！", MessageType.Successful, WindowsManager.Windows["MainView"]);
             });
+        /// <summary>
+        /// 导出工作信息成word--待开发，预留功能
+        /// </summary>
+        public RelayCommand ExportFileModelToWord => new RelayCommand(() =>
+        {
+            if (selectedItem!=null)
+            {
+                if(DialogWindow.ShowDialog($"是否要导出 {selectedItem.FileTitle} 到word？", "提示"))
+                {
+
+                }
+            }
+        });
         #endregion
 
         #region 消息
@@ -339,13 +384,15 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void MessengerRegister()
         {
-            Messenger.Default.Register<FileModel,bool>(this, "ShowWorkInfo", ShowWorkInfo);
+            Messenger.Default.Register<FileModel>(this, "ShowWorkInfo", ShowWorkInfo);
+
+            Messenger.Default.Register(this, "GetFileType", GetFileType);
         }
         /// <summary>
         /// 将选择的FileModel，获取附件之后，将完整信息显示到下方的panel中
         /// </summary>
         /// <param name="entity"></param>
-        private bool ShowWorkInfo(FileModel entity)
+        private void ShowWorkInfo(FileModel entity)
         {
             if (entity!=null)
             {
@@ -364,12 +411,9 @@ namespace YC.WorkEfficiency.ViewModels
                         }
                     }
                 }
-                return true;
             }
-            return false;
         }
 
-        
         #endregion
 
         #region 事件

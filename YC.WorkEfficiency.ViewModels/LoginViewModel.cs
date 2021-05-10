@@ -33,7 +33,13 @@ namespace YC.WorkEfficiency.ViewModels
             InitData();
         }
         #region 重写
-
+        public override void InitData()
+        {
+            HaveLoginUserName = new ObservableCollection<UserModel>();
+            User = new UserModel();
+            MessengerRegister();
+            GetLoginName();
+        }
         public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
             System.Environment.Exit(0);
@@ -61,13 +67,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
-        private void InitData()
-        {
-            HaveLoginUserName = new ObservableCollection<UserModel>();
-            User = new UserModel();
-            MessengerRegister();
-            GetLoginName();
-        }
+        
         #endregion
 
         #region 命令
@@ -91,11 +91,13 @@ namespace YC.WorkEfficiency.ViewModels
                         work.SaveChanges();
                         GlobalData.GetInstance().UserInfo = User;
                         //获取该用户的文件分类类型设置
-                        var fileTypeList= work.FileTypeDB.Where(w => w.UserId == User.GuidId).ToList();
-                        foreach (var item in fileTypeList)
-                        {
-                            GlobalData.GetInstance().UserFileTypes.Add(item);
-                        }
+                        //var fileTypeList= work.FileTypeDB.Where(w => w.UserId == User.GuidId).ToList();
+                        //foreach (var item in fileTypeList)
+                        //{
+                        //    item.HaveSetting = work.FileModelDB.Where(w => w.FileType == item.Types).ToList().Count;
+                            
+                        //    GlobalData.GetInstance().UserFileTypes.Add(item);
+                        //}
 
                         isLogin = true;
                         w.Close();

@@ -29,6 +29,9 @@ namespace YC.WorkEfficiency.Models
         private string _Types;
         [Column("Types")]
         public string Types { get => _Types; set { _Types = value;DoNotify(); } }
+
+        [NotMapped]
+        public int HaveSetting { get; set; }
         #endregion
     }
 }

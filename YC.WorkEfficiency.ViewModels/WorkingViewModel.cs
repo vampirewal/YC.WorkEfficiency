@@ -20,6 +20,7 @@ using System.Threading;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.Themes;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
@@ -32,14 +33,19 @@ namespace YC.WorkEfficiency.ViewModels
             Title = "未完成的工作";
             InitData();
         }
-        public override object GetResult()
+
+        #region 重写
+        public override void InitData()
         {
-            return null;
+            GetData();
+            MessengerRegist();
+            StartWork();
         }
+        #endregion
 
         #region 属性
         public ObservableCollection<FileModel> WorkingList { get; set; }
-        public ObservableCollection<FileType> fileTypes { get; set; }
+        
 
         private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
@@ -50,15 +56,6 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
-        /// <summary>
-        /// 初始化数据
-        /// </summary>
-        private void InitData()
-        {
-            GetData();
-            MessengerRegist();
-            StartWork();
-        }
         /// <summary>
         /// 获取数据
         /// </summary>
@@ -72,7 +69,7 @@ namespace YC.WorkEfficiency.ViewModels
                 //1、第一步，先获取当前的时间
                 TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
                 //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var result = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false).ToList();
+                var result = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false&&w.UserGuid==GlobalData.GetInstance().UserInfo.GuidId).ToList();
                 //3、在workList中的每一条都与互相排序
                 result.Sort((left, right) =>
                 {
@@ -88,40 +85,11 @@ namespace YC.WorkEfficiency.ViewModels
                 WorkingList = new ObservableCollection<FileModel>(result);
             }
 
-            fileTypes = GlobalData.GetInstance().UserFileTypes;
-        }
-        /// <summary>
-        /// 注册消息
-        /// </summary>
-        private void MessengerRegist()
-        {
-            Messenger.Default.Register<FileModel>(this, "AddNoFinishedWork", AddNoFinishedWork);
-            Messenger.Default.Register<FileModel>(this, "InsertFinishWork", InsertFinishWork);
-
-            Messenger.Default.Register<FileType>(this, "AddFileType", AddFileType);
-        }
-
-
-        #region 消息
-        private void AddNoFinishedWork(FileModel entity)
-        {
-            WorkingList.Add(entity);
-        }
-
-        private void InsertFinishWork(FileModel entity)
-        {
-            if (WorkingList.Where(w => w.IsEdit == true).Count()==0)
-            {
-                WorkingList.Insert(0, entity);
-            }
             
         }
 
-        private void AddFileType(FileType fileType)
-        {
-            fileTypes.Add(fileType);
-        }
-        #endregion
+
+        
 
         #region 开启一个新的线程来执行这个方法
         private void StartWork()
@@ -159,6 +127,37 @@ namespace YC.WorkEfficiency.ViewModels
 
         #endregion
 
+        #region 消息
+        /// <summary>
+        /// 注册消息
+        /// </summary>
+        private void MessengerRegist()
+        {
+            Messenger.Default.Register<FileModel, bool>(this, "InsertFinishWork", InsertFinishWork);
+
+            Messenger.Default.Register(this, "GetWorkingList", GetData);
+        }
+        /// <summary>
+        /// 插入一条最新的工作到工作表的最上面
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        private bool InsertFinishWork(FileModel entity)
+        {
+            //需要判断一下在工作表中，是否还存在有草稿状态的工作
+            if (WorkingList.Where(w => w.IsEdit == true).Count() == 0)
+            {
+                WorkingList.Insert(0, entity);
+                return true;
+            }
+            else
+            {
+                DialogWindow.Show("已存在一条草稿状态的工作，请编辑完成后再新增！", MessageType.Error, WindowsManager.Windows["MainView"]);
+                return false;
+            }
+        }
+        #endregion
+
         #region 命令
         public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
         {
@@ -168,22 +167,10 @@ namespace YC.WorkEfficiency.ViewModels
                 f.IsEdit = false;
             }
         });
-        public RelayCommand<FileModel> WorkSelectionChangeCommand => new RelayCommand<FileModel>((o) =>
-        {
-            if (o != null)
-            {
-                //if(Messenger.Default.Send<bool>("ShowWorkInfo", o))
-                //{
-                //    //SelectedItem = null;
-                //}
-                //if (WorkingList.Count==1)
-                //{
-                //    SelectedItem = null;
-                //    //Messenger.Default.Send("RefreshWorkingSelectedItem");
-                //}
-            }
-        });
-
+        
+        /// <summary>
+        /// 完成工作命令
+        /// </summary>
         public RelayCommand<FileModel> FinishSettingCommand => new RelayCommand<FileModel>((f) =>
         {
             if (f != null)
@@ -203,20 +190,16 @@ namespace YC.WorkEfficiency.ViewModels
             }
         });
 
+        /// <summary>
+        /// 查看工作详细命令
+        /// </summary>
         public RelayCommand<FileModel> WatchInfoCommand => new RelayCommand<FileModel>((f) =>
           {
               if (f!=null)
               {
-                  if (Messenger.Default.Send<bool>("ShowWorkInfo", f))
-                  {
-                      //SelectedItem = null;
-                  }
+                  Messenger.Default.Send("ShowWorkInfo", f);
               }
           });
         #endregion
-
-        
-
-        
     }
 }

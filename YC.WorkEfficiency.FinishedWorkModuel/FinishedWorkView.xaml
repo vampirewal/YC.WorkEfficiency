@@ -72,7 +72,12 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                <DataGridTextColumn
+                    Width="auto"
+                    MinWidth="50"
+                    MaxWidth="150"
+                    Binding="{Binding FileType}"
+                    Header="文件类型" />
                 <DataGridTemplateColumn
                     Width="auto"
                     MaxWidth="200"
@@ -134,47 +139,28 @@
                     Header="已经过时间"
                     IsReadOnly="True" />
 
-                <!--<DataGridTemplateColumn Width="auto" Header="操作">
+                <DataGridTemplateColumn Width="auto" Header="操作">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Button
                                     x:Name="btnStartWork"
-                                    Command="{Binding DataContext.QueDing, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    Command="{Binding DataContext.WatchInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
-                                    Content="确定" />
-                                <Button
-                                    x:Name="btnFinishWork"
-                                    Command="{Binding DataContext.FinishSettingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
-                                    Content="完成" />
+                                    Content="查看详细" />
                             </StackPanel>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsEdit}" Value="True">
-                                    <Setter TargetName="btnFinishWork" Property="Visibility" Value="Collapsed" />
-                                    <Setter TargetName="btnStartWork" Property="Visibility" Value="Visible" />
-                                </DataTrigger>
 
-                                <DataTrigger Binding="{Binding IsEdit}" Value="False">
-                                    <Setter TargetName="btnStartWork" Property="Visibility" Value="Collapsed" />
-                                    <Setter TargetName="btnFinishWork" Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
 
-            <!--<DataGrid.ContextMenu>
-                <ContextMenu MinWidth="50">
-                    <MenuItem Command="{Binding RefreshData}" Header="刷新数据" />
-                </ContextMenu>
-            </DataGrid.ContextMenu>-->
-            <i:Interaction.Triggers>
+
+            <!--<i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding FinishedWorkSelectionChangeCommand}" CommandParameter="{Binding SelectedItem, ElementName=FinishedWorkList}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
+            </i:Interaction.Triggers>-->
         </DataGrid>
         <!--#endregion-->
     </Grid>

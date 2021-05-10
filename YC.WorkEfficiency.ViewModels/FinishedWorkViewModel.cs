@@ -19,6 +19,7 @@ using System.Text;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -29,18 +30,24 @@ namespace YC.WorkEfficiency.ViewModels
             //构造函数
             InitData();
         }
-        
 
-        private void InitData()
+        #region 重写
+        public override void InitData()
         {
             GetData();
             MessagerRegistMethod();
-        }
+        } 
+        #endregion
 
+        /// <summary>
+        /// 注册消息
+        /// </summary>
         private void MessagerRegistMethod()
         {
             Messenger.Default.Register<FileModel>(this, "AddFinishedWork", AddFinishedWork);
+            Messenger.Default.Register(this, "GetFinishedWork", GetData);
         }
+
         #region 属性
         public ObservableCollection<FileModel> FinishedWorkList { get; set; }
 
@@ -52,6 +59,9 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
+        /// <summary>
+        /// 获取页面数据
+        /// </summary>
         private void GetData()
         {
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
@@ -62,7 +72,7 @@ namespace YC.WorkEfficiency.ViewModels
                 //1、第一步，先获取当前的时间
                 TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
                 //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var EndResult = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true).ToList();
+                var EndResult = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true&&w.UserGuid==GlobalData.GetInstance().UserInfo.GuidId).ToList();
                 //3、在workList中的每一条都与互相排序
                 EndResult.Sort((left, right) =>
                 {
@@ -90,12 +100,14 @@ namespace YC.WorkEfficiency.ViewModels
 
         #region 命令
 
-
-        public RelayCommand<FileModel> FinishedWorkSelectionChangeCommand => new RelayCommand<FileModel>((o) =>
+        /// <summary>
+        /// 查看工作详细命令
+        /// </summary>
+        public RelayCommand<FileModel> WatchInfoCommand => new RelayCommand<FileModel>((f) =>
         {
-            if (o != null)
+            if (f != null)
             {
-                Messenger.Default.Send("ShowWorkInfo", o);
+                Messenger.Default.Send("ShowWorkInfo", f);
             }
         });
         #endregion

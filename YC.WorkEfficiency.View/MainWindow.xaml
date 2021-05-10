@@ -198,6 +198,7 @@
                         <Button
                             Command="{Binding OpenSettingWindow}"
                             Content="&#xe667;"
+                            FontSize="20"
                             Style="{StaticResource WindowControlButtonStyle}"
                             ToolTip="设置" />
                         <Button
@@ -221,7 +222,7 @@
                 </Grid>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
-                        <i:InvokeCommandAction Command="{Binding baseCommand.WindowMoveCommand}" CommandParameter="{Binding ElementName=MainView}" />
+                        <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=MainView}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Border>
@@ -251,7 +252,8 @@
                                 Command="{Binding AddWorkCommand}"
                                 Content="&#xe613;"
                                 Foreground="White"
-                                Style="{StaticResource TransparentIconButton}" />
+                                Style="{StaticResource TransparentIconButton}"
+                                ToolTip="新增1条工作" />
 
                         </StackPanel>
                         <Border
@@ -371,7 +373,7 @@
                         <RowDefinition
                             Height="{Binding LoadHeight, Mode=OneTime}"
                             MinHeight="10"
-                            MaxHeight="{Binding ElementName=FileInfoPanel, Path=Height}" />
+                             />
                     </Grid.RowDefinitions>
                     <TabControl BorderThickness="0" Style="{StaticResource MainTabControlStyle}">
                         <TabControl.Resources>
@@ -523,7 +525,19 @@
                         BorderThickness="1"
                         CornerRadius="5"
                         Style="{StaticResource BorderOnlyEffect}">
-
+                        <Border.ContextMenu>
+                            <ContextMenu>
+                                <ContextMenu.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                                        </ResourceDictionary.MergedDictionaries>
+                                    </ResourceDictionary>
+                                </ContextMenu.Resources>
+                                <MenuItem Command="{Binding ExportFileModelToWord}" Header="导出Word" />
+                            </ContextMenu>
+                        </Border.ContextMenu>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20" />
@@ -574,10 +588,29 @@
                                     <TextBox
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Grid.ColumnSpan="3"
                                         Style="{StaticResource Text}"
                                         Text="{Binding SelectedItem.FileTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Style="{StaticResource txt_Title}"
+                                        Text="选择文件类型" />
+                                    <ComboBox
+                                        Name="selectfiletype"
+                                        Grid.Row="0"
+                                        Grid.Column="3"
+                                        Margin="5"
+                                        DisplayMemberPath="Types"
+                                        ItemsSource="{Binding fileTypes}"
+                                        SelectedValuePath="Types"
+                                        Text="{Binding SelectedItem.FileType, UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectionChanged">
+                                                <i:InvokeCommandAction Command="{Binding SelectionChangeCommand}" CommandParameter="{Binding ElementName=selectfiletype, Path=SelectedValue}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="0"

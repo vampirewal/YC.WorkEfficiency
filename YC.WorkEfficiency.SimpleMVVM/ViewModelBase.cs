@@ -56,6 +56,14 @@ namespace YC.WorkEfficiency.SimpleMVVM
             return null;
         }
 
+        /// <summary>
+        /// 初始化页面数据
+        /// </summary>
+        public virtual void InitData()
+        {
+
+        }
+
         #region 命令
         /// <summary>
         /// 通用的窗体关闭命令，但是每个窗体的关闭可能需要做的事情不一样，故非DialogWindow窗体，重写这个命令。

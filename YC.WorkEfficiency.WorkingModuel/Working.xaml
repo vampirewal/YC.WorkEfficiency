@@ -76,27 +76,11 @@
                 </DataGridTemplateColumn>
 
 
-                <DataGridTemplateColumn
+                <DataGridTextColumn
                     Width="auto"
-                    MaxWidth="100"
-                    Header="选择类型">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox
-                                Name="SelectType"
-                                DisplayMemberPath="Types"
-                                ItemsSource="{Binding DataContext.fileTypes, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
-                                SelectedValuePath="GuidId"
-                                Text="{Binding FileType, Mode=TwoWay}">
-                                <!--<i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectionChanged">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.WorkSelectionChangeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>-->
-                            </ComboBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    MaxWidth="150"
+                    Binding="{Binding FileType}"
+                    Header="文件类型" />
                 <DataGridTemplateColumn
                     Width="auto"
                     MaxWidth="100"
@@ -174,6 +158,7 @@
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Button
+                                    Margin="2,0"
                                     Command="{Binding DataContext.WatchInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
                                     Content="查看详细" />

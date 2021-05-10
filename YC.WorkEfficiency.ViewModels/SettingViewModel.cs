@@ -21,6 +21,7 @@ using YC.WorkEfficiency.SimpleMVVM;
 using YC.WorkEfficiency.ViewModels.Common;
 using System.Linq;
 using YC.WorkEfficiency.Themes;
+using System.Collections.ObjectModel;
 
 namespace YC.WorkEfficiency.ViewModels
 {
@@ -29,27 +30,47 @@ namespace YC.WorkEfficiency.ViewModels
         public SettingViewModel()
         {
             //构造函数
-            CurrentUser = GlobalData.GetInstance().UserInfo;
+            
+            InitData();
         }
 
+        #region 重写
         private bool IsSetting = false;
         public override object GetResult()
         {
             return IsSetting;
         }
 
-        public override RelayCommand CloseWindowCommand => new RelayCommand(()=> 
+        public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
             Window w = View as Window;
             w.DialogResult = false;
             WindowsManager.CloseWindow(w);
         });
 
+        public override void InitData()
+        {
+            CurrentUser = GlobalData.GetInstance().UserInfo;
+            GetFileTypeData();
+        }
+        #endregion
+
         #region 属性
         //当前登陆用户
         public UserModel CurrentUser { get; set; }
 
+        #region 文件类型
+        /// <summary>
+        /// 新增的文件类型名称
+        /// </summary>
         public string fileTypeStr { get; set; }
+
+        /// <summary>
+        /// 文件类型集合
+        /// </summary>
+        public ObservableCollection<FileType> filetypeList { get; set; } 
+        #endregion
+
         #endregion
 
         #region 公共方法
@@ -57,16 +78,39 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
+        
+        /// <summary>
+        /// 获取数据库内最新的文件类型
+        /// </summary>
+        private void GetFileTypeData()
+        {
+            filetypeList = new ObservableCollection<FileType>();
+            using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                var current = work.FileTypeDB.Where(w => w.UserId == GlobalData.GetInstance().UserInfo.GuidId).ToList();
 
+                foreach (var item in current)
+                {
+                    item.HaveSetting = work.FileModelDB.Where(w => w.FileTypeGuid == item.GuidId).Count();
+                    filetypeList.Add(item);
+                }
+            }
+        }
         #endregion
 
         #region 命令
+        /// <summary>
+        /// 保存设置命令
+        /// </summary>
         public RelayCommand SaveSetting => new RelayCommand(() =>
           {
               (View as Window).DialogResult = true;
               WindowsManager.CloseWindow((View as Window));
           });
 
+        /// <summary>
+        /// 添加1条新的文件类型命令
+        /// </summary>
         public RelayCommand AddFileType => new RelayCommand(() =>
           {
               if (!string.IsNullOrEmpty(fileTypeStr))
@@ -78,22 +122,64 @@ namespace YC.WorkEfficiency.ViewModels
                           DialogWindow.Show("已存在相同名称的文件类型，请重新输入！", MessageType.Error, WindowsManager.Windows["SettingWindow"]);
                           return;
                       }
-
-                      FileType fileType = new FileType()
+                      else
                       {
-                          GuidId = Guid.NewGuid().ToString(),
-                          UserId = CurrentUser.GuidId,
-                          Types = fileTypeStr
-                      };
-                      
+                          FileType fileType = new FileType()
+                          {
+                              GuidId = Guid.NewGuid().ToString(),
+                              UserId = CurrentUser.GuidId,
+                              Types = fileTypeStr
+                          };
 
-                      work.FileTypeDB.Add(fileType);
-                      work.SaveChanges();
 
-                      Messenger.Default.Send("AddFileType", fileType);
-                      DialogWindow.Show("创建新的文件类型成功！", MessageType.Successful, WindowsManager.Windows["SettingWindow"]);
-                      fileTypeStr = string.Empty;
+                          work.FileTypeDB.Add(fileType);
+                          work.SaveChanges();
+
+                          Messenger.Default.Send("GetFileType");
+                          filetypeList.Add(fileType);
+                          DialogWindow.Show("创建新的文件类型成功！", MessageType.Successful, WindowsManager.Windows["SettingWindow"]);
+                          fileTypeStr = "";
+                      }
                   }
+              }
+          });
+
+        /// <summary>
+        /// 删除文件类型命令
+        /// </summary>
+        public RelayCommand<FileType> DeleteFileTypeCommand => new RelayCommand<FileType>((f) =>
+          {
+              if (f!=null)
+              {
+                  using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                  {
+                      //var filetypeCount = work.FileModelDB.Where(w => w.FileType == f.Types).ToList().Count;
+                      if (f.HaveSetting>0)
+                      {
+                          if (DialogWindow.ShowDialog($"是否要删除 {f.Types} ? \r\n 该文件类型下，已设置了 {f.HaveSetting} 条文件。\r\n 如确认删除，将清空这些文件的 文件类型！","警告"))
+                          {
+                              work.FileTypeDB.Remove(f);
+                              var current = work.FileModelDB.Where(w => w.FileType == f.Types).ToList();
+                              foreach (var item in current)
+                              {
+                                  item.FileTypeGuid = "";
+                                  item.FileType = "";
+                              }
+                              filetypeList.Remove(f);
+                          }
+                      }
+                      else if (DialogWindow.ShowDialog($"是否要删除 {f.Types} ?", "是否删除"))
+                      {
+                          work.FileTypeDB.Remove(f);
+                          filetypeList.Remove(f);
+                      }
+                      DialogWindow.Show("删除成功！", MessageType.Successful, WindowsManager.Windows["SettingWindow"]);
+                      work.SaveChanges();
+                      Messenger.Default.Send("GetFileType");
+                      Messenger.Default.Send("GetWorkingList");
+                      Messenger.Default.Send("GetFinishedWork");
+                  }
+                  
               }
           });
         #endregion

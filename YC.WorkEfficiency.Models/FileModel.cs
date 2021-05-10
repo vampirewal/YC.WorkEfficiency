@@ -146,7 +146,15 @@ namespace YC.WorkEfficiency.Models
 
 
         private string _FileTypeGuid;
-        
+        /// <summary>
+        /// 项目类型ID
+        /// </summary>
+        [Column("FileTypeGuid")]
+        public string FileTypeGuid
+        {
+            get { return _FileTypeGuid; }
+            set { _FileTypeGuid = value; DoNotify(); }
+        }
 
         private string _FileType;
         /// <summary>

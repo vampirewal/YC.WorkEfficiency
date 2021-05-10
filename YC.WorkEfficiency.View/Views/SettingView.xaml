@@ -95,17 +95,110 @@
                     Background="Transparent"
                     Header="个人设置"
                     Style="{StaticResource MainTabItemStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox
-                            Width="100"
-                            Height="30"
-                            Text="{Binding fileTypeStr, Mode=TwoWay}" />
-                        <Button
-                            Width="100"
-                            Height="30"
-                            Command="{Binding AddFileType}"
-                            Content="添加" />
-                    </StackPanel>
+                    <TabItem.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </TabItem.Resources>
+                    <ScrollViewer>
+                        <StackPanel>
+                            <Expander Header="设置文件类型" IsExpanded="True">
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Margin="5,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Foreground="{DynamicResource BaseBackground}"
+                                        Text="添加新的文件类型标签" />
+                                    <TextBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Height="30"
+                                        Margin="5,0"
+                                        Text="{Binding fileTypeStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Width="100"
+                                        Height="30"
+                                        Command="{Binding AddFileType}"
+                                        Content="添加" />
+
+                                    <DataGrid
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        Margin="5"
+                                        AutoGenerateColumns="False"
+                                        Background="Transparent"
+                                        HeadersVisibility="All"
+                                        ItemsSource="{Binding filetypeList}"
+                                        RowHeaderWidth="60"
+                                        SelectionMode="Single"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <DataGrid.Resources>
+                                            <ResourceDictionary>
+                                                <ResourceDictionary.MergedDictionaries>
+                                                    <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
+                                                    <ResourceDictionary>
+                                                        <Style x:Key="TextBlockCenterStyle" TargetType="TextBlock">
+                                                            <Setter Property="VerticalAlignment" Value="Center" />
+                                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                                        </Style>
+                                                    </ResourceDictionary>
+                                                </ResourceDictionary.MergedDictionaries>
+                                            </ResourceDictionary>
+                                        </DataGrid.Resources>
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="DataGridColumnHeader">
+                                                <Setter Property="Foreground" Value="White" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn
+                                                Width="auto"
+                                                MinWidth="100"
+                                                MaxWidth="150"
+                                                Binding="{Binding Types}"
+                                                Header="文件类型" />
+                                            <DataGridTextColumn
+                                                Width="auto"
+                                                MinWidth="100"
+                                                MaxWidth="150"
+                                                Binding="{Binding HaveSetting}"
+                                                Header="已设置文件数" />
+                                            <DataGridTemplateColumn
+                                                Width="auto"
+                                                MinWidth="100"
+                                                Header="操作">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            Command="{Binding DataContext.DeleteFileTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                                            Content="删除" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
                 </TabItem>
             </TabControl>
             <Grid Grid.Row="2">
