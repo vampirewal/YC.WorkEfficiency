@@ -53,54 +53,18 @@
                 </Style>
             </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn
-                    Width="auto"
-                    Header="状态"
-                    IsReadOnly="True">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Path
-                                x:Name="StatePoint"
-                                Width="20"
-                                Height="20"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Data="{StaticResource StatePoint}"
-                                Fill="Green"
-                                SnapsToDevicePixels="True"
-                                Stretch="Uniform" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+
                 <DataGridTextColumn
                     Width="auto"
                     MinWidth="50"
                     MaxWidth="150"
                     Binding="{Binding FileType}"
                     Header="文件类型" />
-                <DataGridTemplateColumn
+                <DataGridTextColumn
                     Width="auto"
                     MaxWidth="200"
-                    Header="工作名">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock x:Name="ShowFileTitle" Text="{Binding FileTitle}" />
-                                <TextBox x:Name="EditText" Text="{Binding FileTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsEdit}" Value="True">
-                                    <Setter TargetName="ShowFileTitle" Property="Visibility" Value="Collapsed" />
-                                    <Setter TargetName="EditText" Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsEdit}" Value="False">
-                                    <Setter TargetName="ShowFileTitle" Property="Visibility" Value="Visible" />
-                                    <Setter TargetName="EditText" Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    Binding="{Binding FileTitle}"
+                    Header="工作名" />
 
 
 
@@ -109,29 +73,11 @@
                     Binding="{Binding CreateTime, StringFormat={}{0:yyyy-MM-dd}}"
                     Header="开始时间"
                     IsReadOnly="True" />
-                <DataGridTemplateColumn Width="auto" Header="结束时间">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center">
-                                <hc:DateTimePicker
-                                    x:Name="datepicker"
-                                    IsEnabled="{Binding IsEdit, Converter={StaticResource Boolean2VisibilityConverter}}"
-                                    SelectedDateTime="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock
-                                    x:Name="showEndTime"
-                                    Text="{Binding EndTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
-                                    Visibility="Collapsed" />
-                            </StackPanel>
-
-                            <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding IsEdit}" Value="False">
-                                    <Setter TargetName="datepicker" Property="Visibility" Value="Collapsed" />
-                                    <Setter TargetName="showEndTime" Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn
+                    Width="auto"
+                    Binding="{Binding EndTime, StringFormat={}{0:yyyy-MM-dd}}"
+                    Header="结束时间"
+                    IsReadOnly="True" />
 
                 <DataGridTextColumn
                     Width="auto"
@@ -148,6 +94,11 @@
                                     Command="{Binding DataContext.WatchInfoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
                                     Content="查看详细" />
+                                <Button
+                                    x:Name="btnDeleteWork"
+                                    Command="{Binding DataContext.DeleteFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                    Content="删除" />
                             </StackPanel>
 
                         </DataTemplate>

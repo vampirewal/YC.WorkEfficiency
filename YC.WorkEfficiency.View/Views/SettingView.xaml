@@ -105,7 +105,7 @@
                     </TabItem.Resources>
                     <ScrollViewer>
                         <StackPanel>
-                            <Expander Header="设置文件类型" IsExpanded="True">
+                            <Expander Margin="0,5" Header="设置文件类型">
                                 <Grid Margin="5">
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
@@ -196,6 +196,89 @@
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </Grid>
+                            </Expander>
+                            <Expander Margin="0,5" Header="回收站">
+                                <DataGrid
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    Margin="5"
+                                    AutoGenerateColumns="False"
+                                    Background="Transparent"
+                                    HeadersVisibility="All"
+                                    ItemsSource="{Binding RecycleBinForFileModel}"
+                                    RowHeaderWidth="60"
+                                    SelectionMode="Single"
+                                    VerticalScrollBarVisibility="Auto">
+                                    <DataGrid.Resources>
+                                        <ResourceDictionary>
+                                            <ResourceDictionary.MergedDictionaries>
+                                                <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
+                                                <ResourceDictionary>
+                                                    <Style x:Key="TextBlockCenterStyle" TargetType="TextBlock">
+                                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                                    </Style>
+                                                </ResourceDictionary>
+                                            </ResourceDictionary.MergedDictionaries>
+                                        </ResourceDictionary>
+                                    </DataGrid.Resources>
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn
+                                            Width="auto"
+                                            MinWidth="50"
+                                            MaxWidth="150"
+                                            Binding="{Binding FileType}"
+                                            Header="文件类型" />
+                                        <DataGridTextColumn
+                                            Width="auto"
+                                            MaxWidth="200"
+                                            Binding="{Binding FileTitle}"
+                                            Header="工作名" />
+                                        <DataGridTextColumn
+                                            Width="auto"
+                                            Binding="{Binding CreateTime, StringFormat={}{0:yyyy-MM-dd}}"
+                                            Header="开始时间"
+                                            IsReadOnly="True" />
+                                        <DataGridTextColumn
+                                            Width="auto"
+                                            Binding="{Binding EndTime, StringFormat={}{0:yyyy-MM-dd}}"
+                                            Header="结束时间"
+                                            IsReadOnly="True" />
+
+                                        <DataGridTextColumn
+                                            Width="auto"
+                                            Binding="{Binding AfterTime}"
+                                            Header="已经过时间"
+                                            IsReadOnly="True" />
+
+                                        <DataGridTemplateColumn Width="auto" Header="操作">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button
+                                                            x:Name="btnStartWork"
+                                                            Command="{Binding DataContext.RestoreFile, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                                            Content="恢复" />
+                                                        <Button
+                                                            x:Name="btnDeleteWork"
+                                                            Command="{Binding DataContext.TrueDeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}, Path=SelectedItem}"
+                                                            Content="彻底删除" />
+                                                    </StackPanel>
+
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Expander>
                         </StackPanel>
                     </ScrollViewer>

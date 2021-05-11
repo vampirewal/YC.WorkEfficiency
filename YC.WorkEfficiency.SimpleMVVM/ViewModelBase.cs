@@ -23,6 +23,10 @@ namespace YC.WorkEfficiency.SimpleMVVM
     /// </summary>
     public  class ViewModelBase : NotifyBase
     {
+        public ViewModelBase()
+        {
+            InitData();
+        }
         /// <summary>
         /// 判断是不是设计器模式
         /// </summary>
@@ -57,7 +61,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
         }
 
         /// <summary>
-        /// 初始化页面数据
+        /// 初始化页面数据，由ViewModelBase的构造函数调用，重写后不用再调用
         /// </summary>
         public virtual void InitData()
         {

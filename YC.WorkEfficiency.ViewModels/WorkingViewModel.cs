@@ -31,7 +31,7 @@ namespace YC.WorkEfficiency.ViewModels
         {
             //构造函数
             Title = "未完成的工作";
-            InitData();
+            //InitData();
         }
 
         #region 重写
@@ -105,18 +105,20 @@ namespace YC.WorkEfficiency.ViewModels
                 Thread.Sleep(1000);
                 if (WorkingList.Count > 0)
                 {
-                    TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
-                    foreach (var item in WorkingList)
-                    {
-                        if (!item.IsFinished && !item.IsEdit)
-                        {
-                            TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
-                            TimeSpan ts = ts_now.Subtract(ts_createtime);
-                            item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
-                        }
-                    }
+                    
                     using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                     {
+                        TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
+                        foreach (var item in WorkingList)
+                        {
+                            if (!item.IsFinished && !item.IsEdit)
+                            {
+                                TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
+                                TimeSpan ts = ts_now.Subtract(ts_createtime);
+                                item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+                            }
+                        }
+
                         fileModelDataContext.UpdateRange(WorkingList);
                         fileModelDataContext.SaveChanges();
                     }
@@ -181,12 +183,13 @@ namespace YC.WorkEfficiency.ViewModels
                 WorkingList.Remove(f);
                 //EndingList.Add(f);
                 Messenger.Default.Send("AddFinishedWork", f);
-
+                
                 using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                 {
                     work.Update(f);
                     work.SaveChanges();
                 }
+                Messenger.Default.Send("GetTotalWorking");
             }
         });
 

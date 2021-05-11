@@ -34,6 +34,8 @@ namespace YC.WorkEfficiency.DataAccess
 
         public DbSet<UserSetting> UserSettingsDB { get; set; }
 
+        public DbSet<WorkDescription> WorkDescriptionDB { get; set; }
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

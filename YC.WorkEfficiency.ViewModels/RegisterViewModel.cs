@@ -27,7 +27,6 @@ namespace YC.WorkEfficiency.ViewModels
     {
         public RegisterViewModel()
         {
-            baseCommand = new BaseCommand();
             Title = "注册";
             //构造函数
             NewUserModel = new UserModel()
@@ -46,7 +45,6 @@ namespace YC.WorkEfficiency.ViewModels
         #region 属性
         public UserModel NewUserModel { get; set; }
 
-        public BaseCommand baseCommand { get; set; } 
         #endregion
 
         #region 公共方法

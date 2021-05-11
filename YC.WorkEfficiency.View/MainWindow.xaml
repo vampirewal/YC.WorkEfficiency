@@ -9,11 +9,11 @@
     Name="MainView"
     Title="{Binding Title}"
     Width="1000"
-    Height="450"
+    Height="650"
     MaxWidth="{Binding MaxWidth}"
     MaxHeight="{Binding MaxHeight}"
     FontFamily="Microsoft YaHei"
-    Icon="Assets/Image/时钟.jpg"
+    Icon="Assets/Image/时钟.png"
     Style="{StaticResource WindowDefauleStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -318,28 +318,28 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="White"
-                                    Text="今日工作" />
+                                    Text="{Binding TotalWorking}" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="White"
-                                    Text="本周工作" />
+                                    Text="{Binding ThisWeekFinishedWork}" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="White"
-                                    Text="本月工作" />
+                                    Text="{Binding ThisMouthFinishedWork}" />
                             </Border>
                             <Border Style="{StaticResource CardBorder}">
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="White"
-                                    Text="今年工作" />
+                                    Text="{Binding ThisYearFinishedWork}" />
                             </Border>
                         </UniformGrid>
 
@@ -370,10 +370,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition MinHeight="100" />
                         <RowDefinition Height="10" />
-                        <RowDefinition
-                            Height="{Binding LoadHeight, Mode=OneTime}"
-                            MinHeight="10"
-                             />
+                        <RowDefinition Height="{Binding LoadHeight, Mode=OneTime}" MinHeight="10" />
                     </Grid.RowDefinitions>
                     <TabControl BorderThickness="0" Style="{StaticResource MainTabControlStyle}">
                         <TabControl.Resources>
@@ -576,6 +573,7 @@
                                         <RowDefinition Height="40" />
                                         <RowDefinition Height="auto" MinHeight="40" />
                                         <RowDefinition Height="*" MaxHeight="300" />
+                                        <RowDefinition Height="*" MaxHeight="300" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100" />
@@ -754,12 +752,54 @@
 
                                             </DataGrid>
                                         </Grid>
-                                        <!--<i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="DrogEnter">
-                                                <i:CallMethodAction MethodName="Attachment_DragEnter"
-                                                                    TargetObject="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>-->
+
+                                    </Border>
+
+                                    <Button
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        Width="100"
+                                        Height="30"
+                                        Margin="5"
+                                        HorizontalAlignment="Center"
+                                        Command="{Binding AddFileDesCommand}"
+                                            Cursor="Hand">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Content" Value="点击添加描述" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                        <Setter Property="Content" Value="文件描述" />
+                                                    </Trigger>
+
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="3"
+                                        Margin="5"
+                                        AllowDrop="True"
+                                        Background="White"
+                                        BorderThickness="1"
+                                        CornerRadius="5">
+                                        <Border.Effect>
+                                            <DropShadowEffect
+                                                BlurRadius="5"
+                                                Direction="0"
+                                                Opacity="0.7"
+                                                ShadowDepth="0"
+                                                Color="#e0861a" />
+                                        </Border.Effect>
+
+
                                     </Border>
                                 </Grid>
                             </ScrollViewer>

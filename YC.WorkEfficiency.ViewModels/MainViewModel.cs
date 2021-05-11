@@ -34,11 +34,11 @@ namespace YC.WorkEfficiency.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel()
+        public MainViewModel():base()
         {
             //构造函数
             Title = "时间效率管理";
-            InitData();
+            //InitData();
         }
 
         #region 重写
@@ -65,6 +65,7 @@ namespace YC.WorkEfficiency.ViewModels
             MessengerRegister();
             GetFileType();
             GetTotleTime();
+            GetTotalWorking();
         }
         #endregion
 
@@ -73,8 +74,9 @@ namespace YC.WorkEfficiency.ViewModels
 
         private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
-        
 
+
+        #region 左侧信息栏
         private string _TotleWorkTime;
         /// <summary>
         /// 汇总工作时间
@@ -84,6 +86,48 @@ namespace YC.WorkEfficiency.ViewModels
             get { return _TotleWorkTime; }
             set { _TotleWorkTime = value; DoNotify(); }
         }
+
+        private string _TotalWorking;
+        /// <summary>
+        /// 统计总的正在工作
+        /// </summary>
+        public string TotalWorking
+        {
+            get { return _TotalWorking; }
+            set { _TotalWorking = value; DoNotify(); }
+        }
+
+        private string _ThisWeekFinishedWork;
+        /// <summary>
+        /// 本周已完成的工作
+        /// </summary>
+        public string ThisWeekFinishedWork
+        {
+            get { return _ThisWeekFinishedWork; }
+            set { _ThisWeekFinishedWork = value; DoNotify(); }
+        }
+
+        private string _ThisMouthFinishedWork;
+        /// <summary>
+        /// 本月已完成的工作
+        /// </summary>
+        public string ThisMouthFinishedWork
+        {
+            get { return _ThisMouthFinishedWork; }
+            set { _ThisMouthFinishedWork = value; DoNotify(); }
+        }
+
+        private string _ThisYearFinishedWork;
+        /// <summary>
+        /// 本年已完成的工作
+        /// </summary>
+        public string ThisYearFinishedWork
+        {
+            get { return _ThisYearFinishedWork; }
+            set { _ThisYearFinishedWork = value; DoNotify(); }
+        }
+
+        #endregion
 
         /// <summary>
         /// 附件集合
@@ -130,9 +174,6 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion 属性
 
         #region 私有方法
-
-        
-        
         /// <summary>
         /// 获取模块并加载到MainViewModel
         /// </summary>
@@ -142,20 +183,7 @@ namespace YC.WorkEfficiency.ViewModels
             NoFinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("未完成的工作", new WorkingViewModel());
             FinishedWorkFrame = LoadModulesServices.Instance.OpenModuleBindingVM("已完成的工作", new FinishedWorkViewModel());
         }
-        //暂时废弃
-        private string GetFileExtension(string FileExtension)
-        {
-            string str = string.Empty;
-            switch (FileExtension)
-            {
-                case ".xlsx":
-                    str = "Excel文件";
-                    break;
-                default:
-                    break;
-            }
-            return str;
-        }
+        
         private void GetTotleTime()
         {
             Task.Run(() =>
@@ -188,6 +216,43 @@ namespace YC.WorkEfficiency.ViewModels
                 seconds += DatToSeconds + HoursToSeconds + MinutesToSeconds;
                 TimeSpan tsTotle = TimeSpan.FromSeconds(seconds);
                 TotleWorkTime = $"累计工时：\r\n{tsTotle.Days}天{tsTotle.Hours}小时{tsTotle.Minutes}分{tsTotle.Seconds}秒";
+            });
+        }
+
+
+        private void GetTotalWorking()
+        {
+            Task.Run(() =>
+            {
+
+                
+                DateTime dt = DateTime.Now;  //当前时间  
+                using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                {
+                    var currentCount = work.FileModelDB.Where(w => w.UserGuid == GlobalData.GetInstance().UserInfo.GuidId&&w.IsFinished==false).Count();
+                    if (currentCount>0)
+                    {
+                        TotalWorking = $"现在还有{currentCount}条工作待完成";
+                    }
+                    else
+                    {
+                        TotalWorking = $"现在没有待完成工作";
+                    }
+                    //先获取登陆用户名下的已完成工作数
+                    var currentFinishedWork = work.FileModelDB.Where(w => w.UserGuid == GlobalData.GetInstance().UserInfo.GuidId && w.IsFinished == true&&w.IsDeleted==false).ToList();
+                    //本周已完成的工作
+                    DateTime startWeek =Convert.ToDateTime( dt.AddDays(1 - Convert.ToInt32(dt.DayOfWeek.ToString("d"))).ToString("yyyy/MM/dd 00:00:00"));  //本周周一  
+                    DateTime endWeek = startWeek.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59);  //本周周日 
+                    ThisWeekFinishedWork = $"本周完成工作 {currentFinishedWork.Where(w => w.EndTime >= startWeek&&w.EndTime<= endWeek).Count()} 条";
+                    //本月
+                    DateTime startMonth =Convert.ToDateTime( dt.AddDays(1 - dt.Day).ToString("yyyy/MM/dd 00:00:00"));  //本月月初  
+                    DateTime endMonth = startMonth.AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);  //本月月末
+                    ThisMouthFinishedWork = $"本月完成工作 {currentFinishedWork.Where(w => w.EndTime >= startMonth&&w.EndTime<= endMonth).Count()} 条";
+                    //本年
+                    DateTime startYear = new DateTime(dt.Year, 1, 1);  //本年年初 
+                    DateTime endYear = new DateTime(dt.Year, 12, 31).AddHours(23).AddMinutes(59).AddSeconds(59);  //本年年末
+                    ThisYearFinishedWork = $"本年完成工作 {currentFinishedWork.Where(w => w.EndTime >= startYear&&w.EndTime<= endYear).Count()} 条"; 
+                }
             });
         }
 
@@ -233,6 +298,7 @@ namespace YC.WorkEfficiency.ViewModels
                     work.FileModelDB.Add(current);
                     work.SaveChanges();
                 }
+                GetTotalWorking();
             }
 
         });
@@ -376,6 +442,17 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         });
+
+        /// <summary>
+        /// 针对选择的文件，添加描述信息
+        /// </summary>
+        public RelayCommand AddFileDesCommand => new RelayCommand(() =>
+          {
+              if (selectedItem!=null)
+              {
+                  var workDes = WindowsManager.CreateDialogWindowByViewModelResult("AddFileDes", new AddFileDesViewModel(SelectedItem)) as WorkDescription;
+              }
+          });
         #endregion
 
         #region 消息
@@ -387,6 +464,8 @@ namespace YC.WorkEfficiency.ViewModels
             Messenger.Default.Register<FileModel>(this, "ShowWorkInfo", ShowWorkInfo);
 
             Messenger.Default.Register(this, "GetFileType", GetFileType);
+
+            Messenger.Default.Register(this, "GetTotalWorking", GetTotalWorking);
         }
         /// <summary>
         /// 将选择的FileModel，获取附件之后，将完整信息显示到下方的panel中

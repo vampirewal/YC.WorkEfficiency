@@ -30,7 +30,7 @@ namespace YC.WorkEfficiency.ViewModels
         {
             //构造函数
             Title = "登陆";
-            InitData();
+            //InitData();
         }
         #region 重写
         public override void InitData()
@@ -71,7 +71,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-        public RelayCommand<Window> LoginCommand => new RelayCommand<Window>((w) => 
+        public RelayCommand LoginCommand => new RelayCommand(() => 
         {
             using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
             {
@@ -90,17 +90,8 @@ namespace YC.WorkEfficiency.ViewModels
                         work.UserModelDB.Update(User);
                         work.SaveChanges();
                         GlobalData.GetInstance().UserInfo = User;
-                        //获取该用户的文件分类类型设置
-                        //var fileTypeList= work.FileTypeDB.Where(w => w.UserId == User.GuidId).ToList();
-                        //foreach (var item in fileTypeList)
-                        //{
-                        //    item.HaveSetting = work.FileModelDB.Where(w => w.FileType == item.Types).ToList().Count;
-                            
-                        //    GlobalData.GetInstance().UserFileTypes.Add(item);
-                        //}
-
                         isLogin = true;
-                        w.Close();
+                        WindowsManager.CloseWindow(WindowsManager.Windows["LoginWindow"]);
                     }
                     else
                     {

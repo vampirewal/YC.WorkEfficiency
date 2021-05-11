@@ -26,11 +26,11 @@
 
                 <ResourceDictionary>
                     <Style TargetType="{x:Type TextElement}">
-                        <Setter Property="FontFamily" Value="youyuan" />
+                        <Setter Property="FontFamily" Value="Microsoft YaHei" />
                         <Setter Property="FontSize" Value="12" />
                     </Style>
                     <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="FontFamily" Value="youyuan" />
+                        <Setter Property="FontFamily" Value="Microsoft YaHei" />
                         <Setter Property="FontSize" Value="13" />
                     </Style>
                 </ResourceDictionary>

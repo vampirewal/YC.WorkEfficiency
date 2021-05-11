@@ -30,8 +30,6 @@ namespace YC.WorkEfficiency.ViewModels
         public SettingViewModel()
         {
             //构造函数
-            
-            InitData();
         }
 
         #region 重写
@@ -51,7 +49,9 @@ namespace YC.WorkEfficiency.ViewModels
         public override void InitData()
         {
             CurrentUser = GlobalData.GetInstance().UserInfo;
+            
             GetFileTypeData();
+            GetRecycleBinForFileModelData();
         }
         #endregion
 
@@ -69,6 +69,8 @@ namespace YC.WorkEfficiency.ViewModels
         /// 文件类型集合
         /// </summary>
         public ObservableCollection<FileType> filetypeList { get; set; } 
+
+        public ObservableCollection<FileModel> RecycleBinForFileModel { get; set; }
         #endregion
 
         #endregion
@@ -78,7 +80,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 私有方法
-        
+
         /// <summary>
         /// 获取数据库内最新的文件类型
         /// </summary>
@@ -96,6 +98,21 @@ namespace YC.WorkEfficiency.ViewModels
                 }
             }
         }
+        /// <summary>
+        /// 获取回收站的文件数据
+        /// </summary>
+        private void GetRecycleBinForFileModelData()
+        {
+            RecycleBinForFileModel = new ObservableCollection<FileModel>();
+            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                var current = work.FileModelDB.Where(w => w.UserGuid == GlobalData.GetInstance().UserInfo.GuidId && w.IsDeleted == true).ToList();
+                foreach (var item in current)
+                {
+                    RecycleBinForFileModel.Add(item);
+                }
+            }
+        }
         #endregion
 
         #region 命令
@@ -108,6 +125,7 @@ namespace YC.WorkEfficiency.ViewModels
               WindowsManager.CloseWindow((View as Window));
           });
 
+        #region 针对 文件类型 的命令
         /// <summary>
         /// 添加1条新的文件类型命令
         /// </summary>
@@ -115,9 +133,9 @@ namespace YC.WorkEfficiency.ViewModels
           {
               if (!string.IsNullOrEmpty(fileTypeStr))
               {
-                  using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                  using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                   {
-                      if(work.FileTypeDB.Where(w => w.Types == fileTypeStr).Any())
+                      if (work.FileTypeDB.Where(w => w.Types == fileTypeStr).Any())
                       {
                           DialogWindow.Show("已存在相同名称的文件类型，请重新输入！", MessageType.Error, WindowsManager.Windows["SettingWindow"]);
                           return;
@@ -149,14 +167,14 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         public RelayCommand<FileType> DeleteFileTypeCommand => new RelayCommand<FileType>((f) =>
           {
-              if (f!=null)
+              if (f != null)
               {
                   using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
                   {
                       //var filetypeCount = work.FileModelDB.Where(w => w.FileType == f.Types).ToList().Count;
-                      if (f.HaveSetting>0)
+                      if (f.HaveSetting > 0)
                       {
-                          if (DialogWindow.ShowDialog($"是否要删除 {f.Types} ? \r\n 该文件类型下，已设置了 {f.HaveSetting} 条文件。\r\n 如确认删除，将清空这些文件的 文件类型！","警告"))
+                          if (DialogWindow.ShowDialog($"是否要删除 {f.Types} ? \r\n 该文件类型下，已设置了 {f.HaveSetting} 条文件。\r\n 如确认删除，将清空这些文件的 文件类型！", "警告"))
                           {
                               work.FileTypeDB.Remove(f);
                               var current = work.FileModelDB.Where(w => w.FileType == f.Types).ToList();
@@ -179,9 +197,57 @@ namespace YC.WorkEfficiency.ViewModels
                       Messenger.Default.Send("GetWorkingList");
                       Messenger.Default.Send("GetFinishedWork");
                   }
-                  
+
               }
           });
+        #endregion
+
+        #region 针对回收站的命令
+        /// <summary>
+        /// 将回收站内的文件恢复命令
+        /// </summary>
+        public RelayCommand<FileModel> RestoreFile => new RelayCommand<FileModel>((f) =>
+          {
+              if (f != null)
+              {
+                  using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                  {
+                      f.IsDeleted = false;
+                      work.FileModelDB.Update(f);
+                      work.SaveChanges();
+                      DialogWindow.Show("恢复成功！", MessageType.Successful, WindowsManager.Windows["SettingWindow"]);
+                      Messenger.Default.Send("GetFinishedWork");
+                      Messenger.Default.Send("GetTotalWorking");
+                      RecycleBinForFileModel.Remove(f);
+                  }
+              }
+          });
+        /// <summary>
+        /// 将回收站内的文件彻底删除命令
+        /// </summary>
+        public RelayCommand<FileModel> TrueDeleteCommand => new RelayCommand<FileModel>((f) =>
+          {
+              if (f != null)
+              {
+                  if (DialogWindow.ShowDialog("确认是否彻底删除该文件？这样删除将包括该文件名下的附件等资料！", "请确认"))
+                  {
+                      using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                      {
+                          var fileattachment = work.FileAttachmentModelDB.Where(w => w.ParentGuidId == f.GuidId).ToList();
+                          if (fileattachment.Count > 0)
+                          {
+                              DialogWindow.Show($"已删除该文件下的{fileattachment.Count}条附件！", MessageType.Information, WindowsManager.Windows["SettingWindow"]);
+                              work.FileAttachmentModelDB.RemoveRange(fileattachment);
+                          }
+                          work.FileModelDB.Remove(f);
+                          work.SaveChanges();
+                          RecycleBinForFileModel.Remove(f);
+                      }
+                  }
+              }
+          }); 
+        #endregion
+
         #endregion
     }
 }

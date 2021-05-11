@@ -19,6 +19,7 @@ using System.Text;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.Themes;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
@@ -28,12 +29,13 @@ namespace YC.WorkEfficiency.ViewModels
         public FinishedWorkViewModel()
         {
             //构造函数
-            InitData();
+            //InitData();
         }
 
         #region 重写
         public override void InitData()
         {
+            FinishedWorkList = new ObservableCollection<FileModel>();
             GetData();
             MessagerRegistMethod();
         } 
@@ -64,6 +66,7 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void GetData()
         {
+            FinishedWorkList.Clear();
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
@@ -72,7 +75,7 @@ namespace YC.WorkEfficiency.ViewModels
                 //1、第一步，先获取当前的时间
                 TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
                 //2、第二步，从sqlite数据库中获取到数据，转化为List
-                var EndResult = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true&&w.UserGuid==GlobalData.GetInstance().UserInfo.GuidId).ToList();
+                var EndResult = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == true&&w.UserGuid==GlobalData.GetInstance().UserInfo.GuidId&&w.IsDeleted==false).ToList();
                 //3、在workList中的每一条都与互相排序
                 EndResult.Sort((left, right) =>
                 {
@@ -85,8 +88,10 @@ namespace YC.WorkEfficiency.ViewModels
                         return 1;
                     }
                 });
-                FinishedWorkList = new ObservableCollection<FileModel>(EndResult);
-
+                foreach (var item in EndResult)
+                {
+                    FinishedWorkList.Add(item);
+                }
             }
         }
 
@@ -110,6 +115,27 @@ namespace YC.WorkEfficiency.ViewModels
                 Messenger.Default.Send("ShowWorkInfo", f);
             }
         });
+
+        /// <summary>
+        /// 逻辑删除文件
+        /// </summary>
+        public RelayCommand<FileModel> DeleteFileCommand => new RelayCommand<FileModel>((f) =>
+          {
+              if (f != null)
+              {
+                  if (DialogWindow.ShowDialog("是否删除该文件？", "请确认"))
+                  {
+                      using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                      {
+                          f.IsDeleted = true;
+                          work.FileModelDB.Update(f);
+                          work.SaveChanges();
+                          FinishedWorkList.Remove(f);
+                          Messenger.Default.Send("GetTotalWorking");
+                      }
+                  }
+              }
+          });
         #endregion
     }
 }

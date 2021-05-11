@@ -12,6 +12,7 @@
     Width="288.4"
     Height="400"
     FontFamily="Bahnschrift SemiBold"
+    Icon="Assets/Image/时钟.png"
     ResizeMode="NoResize"
     Style="{StaticResource WindowDefauleStyle}"
     WindowStartupLocation="CenterScreen"
@@ -103,7 +104,6 @@
                     <Button
                         Margin="5"
                         Command="{Binding LoginCommand}"
-                        CommandParameter="{Binding ElementName=LoginWindow}"
                         Content="登   陆">
                         <Button.Style>
                             <Style TargetType="Button">

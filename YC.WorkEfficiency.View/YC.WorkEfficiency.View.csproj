@@ -4,10 +4,16 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Image\timeWork.ico</ApplicationIcon>
+    <Authors>yangcheng</Authors>
+    <Product>WorkEfficiency</Product>
+    <PackageId>WorkEfficiency</PackageId>
+    <AssemblyName>WorkEfficiency</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Image\时钟.jpg" />
+    <None Remove="Assets\Image\timeWork.ico" />
+    <None Remove="Assets\Image\时钟.png" />
     <None Remove="DataSettings.json" />
   </ItemGroup>
 
@@ -21,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Image\时钟.jpg" />
+    <Resource Include="Assets\Image\timeWork.ico" />
+    <Resource Include="Assets\Image\时钟.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@
         <ResourceDictionary Source="ControlStyles/ComboxStyles.xaml" />
         <ResourceDictionary Source="ControlStyles/PathIconStyles.xaml" />
         <ResourceDictionary Source="ControlStyles/CheckBoxStyles.xaml" />
+        <ResourceDictionary Source="ControlStyles/TextBlockStyles.xaml" />
 
 
         <ResourceDictionary Source="CustomControl/TabControl/TabControlStyles.xaml" />

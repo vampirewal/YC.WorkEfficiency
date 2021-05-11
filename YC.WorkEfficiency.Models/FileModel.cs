@@ -43,7 +43,7 @@ namespace YC.WorkEfficiency.Models
 
         private bool isEdit;
 
-        private bool isSelected;
+        private bool isDelete;
 
         /// <summary>
         /// 经过时间
@@ -109,8 +109,11 @@ namespace YC.WorkEfficiency.Models
             set { _IsFinished = value; DoNotify(); }
         }
 
-        [Column("IsSelected")]
-        public bool IsSelected { get => isSelected; set { isSelected = value; DoNotify(); } }
+        /// <summary>
+        /// 是否删除（逻辑删除）
+        /// </summary>
+        [Column("IsDeleted")]
+        public bool IsDeleted { get => isDelete; set { isDelete = value; DoNotify(); } }
         #endregion 属性
 
         #region 扩展属性

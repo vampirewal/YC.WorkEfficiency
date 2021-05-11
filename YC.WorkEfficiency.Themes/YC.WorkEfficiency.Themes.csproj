@@ -22,4 +22,8 @@
     <Resource Include="Assets\Images\时间管理.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CustomControl\ColorPicker\" />
+  </ItemGroup>
+
 </Project>
