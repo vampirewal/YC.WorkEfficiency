@@ -13,6 +13,14 @@
     Style="{DynamicResource WindowDefauleStyle}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
@@ -23,6 +31,8 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="{StaticResource BaseBackground}"
                 Text="{Binding Title}" />
             <Button
                 HorizontalAlignment="Right"
@@ -31,8 +41,11 @@
                 ToolTip="关闭" />
             <TextBox
                 Grid.Row="1"
-                Background="{Binding workDescription.DesBackground}"
+                Margin="5"
+                VerticalContentAlignment="Top"
+                Background="{Binding SelectType.TypeBackgroundColor}"
                 BorderThickness="0"
+                Foreground="{Binding SelectType.TypeFontColor}"
                 Text="{Binding workDescription.WorkDescriptionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
             <Grid Grid.Row="2">
@@ -46,15 +59,54 @@
                 <TextBlock
                     Foreground="{StaticResource BaseBackground}"
                     Style="{StaticResource CenterTextBlock}"
-                    Text="背景色" />
-                <Button
+                    Text="描述类型" />
+                <ComboBox
                     Grid.Column="1"
-                    Margin="5"
-                    Command="{Binding OpenSelectBackgroundColorPickerCommand}">
-                    <Button.Background>
-                        <SolidColorBrush Color="{Binding workDescription.DesBackground}" />
-                    </Button.Background>
-                </Button>
+                    Grid.ColumnSpan="2"
+                    Margin="2"
+                    DisplayMemberPath="TypeName"
+                    ItemsSource="{Binding TypeList}"
+                    SelectedItem="{Binding SelectType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ComboBoxItem">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="22" />
+                                                <ColumnDefinition Width="22" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Border
+                                                Width="20"
+                                                Height="20"
+                                                Margin="1,0"
+                                                Background="{Binding TypeBackgroundColor}"
+                                                BorderThickness="0"
+                                                CornerRadius="3"
+                                                ToolTip="背景色" />
+                                            <Border
+                                                Grid.Column="1"
+                                                Width="20"
+                                                Height="20"
+                                                Margin="1,0"
+                                                Background="{Binding TypeFontColor}"
+                                                BorderThickness="0"
+                                                CornerRadius="3"
+                                                ToolTip="文字颜色" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding TypeName}" />
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
             </Grid>
         </Grid>
     </Border>

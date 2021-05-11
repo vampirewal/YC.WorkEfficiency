@@ -36,6 +36,8 @@ namespace YC.WorkEfficiency.DataAccess
 
         public DbSet<WorkDescription> WorkDescriptionDB { get; set; }
 
+        public DbSet<WorkDescriptionType> workDescriptionTypesDB { get; set; }
+
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

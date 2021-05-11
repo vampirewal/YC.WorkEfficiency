@@ -25,8 +25,7 @@ namespace YC.WorkEfficiency.Models
     {
         public WorkDescription()
         {
-            DesBackground = "#3a3952";
-            FontColor = "#f2eada";
+            
         }
 
         #region 属性
@@ -75,21 +74,14 @@ namespace YC.WorkEfficiency.Models
             set { _UserGuidId = value; DoNotify(); }
         }
 
-        private string _DesBackground;
-        [Column("DesBackground")]
-        public string DesBackground
+        private string _WorkDescriptionTypeGuid;
+        [Column("WorkDescriptionTypeGuid")]
+        public string WorkDescriptionTypeGuid
         {
-            get { return _DesBackground; }
-            set { _DesBackground = value; DoNotify(); }
+            get { return _WorkDescriptionTypeGuid; }
+            set { _WorkDescriptionTypeGuid = value; DoNotify(); }
         }
 
-        private string _FontColor;
-        [Column("FontColor")]
-        public string FontColor
-        {
-            get { return _FontColor; }
-            set { _FontColor = value; DoNotify(); }
-        }
 
         #endregion
     }

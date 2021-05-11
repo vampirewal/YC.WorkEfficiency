@@ -93,7 +93,7 @@
                     Name="tab2"
                     Width="200"
                     Background="Transparent"
-                    Header="个人设置"
+                    Header="系统设置"
                     Style="{StaticResource MainTabItemStyle}">
                     <TabItem.Resources>
                         <ResourceDictionary>
@@ -195,6 +195,19 @@
                                             </DataGridTemplateColumn>
                                         </DataGrid.Columns>
                                     </DataGrid>
+                                </Grid>
+                            </Expander>
+                            <Expander Margin="0,5" Header="设置工作描述类型">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBox
+                                        Width="100"
+                                        HorizontalAlignment="Left"
+                                        Text="{Binding workDescriptionType.TypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button Command="{Binding AddNewWorkDesCommand}" Content="添加" />
                                 </Grid>
                             </Expander>
                             <Expander Margin="0,5" Header="回收站">

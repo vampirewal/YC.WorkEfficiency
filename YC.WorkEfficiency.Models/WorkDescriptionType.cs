@@ -18,7 +18,7 @@ using System.Text;
 
 namespace YC.WorkEfficiency.Models
 {
-    [Table("WorkDescription")]
+    [Table("WorkDescriptionType")]
     public class WorkDescriptionType:BaseModel
     {
         public WorkDescriptionType()

@@ -49,7 +49,8 @@ namespace YC.WorkEfficiency.ViewModels
         public override void InitData()
         {
             CurrentUser = GlobalData.GetInstance().UserInfo;
-            
+            workDescriptionType = new WorkDescriptionType();
+
             GetFileTypeData();
             GetRecycleBinForFileModelData();
         }
@@ -71,6 +72,10 @@ namespace YC.WorkEfficiency.ViewModels
         public ObservableCollection<FileType> filetypeList { get; set; } 
 
         public ObservableCollection<FileModel> RecycleBinForFileModel { get; set; }
+        #endregion
+
+        #region 工作描述设置
+        public WorkDescriptionType workDescriptionType { get; set; }
         #endregion
 
         #endregion
@@ -202,6 +207,25 @@ namespace YC.WorkEfficiency.ViewModels
           });
         #endregion
 
+        #region 针对工作描述设置的命令
+        public RelayCommand AddNewWorkDesCommand => new RelayCommand(() =>
+          {
+              /*
+               * 此处还需判断一下是否重复，因界面还未写完，这里先放一下
+               */
+              
+              workDescriptionType.GuidId = Guid.NewGuid().ToString();
+              workDescriptionType.UserGuidId = GlobalData.GetInstance().UserInfo.GuidId;
+              workDescriptionType.TypeBackgroundColor = "#fe6584";
+              workDescriptionType.TypeFontColor = "#e0861a";
+              using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+              {
+                  work.workDescriptionTypesDB.Add(workDescriptionType);
+                  work.SaveChanges();
+              }
+          });
+        #endregion
+
         #region 针对回收站的命令
         /// <summary>
         /// 将回收站内的文件恢复命令
@@ -247,6 +271,7 @@ namespace YC.WorkEfficiency.ViewModels
               }
           }); 
         #endregion
+
 
         #endregion
     }
