@@ -116,37 +116,49 @@ namespace YC.WorkEfficiency.ViewModels
                 new ColorInfo(){ colorName="灰色",colorValue="#C0C0C0"},
                 new ColorInfo(){ colorName="海军蓝",colorValue="#23238E"},
                 new ColorInfo(){ colorName="亮天蓝色",colorValue="#38B0DE"},
-                new ColorInfo(){ colorName="亮天蓝色",colorValue="#38B0DE"},
+                new ColorInfo(){ colorName="2号青铜色",colorValue="#A67D3D"},
+                new ColorInfo(){ colorName="铜绿色",colorValue="#527F76"},
+                new ColorInfo(){ colorName="霓虹篮",colorValue="#4D4DFF"},
+                new ColorInfo(){ colorName="棕褐色",colorValue="#DB9370"},
+                new ColorInfo(){ colorName="士官服蓝色",colorValue="#5F9F9F"},
+                new ColorInfo(){ colorName="青黄色",colorValue="#93DB70"},
+                new ColorInfo(){ colorName="霓虹粉红",colorValue="#FF6EC7"},
+                new ColorInfo(){ colorName="紫红色",colorValue="#D8BFD8"},
+                new ColorInfo(){ colorName="冷铜色",colorValue="#D98719"},
+                new ColorInfo(){ colorName="猎人绿",colorValue="#215E21"},
+                new ColorInfo(){ colorName="新深藏青色",colorValue="#00009C"},
+                new ColorInfo(){ colorName="石板蓝色",colorValue="#ADEAEA"},
+                new ColorInfo(){ colorName="铜色",colorValue="#B87333"},
+                new ColorInfo(){ colorName="印度红",colorValue="#4E2F2F"},
+                new ColorInfo(){ colorName="新棕褐色",colorValue="#EBC79E"},
+                new ColorInfo(){ colorName="浓深棕色",colorValue="#5C4033"},
+                new ColorInfo(){ colorName="珊瑚红",colorValue="#FF7F00"},
+                new ColorInfo(){ colorName="土黄色",colorValue="#9F9F5F"},
+                new ColorInfo(){ colorName="暗金黄色",colorValue="#CFB53B"},
+                new ColorInfo(){ colorName="淡浅灰色",colorValue="#CDCDCD"},
+                new ColorInfo(){ colorName="紫蓝色",colorValue="#42426F"},
+                new ColorInfo(){ colorName="浅蓝色",colorValue="#C0D9D9"},
+                new ColorInfo(){ colorName="橙色",colorValue="#FF7F00"},
+                new ColorInfo(){ colorName="紫罗兰色",colorValue="#4F2F4F"},
+                new ColorInfo(){ colorName="深棕",colorValue="#5C4033"},
+                new ColorInfo(){ colorName="浅灰色",colorValue="#A8A8A8"},
+                new ColorInfo(){ colorName="橙红色",colorValue="#FF2400"},
+                new ColorInfo(){ colorName="紫罗兰红色",colorValue="#CC3299"},
+                new ColorInfo(){ colorName="深绿",colorValue="#2F4F2F"},
+                new ColorInfo(){ colorName="浅钢蓝色",colorValue="#8F8FBD"},
+                new ColorInfo(){ colorName="淡紫色",colorValue="#DB70DB"},
+                new ColorInfo(){ colorName="麦黄色",colorValue="#D8D8BF"},
+                new ColorInfo(){ colorName="深铜绿色",colorValue="#4A766E"},
+                new ColorInfo(){ colorName="浅木色",colorValue="#E9C2A6"},
+                new ColorInfo(){ colorName="浅绿色",colorValue="#8FBC8F"},
+                new ColorInfo(){ colorName="黄绿色",colorValue="#99CC32"},
+                new ColorInfo(){ colorName="深橄榄绿",colorValue="#4F4F2F"},
+                new ColorInfo(){ colorName="石灰绿色",colorValue="#32CD32"},
+                new ColorInfo(){ colorName="粉红色",colorValue="#BC8F8F"},
+                new ColorInfo(){ colorName="深兰花色",colorValue="#9932CD"},
+                new ColorInfo(){ colorName="桔黄色",colorValue="#E47833"},
+                new ColorInfo(){ colorName="李子色",colorValue="#EAADEA"}
             };
-            /*
-             *       
-
-      
-
-       
-
-2号青铜色 #A67D3D 铜绿色 #527F76 霓虹篮 #4D4DFF 棕褐色 #DB9370
-
-士官服蓝色 #5F9F9F 青黄色 #93DB70 霓虹粉红 #FF6EC7 紫红色 #D8BFD8
-
-冷铜色 #D98719 猎人绿 #215E21 新深藏青色 #00009C 石板蓝色 #ADEAEA
-
-铜色#B87333 印度红 #4E2F2F 新棕褐色 #EBC79E 浓深棕色 #5C4033
-
-珊瑚红 #FF7F00 土黄色 #9F9F5F 暗金黄色 #CFB53B 淡浅灰色 #CDCDCD
-
-紫蓝色 #42426F 浅蓝色 #C0D9D9 橙色 #FF7F00 紫罗兰色 #4F2F4F
-
-深棕#5C4033 浅灰色 #A8A8A8 橙红色 #FF2400 紫罗兰红色 #CC3299
-
-深绿#2F4F2F 浅钢蓝色 #8F8FBD 淡紫色 #DB70DB 麦黄色 #D8D8BF
-
-深铜绿色 #4A766E 浅木色 #E9C2A6 浅绿色 #8FBC8F 黄绿色 #99CC32
-
-深橄榄绿 #4F4F2F 石灰绿色 #32CD32 粉红色 #BC8F8F
-
-深兰花色 #9932CD 桔黄色 #E47833 李子色 #EAADEA
-             */
         }
 
         class ColorInfo
@@ -162,5 +174,7 @@ namespace YC.WorkEfficiency.ViewModels
             SelectColor = s;
         });
         #endregion
+
+          
     }
 }
