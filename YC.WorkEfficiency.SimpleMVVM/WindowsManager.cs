@@ -157,7 +157,7 @@ namespace YC.WorkEfficiency.SimpleMVVM
         /// </summary>
         /// <param name="windowType"></param>
         /// <param name="showMode"></param>
-        public static void CreatWindow(string windowType, ShowMode showMode, ViewModelBase vm)
+        public static void CreateWindow(string windowType, ShowMode showMode, ViewModelBase vm)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
                         .SelectMany(a => a.GetTypes().Where(t => t.Name == windowType))

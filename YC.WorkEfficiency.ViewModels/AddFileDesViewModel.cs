@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
@@ -51,7 +52,16 @@ namespace YC.WorkEfficiency.ViewModels
 
         public ObservableCollection<WorkDescriptionType> TypeList { get; set; }
 
-        public WorkDescriptionType SelectType { get; set; }
+        private WorkDescriptionType _SelectType;
+        public WorkDescriptionType SelectType { 
+            get=> _SelectType; 
+            set
+            {
+                _SelectType = value;
+                DoNotify();
+            } 
+        }
+
         #endregion
 
         #region 公共方法
@@ -75,10 +85,25 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
-        public RelayCommand OpenSelectBackgroundColorPickerCommand => new RelayCommand(() =>
+        public RelayCommand<string> SelectDesChangedCommand => new RelayCommand<string>((s) =>
           {
-              
+              if (!string.IsNullOrEmpty(s))
+              {
+                  using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                  {
+                      SelectType= work.workDescriptionTypesDB.Where(w => w.GuidId == s).First();
+                  }
+              }
+          });
+
+        /// <summary>
+        /// 保存命令
+        /// </summary>
+        public RelayCommand SaveWorkDesCommand => new RelayCommand(() =>
+          {
+              //workDescription
           });
         #endregion
+
     }
 }

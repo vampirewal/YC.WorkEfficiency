@@ -325,12 +325,10 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         public RelayCommand OpenSettingWindow => new RelayCommand(() =>
         {
-            //Messenger.Default.Send("ShowSettingWindow");
             if (Convert.ToBoolean(WindowsManager.CreateDialogWindowByViewModelResult("SettingView", new SettingViewModel())))
             {
                 DialogWindow.Show("保存设置成功！", MessageType.Successful, WindowsManager.Windows["MainView"]);
             }
-            
         });
         /// <summary>
         /// 上传附件命令

@@ -25,7 +25,7 @@ using System.Collections.ObjectModel;
 
 namespace YC.WorkEfficiency.ViewModels
 {
-    public class SettingViewModel: ViewModelBase
+    public class SettingViewModel : ViewModelBase
     {
         public SettingViewModel()
         {
@@ -34,6 +34,8 @@ namespace YC.WorkEfficiency.ViewModels
 
         #region 重写
         private bool IsSetting = false;
+        
+
         public override object GetResult()
         {
             return IsSetting;
@@ -49,7 +51,7 @@ namespace YC.WorkEfficiency.ViewModels
         public override void InitData()
         {
             CurrentUser = GlobalData.GetInstance().UserInfo;
-            workDescriptionType = new WorkDescriptionType();
+            workDescriptionType = new WorkDescriptionType() { TypeBackgroundColor= "#fe6584",TypeFontColor= "#f2eada" };
 
             GetFileTypeData();
             GetRecycleBinForFileModelData();
@@ -69,13 +71,14 @@ namespace YC.WorkEfficiency.ViewModels
         /// <summary>
         /// 文件类型集合
         /// </summary>
-        public ObservableCollection<FileType> filetypeList { get; set; } 
+        public ObservableCollection<FileType> filetypeList { get; set; }
 
         public ObservableCollection<FileModel> RecycleBinForFileModel { get; set; }
         #endregion
 
         #region 工作描述设置
-        public WorkDescriptionType workDescriptionType { get; set; }
+        private WorkDescriptionType _workDescriptionType;
+        public WorkDescriptionType workDescriptionType { get => _workDescriptionType; set { _workDescriptionType = value;DoNotify(); } }
         #endregion
 
         #endregion
@@ -92,7 +95,7 @@ namespace YC.WorkEfficiency.ViewModels
         private void GetFileTypeData()
         {
             filetypeList = new ObservableCollection<FileType>();
-            using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 var current = work.FileTypeDB.Where(w => w.UserId == GlobalData.GetInstance().UserInfo.GuidId).ToList();
 
@@ -109,7 +112,7 @@ namespace YC.WorkEfficiency.ViewModels
         private void GetRecycleBinForFileModelData()
         {
             RecycleBinForFileModel = new ObservableCollection<FileModel>();
-            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 var current = work.FileModelDB.Where(w => w.UserGuid == GlobalData.GetInstance().UserInfo.GuidId && w.IsDeleted == true).ToList();
                 foreach (var item in current)
@@ -210,20 +213,54 @@ namespace YC.WorkEfficiency.ViewModels
         #region 针对工作描述设置的命令
         public RelayCommand AddNewWorkDesCommand => new RelayCommand(() =>
           {
-              /*
-               * 此处还需判断一下是否重复，因界面还未写完，这里先放一下
-               */
-              
-              workDescriptionType.GuidId = Guid.NewGuid().ToString();
-              workDescriptionType.UserGuidId = GlobalData.GetInstance().UserInfo.GuidId;
-              workDescriptionType.TypeBackgroundColor = "#fe6584";
-              workDescriptionType.TypeFontColor = "#e0861a";
-              using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+              if (string.IsNullOrEmpty(workDescriptionType.TypeName))
               {
-                  work.workDescriptionTypesDB.Add(workDescriptionType);
-                  work.SaveChanges();
+                  DialogWindow.Show($"类型名称不能为空，请修改后再次提交！", MessageType.Error, WindowsManager.Windows["SettingWindow"]);
+                  return;
+              }
+              using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+              {
+                  var current = work.workDescriptionTypesDB.Where(w => w.TypeName == workDescriptionType.TypeName).FirstOrDefault();
+                  if (current != null)
+                  {
+                      DialogWindow.Show($"已存在一条相同的数据，请修改后再次提交！", MessageType.Error, WindowsManager.Windows["SettingWindow"]);
+                      return;
+                  }
+                  else
+                  {
+                      workDescriptionType.GuidId = Guid.NewGuid().ToString();
+                      workDescriptionType.UserGuidId = GlobalData.GetInstance().UserInfo.GuidId;
+                      if (string.IsNullOrEmpty(workDescriptionType.TypeBackgroundColor))
+                      {
+                          workDescriptionType.TypeBackgroundColor = "#fe6584";
+                      }
+                      if (string.IsNullOrEmpty(workDescriptionType.TypeFontColor))
+                      {
+                          workDescriptionType.TypeFontColor = "#e0861a";
+                      }
+
+                      work.workDescriptionTypesDB.Add(workDescriptionType);
+                      work.SaveChanges();
+                  }
+
               }
           });
+        /// <summary>
+        /// 选择背景色命令
+        /// </summary>
+        public RelayCommand BtnSelectBackgroundColorCommand => new RelayCommand(() =>
+         {
+             //WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel());
+             WindowsManager.CreateWindow("SelectColorView", ShowMode.Show, new SelectColorViewModel());
+         });
+
+        /// <summary>
+        /// 选择背景色命令
+        /// </summary>
+        public RelayCommand BtnSelectFontColorCommand => new RelayCommand(() =>
+        {
+            WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel());
+        });
         #endregion
 
         #region 针对回收站的命令
@@ -269,7 +306,7 @@ namespace YC.WorkEfficiency.ViewModels
                       }
                   }
               }
-          }); 
+          });
         #endregion
 
 

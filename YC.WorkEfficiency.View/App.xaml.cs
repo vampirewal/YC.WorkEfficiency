@@ -28,7 +28,7 @@ namespace YC.WorkEfficiency.View
             //}
             if (Convert.ToBoolean( WindowsManager.CreateDialogWindowByViewModelResult(new LoginView(),new LoginViewModel())))
             {
-                WindowsManager.CreatWindow("MainWindow", ShowMode.Dialog, new MainViewModel());
+                WindowsManager.CreateWindow("MainWindow", ShowMode.Dialog, new MainViewModel());
             }
         }
     }
