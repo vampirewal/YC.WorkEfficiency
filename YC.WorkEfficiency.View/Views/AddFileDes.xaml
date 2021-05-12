@@ -23,6 +23,11 @@
         </ResourceDictionary>
     </Window.Resources>
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseLeftButtonDown">
+                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=AddFileDesWindow}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
@@ -117,7 +122,10 @@
                     </ComboBox.ItemContainerStyle>
                 </ComboBox>
 
-                <Button Grid.Column="3" Content="保存"/>
+                <Button
+                    Grid.Column="3"
+                    Command="{Binding SaveWorkDesCommand}"
+                    Content="保存" />
             </Grid>
         </Grid>
     </Border>

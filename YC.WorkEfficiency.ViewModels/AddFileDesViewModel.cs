@@ -16,10 +16,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Media;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
+using YC.WorkEfficiency.Themes;
 using YC.WorkEfficiency.ViewModels.Common;
 
 namespace YC.WorkEfficiency.ViewModels
@@ -35,12 +37,17 @@ namespace YC.WorkEfficiency.ViewModels
         #region 重写
         public override object GetResult()
         {
-            return base.GetResult();
+            return workDescription;
         }
 
         public override void InitData()
         {
-            workDescription = new WorkDescription();
+            workDescription = new WorkDescription() 
+            { 
+                GuidId=Guid.NewGuid().ToString(),
+                
+                UserGuidId=GlobalData.GetInstance().UserInfo.GuidId
+            };
             GetWorkDescriptionTypeList();
         }
         #endregion
@@ -102,6 +109,22 @@ namespace YC.WorkEfficiency.ViewModels
         public RelayCommand SaveWorkDesCommand => new RelayCommand(() =>
           {
               //workDescription
+              if (!string.IsNullOrEmpty(workDescription.WorkDescriptionText))
+              {
+                  workDescription.CreateTime = DateTime.Now;
+                  workDescription.WorkDescriptionTypeGuid = SelectType.GuidId;
+                  workDescription.FileModelGuidId = fileModel.GuidId;
+                  using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                  {
+                      work.WorkDescriptionDB.Add(workDescription);
+                      work.SaveChanges();
+                      DialogWindow.Show("添加新的工作描述成功！", MessageType.Successful, WindowsManager.Windows["MainView"]);
+                      WindowsManager.CloseWindow(View as Window);
+
+                      
+                  }
+
+              }
           });
         #endregion
 

@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Linq;
 using System.Windows.Media;
 using YC.WorkEfficiency.SimpleMVVM;
 
@@ -38,7 +39,7 @@ namespace YC.WorkEfficiency.ViewModels
 
         public override void InitData()
         {
-            
+            GetColorList();
         }
         //public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         //{
@@ -49,6 +50,8 @@ namespace YC.WorkEfficiency.ViewModels
 
         #region 属性
         private string SelectColor;
+
+        public List<ColorInfo> colorList { get; set; }
         #endregion
 
         #region 公共方法
@@ -58,7 +61,7 @@ namespace YC.WorkEfficiency.ViewModels
         #region 私有方法
         private void GetColorList()
         {
-            List<ColorInfo> colorList = new List<ColorInfo>()
+             colorList = new List<ColorInfo>()
             {
                 new ColorInfo(){ colorName="红色",colorValue="#FF0000"},
                 new ColorInfo(){ colorName="深紫色",colorValue="#871F78"},
@@ -161,7 +164,7 @@ namespace YC.WorkEfficiency.ViewModels
             };
         }
 
-        class ColorInfo
+        public class ColorInfo
         {
             public string colorName { get; set; }
             public string colorValue { get; set; }
@@ -172,7 +175,17 @@ namespace YC.WorkEfficiency.ViewModels
         public RelayCommand<string> SelectColorCommand => new RelayCommand<string>((s) =>
         {
             SelectColor = s;
+            WindowsManager.CloseWindow(View as Window);
         });
+
+        public RelayCommand<string> CustomColorCommand => new RelayCommand<string>((s) =>
+          {
+              if (!string.IsNullOrEmpty(s))
+              {
+                  SelectColor = s;
+                  WindowsManager.CloseWindow(View as Window);
+              }
+          });
         #endregion
 
           

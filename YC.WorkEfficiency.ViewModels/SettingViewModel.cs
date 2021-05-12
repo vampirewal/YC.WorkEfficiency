@@ -250,16 +250,24 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         public RelayCommand BtnSelectBackgroundColorCommand => new RelayCommand(() =>
          {
-             //WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel());
-             WindowsManager.CreateWindow("SelectColorView", ShowMode.Show, new SelectColorViewModel());
+             string selectcolor= WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel()).ToString();
+             if (!string.IsNullOrEmpty(selectcolor))
+             {
+                 workDescriptionType.TypeBackgroundColor = selectcolor;
+             }
+             
          });
 
         /// <summary>
-        /// 选择背景色命令
+        /// 选择文字颜色命令
         /// </summary>
         public RelayCommand BtnSelectFontColorCommand => new RelayCommand(() =>
         {
-            WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel());
+            string selectcolor = WindowsManager.CreateDialogWindowByViewModelResult("SelectColorView", new SelectColorViewModel()).ToString();
+            if (!string.IsNullOrEmpty(selectcolor))
+            {
+                workDescriptionType.TypeFontColor = selectcolor;
+            }
         });
         #endregion
 

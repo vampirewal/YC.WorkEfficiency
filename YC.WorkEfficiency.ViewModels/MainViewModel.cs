@@ -61,10 +61,12 @@ namespace YC.WorkEfficiency.ViewModels
 
             fileTypes = new ObservableCollection<FileType>();
 
+            workDescriptions = new ObservableCollection<WorkDescription>();
+
             LoadModuels();
             MessengerRegister();
             GetFileType();
-            GetTotleTime();
+            //GetTotleTime();
             GetTotalWorking();
         }
         #endregion
@@ -168,7 +170,11 @@ namespace YC.WorkEfficiency.ViewModels
         /// <summary>
         /// 已完成工作 模块
         /// </summary>
-        public FrameworkElement FinishedWorkFrame { get; set; } 
+        public FrameworkElement FinishedWorkFrame { get; set; }
+        #endregion
+
+        #region 底部工作信息面板
+        public ObservableCollection<WorkDescription> workDescriptions { get; set; }
         #endregion
 
         #endregion 属性
@@ -224,8 +230,37 @@ namespace YC.WorkEfficiency.ViewModels
         {
             Task.Run(() =>
             {
+                #region 获取汇总工作时间
+                int day = 0;
+                int hours = 0;
+                int minutes = 0;
+                int seconds = 0;
+                using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
+                {
+                    var current = fileModelDataContext.FileModelDB.Where(s => s.IsFinished == true && s.UserGuid == GlobalData.GetInstance().UserInfo.GuidId).ToList();
 
-                
+                    foreach (var item in current)
+                    {
+                        string itemday = item.AfterTime.Split('-')[0];
+                        string newitemday = itemday.Replace('天', ' ');
+                        day += Convert.ToInt32(newitemday.Trim());
+
+                        string[] times = item.AfterTime.Split('-')[1].Split(':');
+                        seconds += Convert.ToInt32(times[2]);
+                        minutes += Convert.ToInt32(times[1]);
+                        hours += Convert.ToInt32(times[0]);
+
+                    }
+                }
+
+                int DatToSeconds = day * 24 * 60 * 60;
+                int HoursToSeconds = hours * 60 * 60;
+                int MinutesToSeconds = minutes * 60;
+                seconds += DatToSeconds + HoursToSeconds + MinutesToSeconds;
+                TimeSpan tsTotle = TimeSpan.FromSeconds(seconds);
+                TotleWorkTime = $"累计工时：\r\n{tsTotle.Days}天{tsTotle.Hours}小时{tsTotle.Minutes}分{tsTotle.Seconds}秒";
+                #endregion
+
                 DateTime dt = DateTime.Now;  //当前时间  
                 using (WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
                 {
@@ -271,6 +306,24 @@ namespace YC.WorkEfficiency.ViewModels
                     fileTypes.Add(item);
                 }
             }
+        }
+        
+        private void GetWoekDes(string fileGuid)
+        {
+            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                workDescriptions.Clear();
+                var currentWorkDes = work.WorkDescriptionDB.Where(w => w.FileModelGuidId == fileGuid).ToList();
+                foreach (var item in currentWorkDes)
+                {
+                    var currentWorkType = work.workDescriptionTypesDB.Where(w => w.GuidId == item.WorkDescriptionTypeGuid).First();
+                    item.WorkBackgroundColor = currentWorkType.TypeBackgroundColor;
+                    item.WorkFontColor = currentWorkType.TypeFontColor;
+
+                    workDescriptions.Add(item);
+                }
+            }
+            
         }
         #endregion 私有方法
 
@@ -448,7 +501,8 @@ namespace YC.WorkEfficiency.ViewModels
           {
               if (selectedItem!=null)
               {
-                  var workDes = WindowsManager.CreateDialogWindowByViewModelResult("AddFileDes", new AddFileDesViewModel(SelectedItem)) as WorkDescription;
+                   WindowsManager.CreateDialogWindowByViewModelResult("AddFileDes", new AddFileDesViewModel(SelectedItem));
+                  GetWoekDes(selectedItem.GuidId);
               }
           });
         #endregion
@@ -488,6 +542,7 @@ namespace YC.WorkEfficiency.ViewModels
                         }
                     }
                 }
+                GetWoekDes(guid);
             }
         }
 

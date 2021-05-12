@@ -82,7 +82,27 @@ namespace YC.WorkEfficiency.Models
             set { _WorkDescriptionTypeGuid = value; DoNotify(); }
         }
 
+        private string _WorkBackgroundColor;
+        /// <summary>
+        /// 背景色
+        /// </summary>
+        [NotMapped]
+        public string WorkBackgroundColor
+        {
+            get { return _WorkBackgroundColor; }
+            set { _WorkBackgroundColor = value; DoNotify(); }
+        }
 
+        private string _WorkFontColor;
+        /// <summary>
+        /// 文字颜色
+        /// </summary>
+        [NotMapped]
+        public string WorkFontColor
+        {
+            get { return _WorkFontColor; }
+            set { _WorkFontColor = value; DoNotify(); }
+        }
         #endregion
     }
 }
