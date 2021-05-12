@@ -50,6 +50,7 @@ namespace YC.WorkEfficiency.Models
             set { _SysBackground = value; DoNotify(); }
         }
 
+
         #endregion
     }
 }

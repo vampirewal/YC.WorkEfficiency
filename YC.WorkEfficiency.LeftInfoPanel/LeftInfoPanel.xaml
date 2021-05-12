@@ -1,0 +1,124 @@
+﻿<UserControl
+    x:Class="YC.WorkEfficiency.LeftInfoPanel.LeftInfoPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:YC.WorkEfficiency.LeftInfoPanel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/YC.WorkEfficiency.Themes;component/DefaultStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <StackPanel
+                Height="20"
+                Margin="5"
+                Background="Transparent"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal">
+                <!--  编辑栏  -->
+                <Button
+                    Command="{Binding AddWorkCommand}"
+                    Content="&#xe613;"
+                    Foreground="White"
+                    Style="{StaticResource TransparentIconButton}"
+                    ToolTip="新增1条工作" />
+
+            </StackPanel>
+            <Border
+                Margin="5,0"
+                BorderBrush="Gray"
+                BorderThickness="0,0,0,1"
+                DockPanel.Dock="Top" />
+            <UniformGrid Columns="1">
+                <UniformGrid.Resources>
+                    <ResourceDictionary>
+                        <Style x:Key="CardBorder" TargetType="Border">
+                            <Setter Property="Margin" Value="5" />
+                            <Setter Property="Background" Value="{StaticResource TextColor1}" />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Setter Property="CornerRadius" Value="3" />
+
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                        BlurRadius="5"
+                                        Direction="0"
+                                        Opacity="0.7"
+                                        ShadowDepth="0"
+                                        Color="#3a3952" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                                                To="#fe6584"
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation
+                                                Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                                                To="#ff4c70"
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ResourceDictionary>
+                </UniformGrid.Resources>
+
+                <Border Style="{StaticResource CardBorder}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Text="{Binding TotleWorkTime}" />
+                </Border>
+                <Border Style="{StaticResource CardBorder}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Text="{Binding TotalWorking}" />
+                </Border>
+                <Border Style="{StaticResource CardBorder}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Text="{Binding ThisWeekFinishedWork}" />
+                </Border>
+                <Border Style="{StaticResource CardBorder}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Text="{Binding ThisMouthFinishedWork}" />
+                </Border>
+                <Border Style="{StaticResource CardBorder}">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Text="{Binding ThisYearFinishedWork}" />
+                </Border>
+            </UniformGrid>
+
+        </DockPanel>
+    </Grid>
+</UserControl>

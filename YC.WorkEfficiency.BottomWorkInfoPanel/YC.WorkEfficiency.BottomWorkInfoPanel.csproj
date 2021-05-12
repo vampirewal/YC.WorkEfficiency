@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YC.WorkEfficiency.Core\YC.WorkEfficiency.Core.csproj" />
+    <ProjectReference Include="..\YC.WorkEfficiency.Themes\YC.WorkEfficiency.Themes.csproj" />
+  </ItemGroup>
+
+</Project>
