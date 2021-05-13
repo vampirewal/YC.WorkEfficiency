@@ -38,12 +38,13 @@ namespace YC.WorkEfficiency.ViewModels
         {
             //构造函数
             Title = "时间效率管理";
-            //InitData();
         }
 
         #region 重写
+
         public override RelayCommand CloseWindowCommand => new RelayCommand(() =>
         {
+            //正常关闭程序时，需反写数据库内的数据，将用户的登陆状态改为未登录
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
                 var current = GlobalData.GetInstance().UserInfo;
@@ -63,8 +64,8 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 属性
+        //初始化窗体时，底部工作信息面板的高度，避免一开始就出现高度，应该由用户自己拖拽
         public double LoadHeight { get; set; } = 0;
-
 
         #region 窗体显示属性
 
@@ -104,7 +105,6 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         public FrameworkElement BottomWorkInfoPanelFrame { get; set; }
         #endregion
-
 
         #endregion 属性
 

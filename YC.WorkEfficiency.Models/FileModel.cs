@@ -75,6 +75,17 @@ namespace YC.WorkEfficiency.Models
             set { _EndTime = value; DoNotify(); }
         }
 
+        private DateTime _ExpectEndTime;
+        /// <summary>
+        /// 预计完成时间
+        /// </summary>
+        [Column("ExpectEndTime")]
+        public DateTime ExpectEndTime
+        {
+            get { return _ExpectEndTime; }
+            set { _ExpectEndTime = value; }
+        }
+
         /// <summary>
         /// 文件存储内容
         /// </summary>
@@ -168,6 +179,17 @@ namespace YC.WorkEfficiency.Models
         {
             get { return _FileType; }
             set { _FileType = value; DoNotify(); }
+        }
+
+        private bool _IsNotify;
+        /// <summary>
+        /// 是否提示
+        /// </summary>
+        [Column("IsNotify")]
+        public bool IsNotify
+        {
+            get { return _IsNotify; }
+            set { _IsNotify = value; DoNotify(); }
         }
 
         #endregion 扩展属性

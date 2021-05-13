@@ -33,6 +33,7 @@ namespace YC.WorkEfficiency.ViewModels
         public WorkInfoPanelViewModel()
         {
             //构造函数
+            
         }
         #region 重写
         public override void InitData()
@@ -232,7 +233,7 @@ namespace YC.WorkEfficiency.ViewModels
         /// <summary>
         /// 导出工作信息成word--待开发，预留功能
         /// </summary>
-        public RelayCommand ExportFileModelToWord => new RelayCommand(() =>
+        public RelayCommand ExportFileModelToWordCommand => new RelayCommand(() =>
         {
             if (selectedItem != null)
             {
@@ -254,6 +255,55 @@ namespace YC.WorkEfficiency.ViewModels
                 GetWoekDes(selectedItem.GuidId);
             }
         });
+
+        /// <summary>
+        /// 编辑工作描述
+        /// </summary>
+        public RelayCommand<WorkDescription> EditWorkDesCommand => new RelayCommand<WorkDescription>((w) =>
+          {
+              if (w!=null)
+              {
+                  WindowsManager.CreateDialogWindowByViewModelResult("EditFileDes", new EditFileDesViewModel(w));
+                  GetWoekDes(selectedItem.GuidId);
+              }
+          });
+
+        /// <summary>
+        /// 删除工作描述
+        /// </summary>
+        public RelayCommand<WorkDescription> DeleteWorkDesCommand => new RelayCommand<WorkDescription>((w) =>
+        {
+            if (w!=null)
+            {
+                if (DialogWindow.ShowDialog("是否确认删除该描述？", "请确认"))
+                {
+                    using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+                    {
+                        work.WorkDescriptionDB.Remove(w);
+                        work.SaveChanges();
+                        DialogWindow.Show("删除成功！",MessageType.Successful,WindowsManager.Windows["MainView"]);
+                        GetWoekDes(selectedItem.GuidId);
+                    }
+                }
+            }
+        });
+
+        /// <summary>
+        /// 保存修改的工作信息
+        /// </summary>
+        public RelayCommand SaveWorkInfoCommand => new RelayCommand(() =>
+          {
+              if (SelectedItem != null)
+              {
+                  using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
+                  {
+                      work.FileModelDB.Update(SelectedItem);
+                      work.SaveChanges();
+
+                      DialogWindow.Show("保存成功！", MessageType.Successful, WindowsManager.Windows["MainView"]);
+                  }
+              }
+          });
         #endregion
 
         #region 消息

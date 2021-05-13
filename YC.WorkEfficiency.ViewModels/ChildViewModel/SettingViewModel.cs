@@ -52,9 +52,10 @@ namespace YC.WorkEfficiency.ViewModels
         {
             CurrentUser = GlobalData.GetInstance().UserInfo;
             workDescriptionType = new WorkDescriptionType() { TypeBackgroundColor= "#fe6584",TypeFontColor= "#f2eada" };
-
+            workDescriptionTypes = new ObservableCollection<WorkDescriptionType>();
             GetFileTypeData();
             GetRecycleBinForFileModelData();
+            GetWorkDesTypeList();
         }
         #endregion
 
@@ -79,6 +80,8 @@ namespace YC.WorkEfficiency.ViewModels
         #region 工作描述设置
         private WorkDescriptionType _workDescriptionType;
         public WorkDescriptionType workDescriptionType { get => _workDescriptionType; set { _workDescriptionType = value;DoNotify(); } }
+
+        public ObservableCollection<WorkDescriptionType> workDescriptionTypes { get; set; }
         #endregion
 
         #endregion
@@ -118,6 +121,28 @@ namespace YC.WorkEfficiency.ViewModels
                 foreach (var item in current)
                 {
                     RecycleBinForFileModel.Add(item);
+                }
+            }
+        }
+        /// <summary>
+        /// 获取工作描述类型数据
+        /// </summary>
+        private void GetWorkDesTypeList()
+        {
+            workDescriptionTypes.Clear();
+            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                var current = work.workDescriptionTypesDB.Where(w => w.UserGuidId == GlobalData.GetInstance().UserInfo.GuidId).ToList();
+
+                if (current.Count>0)
+                {
+                    
+                    foreach (var item in current)
+                    {
+                        item.HaveSettingWorkDes = work.WorkDescriptionDB.Where(w => w.WorkDescriptionTypeGuid == item.GuidId).Count();
+                        
+                        workDescriptionTypes.Add(item);
+                    }
                 }
             }
         }
@@ -241,6 +266,7 @@ namespace YC.WorkEfficiency.ViewModels
 
                       work.workDescriptionTypesDB.Add(workDescriptionType);
                       work.SaveChanges();
+                      GetWorkDesTypeList();
                   }
 
               }

@@ -181,6 +181,7 @@ namespace YC.WorkEfficiency.ViewModels
                 IsFinished = false,
                 CreateTime = DateTime.Now,
                 EndTime = DateTime.Now,
+                ExpectEndTime=DateTime.Now,
                 UserGuid = GlobalData.GetInstance().UserInfo.GuidId,
                 UserName = GlobalData.GetInstance().UserInfo.UserName
             };

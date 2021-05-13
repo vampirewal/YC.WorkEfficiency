@@ -54,6 +54,19 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
                     Width="auto"
@@ -129,11 +142,11 @@
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     IsEnabled="{Binding IsEdit, Converter={StaticResource Boolean2VisibilityConverter}}"
-                                    SelectedDateTime="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    SelectedDateTime="{Binding ExpectEndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBlock
                                     x:Name="showEndTime"
                                     HorizontalAlignment="Center"
-                                    Text="{Binding EndTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
+                                    Text="{Binding ExpectEndTime, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
                                     Visibility="Collapsed" />
                             </StackPanel>
 

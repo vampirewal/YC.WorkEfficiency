@@ -36,6 +36,12 @@ namespace YC.WorkEfficiency.Themes
             dialogWindows.Show();
         }
 
+        /// <summary>
+        /// 弹出一个Dialog的窗体
+        /// </summary>
+        /// <param name="Msg">显示文本</param>
+        /// <param name="Title">标题</param>
+        /// <returns></returns>
         public static bool ShowDialog(string Msg,string Title)
         {
             DialogWindowReturnObject dialogWindowReturnObject = new DialogWindowReturnObject(Msg, Title);
@@ -47,6 +53,17 @@ namespace YC.WorkEfficiency.Themes
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 弹出右侧通知框，可主动关闭，可自动关闭
+        /// </summary>
+        /// <param name="Msg">显示文本</param>
+        /// <param name="TimeSpan">持续时间</param>
+        public static void ShowNotify(string Msg,int TimeSpan)
+        {
+            NotifyWindow notifyWindow = new NotifyWindow(Msg, TimeSpan);
+            notifyWindow.Show();
         }
     }
 }

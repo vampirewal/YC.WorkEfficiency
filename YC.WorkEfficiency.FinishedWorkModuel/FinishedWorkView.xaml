@@ -52,6 +52,19 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
 
                 <DataGridTextColumn

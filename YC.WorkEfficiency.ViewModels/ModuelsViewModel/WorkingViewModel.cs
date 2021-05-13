@@ -17,6 +17,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows;
+using HandyControl.Controls;
+using HandyControl.Data;
 using YC.WorkEfficiency.DataAccess;
 using YC.WorkEfficiency.Models;
 using YC.WorkEfficiency.SimpleMVVM;
@@ -44,9 +47,8 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 属性
+        //正在执行的工作列表
         public ObservableCollection<FileModel> WorkingList { get; set; }
-        
-
         private FileModel selectedItem;
         public FileModel SelectedItem { get => selectedItem; set { selectedItem = value; DoNotify(); } }
         #endregion
@@ -63,17 +65,12 @@ namespace YC.WorkEfficiency.ViewModels
         {
             using (WorkEfficiencyDataContext work = new WorkEfficiencyDataContext())
             {
-                //fileModelDataContext.Add(new FileModel() { GuidId = Guid.NewGuid().ToString() });
-                //fileModelDataContext.SaveChanges();
-
-                //1、第一步，先获取当前的时间
-                TimeSpan tsNow = new TimeSpan(DateTime.Now.Ticks);
-                //2、第二步，从sqlite数据库中获取到数据，转化为List
+                //从sqlite数据库中获取到数据，转化为List
                 var result = work.FileModelDB.Where(w => w.GuidId != null && w.IsFinished == false&&w.UserGuid==GlobalData.GetInstance().UserInfo.GuidId).ToList();
-                //3、在workList中的每一条都与互相排序
+                //在workList中的每一条都与互相排序
                 result.Sort((left, right) =>
                 {
-                    if (left.EndTime > right.EndTime)
+                    if (left.ExpectEndTime > right.ExpectEndTime)
                     {
                         return 1;
                     }
@@ -84,12 +81,7 @@ namespace YC.WorkEfficiency.ViewModels
                 });
                 WorkingList = new ObservableCollection<FileModel>(result);
             }
-
-            
         }
-
-
-        
 
         #region 开启一个新的线程来执行这个方法
         private void StartWork()
@@ -105,10 +97,10 @@ namespace YC.WorkEfficiency.ViewModels
                 Thread.Sleep(1000);
                 if (WorkingList.Count > 0)
                 {
-                    
+                    var datetimeNow = DateTime.Now;
                     using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                     {
-                        TimeSpan ts_now = new TimeSpan(DateTime.Now.Ticks);
+                        TimeSpan ts_now = new TimeSpan(datetimeNow.Ticks);
                         foreach (var item in WorkingList)
                         {
                             if (!item.IsFinished && !item.IsEdit)
@@ -116,9 +108,22 @@ namespace YC.WorkEfficiency.ViewModels
                                 TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
                                 TimeSpan ts = ts_now.Subtract(ts_createtime);
                                 item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+
+                                
+                                TimeSpan ts_ExpectEndTime = new TimeSpan(item.ExpectEndTime.Ticks);
+                                TimeSpan tsExpect = ts_ExpectEndTime.Subtract(ts_now);
+
+                                if (tsExpect.Minutes<=5&&item.IsNotify==false)
+                                {
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        //此处弹窗
+                                        DialogWindow.ShowNotify($"工作：<<{item.FileTitle}>> \r\n该条工作即将到达预计结束时间！请尽快处理！", 3);
+                                        item.IsNotify = true;
+                                    });
+                                }
                             }
                         }
-
                         fileModelDataContext.UpdateRange(WorkingList);
                         fileModelDataContext.SaveChanges();
                     }
@@ -135,8 +140,9 @@ namespace YC.WorkEfficiency.ViewModels
         /// </summary>
         private void MessengerRegist()
         {
+            //注册新增1条工作的消息
             Messenger.Default.Register<FileModel, bool>(this, "InsertFinishWork", InsertFinishWork);
-
+            //注册获取数据的消息，用于其他ViewModel调用
             Messenger.Default.Register(this, "GetWorkingList", GetData);
         }
         /// <summary>
@@ -161,6 +167,7 @@ namespace YC.WorkEfficiency.ViewModels
         #endregion
 
         #region 命令
+        //每条工作在初步设定值之后，点击确定开始执行计时的命令
         public RelayCommand<FileModel> QueDing => new RelayCommand<FileModel>((f) =>
         {
             if (f != null)

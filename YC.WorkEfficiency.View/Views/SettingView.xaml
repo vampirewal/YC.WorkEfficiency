@@ -100,6 +100,12 @@
                             <ResourceDictionary.MergedDictionaries>
                                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
                                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                                <ResourceDictionary>
+                                    <Style x:Key="TextBlockCenterStyle" TargetType="TextBlock">
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </ResourceDictionary>
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </TabItem.Resources>
@@ -167,6 +173,19 @@
                                                 <Setter Property="HorizontalAlignment" Value="Center" />
                                             </Style>
                                         </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.CellStyle>
+                                            <Style TargetType="DataGridCell">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="DataGridCell">
+                                                            <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <ContentPresenter />
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </DataGrid.CellStyle>
                                         <DataGrid.Columns>
                                             <DataGridTextColumn
                                                 Width="auto"
@@ -205,6 +224,7 @@
                                     </Grid.RowDefinitions>
                                     <Grid>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition />
                                             <RowDefinition />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
@@ -251,6 +271,79 @@
                                             Grid.Column="3"
                                             Command="{Binding AddNewWorkDesCommand}"
                                             Content="添加" />
+                                        <DataGrid
+                                            Grid.Row="2"
+                                            Grid.ColumnSpan="4"
+                                            Margin="5"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            HeadersVisibility="All"
+                                            ItemsSource="{Binding workDescriptionTypes}"
+                                            RowHeaderWidth="60"
+                                            SelectionMode="Single"
+                                            VerticalScrollBarVisibility="Auto">
+                                            <DataGrid.ColumnHeaderStyle>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGrid.ColumnHeaderStyle>
+                                            <DataGrid.CellStyle>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="DataGridCell">
+                                                                <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                    <ContentPresenter />
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </DataGrid.CellStyle>
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn
+                                                    Width="150"
+                                                    Binding="{Binding TypeName}"
+                                                    Header="描述名称" />
+                                                <DataGridTemplateColumn Width="150" Header="设置背景色">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button
+                                                                Width="100"
+                                                                HorizontalAlignment="Center"
+                                                                Background="{Binding TypeBackgroundColor}" />
+
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                                <DataGridTemplateColumn Width="150" Header="设置文字颜色">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+
+                                                            <Button
+                                                                Width="100"
+                                                                HorizontalAlignment="Center"
+                                                                Background="{Binding TypeFontColor}" />
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <DataGridTextColumn
+                                                    Width="150"
+                                                    Binding="{Binding HaveSettingWorkDes}"
+                                                    ElementStyle="{StaticResource CenterTextBlock}"
+                                                    Header="已设置描述数量(个)" />
+                                                <DataGridTemplateColumn Header="操作">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="删除" />
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
                                     </Grid>
 
 
@@ -288,6 +381,19 @@
                                             <Setter Property="HorizontalAlignment" Value="Center" />
                                         </Style>
                                     </DataGrid.ColumnHeaderStyle>
+                                    <DataGrid.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="DataGridCell">
+                                                        <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <ContentPresenter />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.CellStyle>
                                     <DataGrid.Columns>
                                         <DataGridTextColumn
                                             Width="auto"

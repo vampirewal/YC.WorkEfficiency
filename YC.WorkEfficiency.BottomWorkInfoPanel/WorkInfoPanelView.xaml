@@ -29,6 +29,21 @@
                         <Setter Property="VerticalContentAlignment" Value="Center" />
                         <Setter Property="Margin" Value="5" />
                     </Style>
+
+                    <Style
+                        x:Key="NewTransparentButton"
+                        BasedOn="{StaticResource TransparentButton}"
+                        TargetType="Button">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem.IsFinished}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedItem.IsFinished}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -38,11 +53,29 @@
             <RowDefinition Height="20" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Button
-            Margin="20,0"
-            HorizontalAlignment="Right"
-            Content="导出Word"
-            Style="{StaticResource TransparentButton}" />
+        <StackPanel Orientation="Horizontal">
+            <Button
+                Margin="20,2"
+                HorizontalAlignment="Right"
+                Command="{Binding SaveWorkInfoCommand}"
+                Content="保存信息"
+                Cursor="Hand"
+                Foreground="Red"
+                Style="{StaticResource NewTransparentButton}"
+                ToolTip="已完成的工作在修改信息后，需手动进行保存！">
+                <!--<Button.Triggers>
+
+                </Button.Triggers>-->
+            </Button>
+            <Button
+                Margin="20,2"
+                HorizontalAlignment="Right"
+                Command="{Binding ExportFileModelToWordCommand}"
+                Content="导出Word"
+                Cursor="Hand"
+                Style="{StaticResource TransparentButton}" />
+        </StackPanel>
+
         <ScrollViewer Grid.Row="1">
             <Grid>
                 <Grid.Resources />
@@ -191,6 +224,20 @@
                                     </ResourceDictionary.MergedDictionaries>
                                 </ResourceDictionary>
                             </DataGrid.Resources>
+                            
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="DataGridCell">
+                                                <Border HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.CellStyle>
                             <DataGrid.Columns>
 
                                 <DataGridTextColumn
@@ -274,7 +321,10 @@
                             Color="#e0861a" />
                     </Border.Effect>
 
-                    <ItemsControl ItemsSource="{Binding workDescriptions}" Style="{StaticResource ItemsControlStyle}">
+                    <ItemsControl
+                        x:Name="WorkDesList"
+                        ItemsSource="{Binding workDescriptions}"
+                        Style="{StaticResource ItemsControlStyle}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel SnapsToDevicePixels="True" />
@@ -285,7 +335,21 @@
                                 <Border
                                     Margin="5"
                                     Background="{Binding WorkBackgroundColor}"
-                                    CornerRadius="3">
+                                    CornerRadius="3"
+                                    ToolTip="鼠标右键可执行额外操作">
+
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem
+                                                Command="{Binding DataContext.EditWorkDesCommand, Source={x:Reference WorkDesList}}"
+                                                CommandParameter="{Binding}"
+                                                Header="修改" />
+                                            <MenuItem
+                                                Command="{Binding DataContext.DeleteWorkDesCommand, Source={x:Reference WorkDesList}}"
+                                                CommandParameter="{Binding}"
+                                                Header="删除" />
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition />

@@ -33,6 +33,7 @@ namespace YC.WorkEfficiency.ViewModels
             //构造函数
             fileModel = _fileModel;
             Title = "新增工作描述";
+            
         }
         #region 重写
         public override object GetResult()
