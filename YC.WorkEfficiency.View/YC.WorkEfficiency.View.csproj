@@ -11,6 +11,11 @@
     <AssemblyName>WorkEfficiency</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Assets\Image\timeWork.ico" />
     <None Remove="Assets\Image\时钟.png" />

@@ -6,6 +6,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\YC.WorkEfficiency.Core\YC.WorkEfficiency.Core.csproj" />
     <ProjectReference Include="..\YC.WorkEfficiency.Themes\YC.WorkEfficiency.Themes.csproj" />
