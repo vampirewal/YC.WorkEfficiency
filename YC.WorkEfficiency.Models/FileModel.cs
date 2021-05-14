@@ -16,6 +16,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace YC.WorkEfficiency.Models
 {
@@ -26,8 +28,20 @@ namespace YC.WorkEfficiency.Models
         public FileModel()
         {
             //构造函数
-            //Childs = new List<FileModel>();
-            //StartWork();
+            if (!isEdit)
+            {
+                dt = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromSeconds(1),
+                    IsEnabled = true
+                };
+                dt.Tick += Dt_Tick;
+                dt.Start();
+            }
+            else
+            {
+                dt.Stop();
+            }
         }
 
         #region 属性
@@ -108,7 +122,14 @@ namespace YC.WorkEfficiency.Models
 
         
         [Column("IsEdit")]
-        public bool IsEdit { get => isEdit; set { isEdit = value; DoNotify(); } }
+        public bool IsEdit { get => isEdit; 
+            set 
+            { 
+                isEdit = value;
+                
+                DoNotify();
+            } 
+        }
 
         /// <summary>
         /// 是否结束
@@ -193,5 +214,22 @@ namespace YC.WorkEfficiency.Models
         }
 
         #endregion 扩展属性
+
+        #region 计时器
+        public DispatcherTimer dt;
+
+        private void Dt_Tick(object sender, EventArgs e)
+        {
+            DateTime dtnow = DateTime.Now;
+            TimeSpan ts_now = new TimeSpan(dtnow.Ticks);
+            if (!this.IsFinished && !this.IsEdit)
+            {
+                TimeSpan ts_createtime = new TimeSpan(this.CreateTime.Ticks);
+                TimeSpan ts = ts_now.Subtract(ts_createtime);
+                this.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+
+            }
+        }
+        #endregion
     }
 }

@@ -32,6 +32,7 @@ namespace YC.WorkEfficiency.ViewModels
             //构造函数
             workDescription = _WorkDescription;
             Title = "修改工作描述";
+            SelectType = GetWorkDesType(workDescription.WorkDescriptionTypeGuid);
         }
         #region 重写
         public override object GetResult()
@@ -41,7 +42,6 @@ namespace YC.WorkEfficiency.ViewModels
 
         public override void InitData()
         {
-            
             GetWorkDescriptionTypeList();
         }
         #endregion
@@ -94,6 +94,15 @@ namespace YC.WorkEfficiency.ViewModels
                 {
                     TypeList.Add(item);
                 }
+            }
+        }
+
+        private WorkDescriptionType GetWorkDesType(string guid)
+        {
+            using(WorkEfficiencyDataContext work=new WorkEfficiencyDataContext())
+            {
+                WorkDescriptionType current = work.workDescriptionTypesDB.Where(w => w.GuidId == guid).FirstOrDefault();
+                return current;
             }
         }
         #endregion

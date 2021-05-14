@@ -25,7 +25,7 @@
     <Border Style="{StaticResource DefualtWindowBorderStyle}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">
-                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=AddFileDesWindow}" />
+                <i:InvokeCommandAction Command="{Binding WindowMoveCommand}" CommandParameter="{Binding ElementName=EditFileDesWindow}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <Grid>
@@ -74,6 +74,7 @@
                     Margin="2"
                     DisplayMemberPath="TypeName"
                     ItemsSource="{Binding TypeList}"
+                    SelectedItem="{Binding SelectType, Mode=TwoWay}"
                     SelectedValuePath="GuidId">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectionChanged">

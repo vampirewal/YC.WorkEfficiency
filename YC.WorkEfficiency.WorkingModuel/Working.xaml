@@ -142,7 +142,14 @@
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
                                     IsEnabled="{Binding IsEdit, Converter={StaticResource Boolean2VisibilityConverter}}"
-                                    SelectedDateTime="{Binding ExpectEndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    SelectedDateTime="{Binding ExpectEndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding ExpectEndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectedDateTimeChanged">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.SelectedDateTimeChangedCommand, Source={x:Reference NoFinishedList}}" CommandParameter="{Binding ElementName=datepicker, Path=Text}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </hc:DateTimePicker>
                                 <TextBlock
                                     x:Name="showEndTime"
                                     HorizontalAlignment="Center"

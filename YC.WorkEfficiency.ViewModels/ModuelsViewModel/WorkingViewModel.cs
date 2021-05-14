@@ -79,6 +79,15 @@ namespace YC.WorkEfficiency.ViewModels
                         return -1;
                     }
                 });
+
+                foreach (var item in result)
+                {
+                    if (!item.IsEdit)
+                    {
+                        item.dt.Start();
+                    }
+                }
+
                 WorkingList = new ObservableCollection<FileModel>(result);
             }
         }
@@ -95,19 +104,20 @@ namespace YC.WorkEfficiency.ViewModels
             while (true)
             {
                 Thread.Sleep(1000);
-                if (WorkingList.Count > 0)
+                var current = WorkingList.Where(w => !w.IsEdit).ToList();
+                if (current.Count > 0)
                 {
                     var datetimeNow = DateTime.Now;
                     using (WorkEfficiencyDataContext fileModelDataContext = new WorkEfficiencyDataContext())
                     {
                         TimeSpan ts_now = new TimeSpan(datetimeNow.Ticks);
-                        foreach (var item in WorkingList)
+                        foreach (var item in current)
                         {
                             if (!item.IsFinished && !item.IsEdit)
                             {
-                                TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
-                                TimeSpan ts = ts_now.Subtract(ts_createtime);
-                                item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
+                                //TimeSpan ts_createtime = new TimeSpan(item.CreateTime.Ticks);
+                                //TimeSpan ts = ts_now.Subtract(ts_createtime);
+                                //item.AfterTime = $"{ts.Days}天-{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
 
                                 
                                 TimeSpan ts_ExpectEndTime = new TimeSpan(item.ExpectEndTime.Ticks);
@@ -124,7 +134,7 @@ namespace YC.WorkEfficiency.ViewModels
                                 }
                             }
                         }
-                        fileModelDataContext.UpdateRange(WorkingList);
+                        fileModelDataContext.UpdateRange(current);
                         fileModelDataContext.SaveChanges();
                     }
                 }
@@ -209,6 +219,11 @@ namespace YC.WorkEfficiency.ViewModels
               {
                   Messenger.Default.Send("ShowWorkInfo", f);
               }
+          });
+
+        public RelayCommand<DateTime> SelectedDateTimeChangedCommand => new RelayCommand<DateTime>((dt) =>
+          {
+
           });
         #endregion
     }

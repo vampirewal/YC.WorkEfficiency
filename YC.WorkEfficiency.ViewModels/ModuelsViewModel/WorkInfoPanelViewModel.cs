@@ -315,6 +315,7 @@ namespace YC.WorkEfficiency.ViewModels
             Messenger.Default.Register<FileModel>(this, "ShowWorkInfo", ShowWorkInfo);
 
             Messenger.Default.Register(this, "GetFileType", GetFileType);
+                        
         }
         /// <summary>
         /// 将选择的FileModel，获取附件之后，将完整信息显示到下方的panel中
